@@ -1,15 +1,18 @@
 import networkx as nx
 import numpy as np
 import random
+import Setting_Simulation_Value
 
-class Layer_B_Modeling():
-    def __init__(self, state=[], node=0, edge=0, inter_edges=0, network=0):
+
+class Layer_B_Modeling:
+    def __init__(self):
         # network : 1 = random regular graph   2 = barabasi-albert graph
-        self.B_state = state    # state = [   ]  kinds of states
-        self.B_node = node
-        self.B_edge = edge
-        self.inter_edges = inter_edges
-        self.network = network
+        self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
+        self.B_state = self.SS.B_state    # state = [   ]  kinds of states
+        self.B_node = self.SS.B_node
+        self.B_edge = self.SS.B_edge
+        self.inter_edges = self.SS.inter_edges
+        self.network = self.SS.B_network
         self.B_layer_config()
         self.B = self.B_layer_config()[0]
         self.B_edges = self.B_layer_config()[1]
@@ -39,7 +42,6 @@ class Layer_B_Modeling():
         B_edges = nx.barabasi_albert_graph(self.B_node, self.B_edge, seed=None)
         return B, B_edges
 
-
 if __name__ == "__main__" :
-    Layer_B = Layer_B_Modeling([-1, 1], 2048, 5, 1, 1)
+    Layer_B = Layer_B_Modeling()
     print(Layer_B.B)

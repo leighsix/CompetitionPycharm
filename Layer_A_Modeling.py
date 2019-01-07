@@ -1,16 +1,19 @@
 import networkx as nx
 import numpy as np
 import random
+import Setting_Simulation_Value
+
 
 class Layer_A_Modeling:
-    def __init__(self, state=[], node=0, edge=0, Max=0, Min=0, network=0):
+    def __init__(self):
         # network : 1 = random regular graph   2 = barabasi-albert graph
-        self.A_state = state     # state = [   ]  kinds of states
-        self.A_node = node
-        self.A_edge = edge
-        self.MAX = Max
-        self.MIN = Min
-        self.network = network
+        self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
+        self.A_state = self.SS.A_state     # state = [   ]  kinds of states
+        self.A_node = self.SS.A_node
+        self.A_edge = self.SS.A_edge
+        self.MAX = self.SS.MAX
+        self.MIN = self.SS.MIN
+        self.network = self.SS.A_network
         self.A = self.A_layer_config()[0]
         self.A_edges = self.A_layer_config()[1]
 
@@ -45,7 +48,7 @@ class Layer_A_Modeling:
         return self.A, self.A_edges
 
 if __name__ == "__main__" :
-    layer_A = Layer_A_Modeling([-2, -1, 1, 2], 2048, 5, +2, -2, 1)
+    layer_A = Layer_A_Modeling()
     print(layer_A.A)
 
 
