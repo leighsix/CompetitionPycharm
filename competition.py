@@ -1,35 +1,25 @@
 from IPython.display import display
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-import mglearn
-import math
-import random
-import networkx as nx
 from sympy import *
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
-from matplotlib import cm
-import pylab
-import time
 import OpinionDynamics
 import DecisionDynamics
+import Visualization
+import MakingDB
 import Modeling
 
+Modeling
+
+
+class Competition:
+    def __init__(self):
+        self.modeling = Modeling.Modeling()
+        self.opinion_dynamics = OpinionDynamics.OpinionDynamics()
+        self.decision_dynamics = DecisionDynamics.DecisionDynamics()
+        self.visualization = Visualization.Visualization()
+        self.makingDB = MakingDB.MakingDB()
 
 
 
-def variables_regularization(result, ganma_scale, beta_scale, Repeating_number, Limited_time, number):
-    global regularization_data
-    simulation_condition(ganma_scale, beta_scale, Repeating_number, Limited_time)
-    variable_scale(a, b, c, d, e, f)
-    df = pd.read_pickle(result)
-    regular_ganma = df['ganma'] / ganma_scale[1]
-    regular_beta = df['beta'] / beta_scale[1]
-    regular_data = pd.DataFrame({'re_ganma': regular_ganma, 're_beta': regular_beta})
-    regularization_data = pd.concat([df, regular_data], axis=1)
-    regularization_data.to_pickle('regular_result' + str(number) + '_data.pickle')
 
 def fraction_different_state():
     global A_layer_fraction, B_layer_fraction
@@ -48,42 +38,10 @@ def fraction_different_state():
     return A_layer_fraction, B_layer_fraction
 
 
-def A_layer_dynamics():  # A_layer 다이내믹스, 감마 적용 및 설득/타협 알고리즘 적용
-    for i, j in sorted(A_edges.edges()):
-        if A[i] * A[j] > 0:
-            A[i] = A_layer_persuasion_function(A[i], A[j])[0]
-            A[j] = A_layer_persuasion_function(A[i], A[j])[1]
-        elif A[i] * A[j] < 0:
-            A[i] = A_layer_compromise_function(A[i], A[j])[0]
-            A[j] = A_layer_compromise_function(A[i], A[j])[1]
-    for i, j in sorted(AB_edges):
-        if A[j] * B[i] > 0:
-            A[j] = AB_layer_persuasion_function(A[j], B[i])[0]
-            B[i] = AB_layer_persuasion_function(A[j], B[i])[1]
-        elif A[j] * B[i] < 0:
-            A[j] = AB_layer_compromise_function(A[j], B[i])[0]
-            B[i] = AB_layer_compromise_function(A[j], B[i])[1]
-    return A, prob_p, prob_q
 
 
-def B_layer_dynamics():  # B_layer 다이내믹스, 베타 적용 및 언어데스 알고리즘 적용
-    global prob_beta
-    flow_prob_beta = []  # 베타 적용 확률 변화 리스트
-    for i in sorted(B_edges.nodes):
-        opposite = []
-        intra_edge_number = len(sorted(nx.all_neighbors(B_edges, i)))
-        inter_edge_number = len(AB_neighbor[i])
-        for j in range(intra_edge_number):
-            if B[i] * B[sorted(nx.all_neighbors(B_edges, i))[j]] < 0:
-                opposite.append(1)
-        for j in range(inter_edge_number):
-            if B[i] * A[AB_neighbor[i][j]] < 0:
-                opposite.append(1)
-        prob_beta = (sum(opposite) / (inter_edge_number + intra_edge_number)) ** beta
-        B[i] = AS_model_function(B[i])
-        flow_prob_beta.append(prob_beta)  # 베타 적용 확률 변화 리스트
-    Flow_prob_beta.append(np.mean(flow_prob_beta))  # 노드의 prob_beta 평균에 대한 변화 리스트
-    return B, Flow_prob_beta
+
+
 
 
 def interconnected_dynamics():

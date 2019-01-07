@@ -1,3 +1,11 @@
+import pandas as pd
+
+
+class MakingDB:
+    def __init__(self):
+
+
+
 def making_dataframe():
     global data_result, DATA_MFPBS, DATA_MFAS, DATA_MFBS, ganma, beta, prob_p, prob_q, Ganma, Beta, mean_PB, mean_PA, mean_PT, mean_PAB, mean_P_plus, Prob_P, Prob_Q, mean_FA, mean_FB, mean_FAB
 

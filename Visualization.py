@@ -1,3 +1,13 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+from mpl_toolkits.mplot3d import Axes3D
+
+
+class Visualization :
+    def __init__(self):
+
+
+
 def plot_3D(result, a, b, c, d, e,
             f):  # ex__  plot_3D('result11_data2.pickle', 'ganma', 'beta', 'B layer mean', 45, 45, 'A b layer mean')
     sns.set_style("whitegrid")
