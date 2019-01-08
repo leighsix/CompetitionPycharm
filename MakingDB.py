@@ -1,175 +1,84 @@
-import pandas as pd
+import mysql.connector
+import numpy as np
+import Setting_Simulation_Value
+
+
 
 
 class MakingDB:
     def __init__(self):
+        self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
 
+    def setting_value_saving(self, layer_A, layer_B, Steps, beta, gamma, prob_beta, time_count):
+        cnx = mysql.connector.connect(user='root', password='2853', database='renew_competition')
+        cursor = cnx.cursor()
 
+        add_data = ("INSERT INTO layer_state (Structure, A_internal_edges, B_internal_edges, "
+                    "A_external_edges, B_external_edges, Steps, beta, gamma, layer_A_mean, "
+                    "layer_B_mean, prob_beta, A_different_state_ratio, B_different_state_ratio, Time_count, " 
+                    "consensus_index, consensus, Negative_state_number, Positive_state_number, A_node_number, "
+                    "B_node_number) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
 
-def making_dataframe():
-    global data_result, DATA_MFPBS, DATA_MFAS, DATA_MFBS, ganma, beta, prob_p, prob_q, Ganma, Beta, mean_PB, mean_PA, mean_PT, mean_PAB, mean_P_plus, Prob_P, Prob_Q, mean_FA, mean_FB, mean_FAB
+        data_info = (str(self.SS.Structure), int(self.SS.A_edge), int(self.SS.B_edge), int(self.SS.A_inter_edges),
+                     int(self.SS.B_inter_edges),
+                     int(Steps), float(beta), float(gamma), int(self.different_state_ratio(layer_A, layer_B)[0]),
+                     float(self.different_state_ratio(layer_A, layer_B)[1]),
+                     float(prob_beta), float(self.different_state_ratio(layer_A, layer_B)[0]),
+                     float(self.different_state_ratio(layer_A, layer_B)[1]),
+                     int(time_count), float(self.different_state_ratio(layer_A, layer_B)[2]),
+                     bool(self.judging_consensus(layer_A, layer_B)),
+                     int(self.counting_negative_node(layer_A, layer_B)),
+                     int(self.counting_positive_node(layer_A, layer_B)),
+                     int(self.SS.A_node), int(self.SS.B_node))
+        cursor.execute(add_data, data_info)
+        cnx.commit()
+        cursor.close()
+        cnx.close()
 
-    mean_PT = []  # 시간측정 평균값 리스트
-    mean_PB = []  # 반복횟수에 대한 B_layer 노드의 평균값
-    mean_PA = []  # 반복횟수에 대한 A_layer 노드의 평균값
-    mean_PAB = []
-    mean_FA = []
-    mean_FB = []
-    mean_FAB = []
-    mean_P_plus = []  # 반복횟수에 대한 +로 consensus 되는 확률의 평균값 리스트
-    Ganma = []  # ganma 리스트
-    Beta = []
-    Prob_P = []  # 확률 P 리스트
-    Prob_Q = []  # 확률 Q 리스트
-    data_MFPBS = pd.DataFrame()
-    Data_MFPBS = pd.DataFrame()
-    DATA_MFPBS = pd.DataFrame()
-    data_MFAS = pd.DataFrame()
-    Data_MFAS = pd.DataFrame()
-    DATA_MFAS = pd.DataFrame()
-    data_MFBS = pd.DataFrame()
-    Data_MFBS = pd.DataFrame()
-    DATA_MFBS = pd.DataFrame()
-    for ganma in r:
-        for beta in D:
-            MFPBS = []
-            MFAS = []
-            MFBS = []
-            prob_p = ganma / (1 + ganma)  # 확률 p
-            prob_q = 1 - prob_p  # 확률 q
-            repeated_and_mean()
-            Ganma.append(ganma)
-            Beta.append(beta)
-            Prob_P.append(prob_p)
-            Prob_Q.append(prob_q)
-            mean_PT.append(sum(PT) / repeating_number)
-            mean_PB.append(sum(PB) / repeating_number)
-            mean_PA.append(sum(PA) / repeating_number)
-            mean_PAB.append(sum(PAB) / repeating_number)
-            mean_FA.append(sum(FA) / repeating_number)
-            mean_FB.append(sum(FB) / repeating_number)
-            mean_FAB.append(sum(FAB) / repeating_number)
-            mean_P_plus.append(sum(mean_Probability_plus) / repeating_number)
-            MFPBS.append(ganma)
-            MFPBS.append(beta)
-            MFAS.append(ganma)
-            MFAS.append(beta)
-            MFBS.append(ganma)
-            MFBS.append(beta)
-            for i in range(len(MEAN_FLOW_PROB_BETA)):
-                MFPB = np.mean(MEAN_FLOW_PROB_BETA.iloc[i])  # 반복횟수에 따른 베타확률의 평균값 정리
-                MFPBS.append(MFPB)
-            data_MFPBS = pd.DataFrame(MFPBS)  # 반복횟수별 평균값으로 칼럼으로 정리
-            Data_MFPBS = pd.concat([Data_MFPBS, data_MFPBS], axis=1, ignore_index=True)  # 감마,베타별 변화상태 정리
+    def different_state_ratio(self, layer_A, layer_B):
+        global A_ratio, B_ratio
+        A_plus = sum(layer_A.A > 0)
+        A_minus = sum(layer_A.A < 0)
+        if A_plus >= A_minus:
+            A_ratio = min(A_plus, A_minus) / self.SS.A_node
+        elif A_plus < A_minus:
+            A_ratio = -(min(A_plus, A_minus)) / self.SS.A_node
+        B_plus = sum(layer_B.B > 0)
+        B_minus = sum(layer_B.B < 0)
+        if B_plus >= B_minus:
+            B_ratio = min(B_plus, B_minus) / self.SS.B_node
+        elif B_plus < B_minus:
+            B_ratio = -(min(B_plus, B_minus)) / self.SS.B_node
+        return A_ratio, B_ratio, A_ratio*B_ratio
 
-            for i in range(len(MEAN_Fraction_A_state)):
-                MFA = np.mean(MEAN_Fraction_A_state.iloc[i])  # 반복횟수에 따른 different state fraction의 평균값 정리
-                MFAS.append(MFA)
-            data_MFAS = pd.DataFrame(MFAS)  # 반복횟수별 평균값으로 칼럼으로 정리
-            Data_MFAS = pd.concat([Data_MFAS, data_MFAS], axis=1, ignore_index=True)  # 감마,베타별 변화상태 정리
+    def layer_state_mean(self, layer_A, layer_B):
+        layer_A_mean = sum(layer_A.A) / self.SS.A_node
+        layer_B_mean = sum(layer_B.B) / self.SS.B_node
+        return layer_A_mean, layer_B_mean
 
-            for i in range(len(MEAN_Fraction_B_state)):
-                MFB = np.mean(MEAN_Fraction_B_state.iloc[i])  # 반복횟수에 따른 different state fraction의 평균값 정리
-                MFBS.append(MFB)
-            data_MFBS = pd.DataFrame(MFBS)  # 반복횟수별 평균값으로 칼럼으로 정리
-            Data_MFBS = pd.concat([Data_MFBS, data_MFBS], axis=1, ignore_index=True)  # 감마,베타별 변화상태 정리
+    @staticmethod
+    def judging_consensus(layer_A, layer_B):
+        if (((np.all(layer_A.A > 0) == 1) and (np.all(layer_B.B > 0) == 1)) or
+                ((np.all(layer_A.A < 0) == 1) and (np.all(layer_B.B < 0) == 1))):
+                return True
+        else:
+            return False
 
-            if beta % 1 == 0:
-                print(ganma, beta, (sum(PT) / repeating_number), (sum(PB) / repeating_number),
-                      (sum(PA) / repeating_number), (sum(PAB) / repeating_number))
-    data_result = pd.DataFrame(
-        {'ganma': Ganma, 'beta': Beta, 'A layer mean': mean_PA, 'B layer mean': mean_PB, 'A B layer mean': mean_PAB,
-         'Probability + mean': mean_P_plus, 'Time mean': mean_PT, 'Prob_P': Prob_P,
-         'Prob_Q': Prob_Q, 'Fraction A': mean_FA, 'Fraction B': mean_FB, 'Fraction AB': mean_FAB})
-    DATA_MFPBS = Data_MFPBS.fillna(0)  # 빈칸은 0으로 채우기
-    DATA_MFAS = Data_MFAS.fillna(0)  # 빈칸은 0으로 채우기
-    DATA_MFBS = Data_MFBS.fillna(0)  # 빈칸은 0으로 채우기
-    return data_result, DATA_MFPBS, DATA_MFAS, DATA_MFBS
+    @staticmethod
+    def counting_positive_node(layer_A, layer_B):
+        return sum(layer_A.A > 0) + sum(layer_B.B > 0)
 
+    @staticmethod
+    def counting_negative_node(layer_A, layer_B):
+        return sum(layer_A.A < 0 ) + sum(layer_B.B < 0)
 
-def fraction_different_state():
-    global A_layer_fraction, B_layer_fraction
-    A_plus = sum(A > 0)
-    A_minus = sum(A < 0)
-    if A_plus >= A_minus:
-        A_layer_fraction = min(A_plus, A_minus) / len(A)
-    elif A_plus < A_minus:
-        A_layer_fraction = -(min(A_plus, A_minus)) / len(A)
-    B_plus = sum(B > 0)
-    B_minus = sum(B < 0)
-    if B_plus >= B_minus:
-        B_layer_fraction = min(B_plus, B_minus) / len(B)
-    elif B_plus < B_minus:
-        B_layer_fraction = -(min(B_plus, B_minus)) / len(B)
-    return A_layer_fraction, B_layer_fraction
+if __name__ == "__main__":
+    cnx = mysql.connector.connect(user='root', password='2853', database='renew_competition')
+    cursor = cnx.cursor()
+    cursor.execute("SELECT VERSION()")
+    data = cursor.fetchone()
+    print("DATABASE version : %s"%data)
+    cursor.close()
+    cnx.close()
 
-
-def saving_data(a):
-    Total_data.to_pickle('result' + str(a) + '_data.pickle')
-    DATA_MFPBS.to_pickle('flow_prob_beta' + str(a) + '_data.pickle')
-    DATA_MFAS.to_pickle('A_different_state' + str(a) + '_data.pickle')
-    DATA_MFBS.to_pickle('B_different_state' + str(a) + '_data.pickle')
-
-
-def pandas_concat1(a, b, c, d, e):  # pandas-concat('결과1', '결과2', '저장할 이름')
-    result_1 = pd.read_pickle(a)
-    result_2 = pd.read_pickle(b)
-    result_3 = pd.read_pickle(c)
-    result_4 = pd.read_pickle(d)
-    final_result = pd.concat([result_1, result_2, result_3, result_4], ignore_index=True)
-    final_result_dropped = final_result.drop_duplicates(['ganma', 'beta'], keep='first')
-    final_result_dropped.to_pickle(e)
-
-
-def pandas_concat2(a, b, c, d, e):  # pandas-concat('결과1', '결과2', '저장할 이름')
-    result_1 = pd.read_pickle(a)
-    result_2 = pd.read_pickle(b)
-    result_3 = pd.read_pickle(c)
-    result_4 = pd.read_pickle(d)
-    final_result1 = pd.concat([result_1, result_2], axis=1, ignore_index=True)
-    final_result2 = pd.concat([result_3, result_4], axis=1, ignore_index=True)
-    final_result3 = pd.concat([final_result1, final_result2], axis=1, ignore_index=True)
-    final_result3.to_pickle(e)
-
-def different_state_ratio(filename, time, new_filename):  # different state ratio로 편집해주는 함수
-    reading_file = pd.read_pickle(filename)
-    index_g = (reading_file.iloc[0, :])  ## ganma index 지정
-    index_b = reading_file.iloc[1, :]  ## beta index 지정
-    index_t = []  ## time index 지정
-    for i in range(0, time):
-        index_t.append(i)
-    different_state = reading_file.iloc[2:, :]
-    dic = {}
-    for i in range(len(index_g)):
-        for j in range(0, time):
-            data = different_state.iloc[j, i]
-            dic[index_g[i], index_b[i], j] = data
-    frame = pd.Series(dic)
-    frame.index.names = ['ganma', 'beta', 'time']
-    df = frame.reset_index(name='Fraction Different')
-    DF = df.set_index(['ganma', 'beta', 'time'])
-    final_table = DF.pivot_table('Fraction Different', 'time', ['beta', 'ganma'])
-    final_table.to_pickle(new_filename)
-    return final_table
-
-
-def flow_prob_beta_dataframe(filename, time, new_filename):  # different state ratio로 편집해주는 함수
-    reading_file = pd.read_pickle(filename)
-    index_g = (reading_file.iloc[0, :])  ## ganma index 지정
-    index_b = reading_file.iloc[1, :]  ## beta index 지정
-    index_t = []  ## time index 지정
-    for i in range(0, time):
-        index_t.append(i)
-    flow_prob_beta = reading_file.iloc[2:, :]
-    dic = {}
-    for i in range(len(index_g)):
-        for j in range(0, time):
-            data = flow_prob_beta.iloc[j, i]
-            dic[index_g[i], index_b[i], j] = data
-    frame = pd.Series(dic)
-    frame.index.names = ['ganma', 'beta', 'time']
-    df = frame.reset_index(name='Flow_prob_beta')
-    DF = df.set_index(['ganma', 'beta', 'time'])
-    final_table = DF.pivot_table('Flow_prob_beta', 'time', ['beta', 'ganma'])
-    final_table.to_pickle(new_filename)
-    return final_table

@@ -4,6 +4,7 @@ import math
 
 class Setting_Simulation_Value :
     def __init__(self):
+        self.Structure = "RR-RR"
         self.A_state = [1, 2]
         self.A_node = 2048
         self.A_edge = 5
@@ -13,10 +14,11 @@ class Setting_Simulation_Value :
         self.B_state = [-1]
         self.B_node = 2048
         self.B_edge = 5
-        self.inter_edges = 1
+        self.B_inter_edges = 1
+        self.A_inter_edges = 1
         self.B_network = 1        # network : 1 = random regular graph   2 = barabasi-albert graph
         self.gap = 41
-        self.Repeating_number = 10
+        self.Repeating_number = 100
         self.Limited_step = 30
         self.R = self.simulation_condition(self.gap)[0]
         self.D = self.simulation_condition(self.gap)[1]
@@ -28,12 +30,8 @@ class Setting_Simulation_Value :
 
     def making_beta_scale(self, a):
         scale = math.log((1 / (self.B_edge + 1)) ** 3)\
-                / math.log(self.inter_edges / (self.B_edge + self.inter_edges))
+                / math.log(self.B_inter_edges / (self.B_edge + self.B_inter_edges))
         return 0, scale, a
-
-    def calculate_prob_p(self, r):
-        prob_p = r / (1 + r)
-        return prob_p
 
 
 if __name__ == "__main__":

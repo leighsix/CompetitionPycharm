@@ -16,7 +16,7 @@ class Changing_Variable:
 if __name__ == "__main__":
     print("Changing_Variable")
     changing_variable = Changing_Variable()
-    result = changing_variable.changing_variable()
-    print(sum(result[0])/2048, sum(result[1])/2048)
+    changing_variable.changing_variable()
+    print("Operating end")
 
 

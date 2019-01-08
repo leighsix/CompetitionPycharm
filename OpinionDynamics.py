@@ -7,6 +7,7 @@ import Layer_B_Modeling
 class OpinionDynamics:
     def __init__(self):
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
+        self.A_COUNT = 0
 
     def A_layer_dynamics(self, layer_A, layer_B, prob_p):  # A_layer 다이내믹스, 감마 적용 및 설득/타협 알고리즘 적용
         for i, j in sorted(layer_A.A_edges.edges()):
@@ -99,8 +100,10 @@ class OpinionDynamics:
                 a = a
             elif a < 0 or a > 1:
                 a = a - 1
+                self.A_COUNT +=1
             elif a == 1:
                 a = -1
+                self.A_COUNT +=1
         elif a < Min:
             a = Min
         return a
@@ -111,8 +114,10 @@ class OpinionDynamics:
                 a = a
             elif a > 0 or a < -1:
                 a = a + 1
+                self.A_COUNT +=1
             elif a == -1:
                 a = 1
+                self.A_COUNT +=1
         elif a > Max:
             a = Max
         return a

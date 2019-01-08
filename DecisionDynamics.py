@@ -8,6 +8,7 @@ import Layer_B_Modeling
 class DecisionDynamics:
     def __init__(self):
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
+        self.B_COUNT = 0
 
     def B_layer_dynamics(self, layer_A, layer_B, beta):  # B_layer 다이내믹스, 베타 적용 및 언어데스 알고리즘 적용
         for i in sorted(layer_B.B_edges.nodes):
@@ -24,7 +25,9 @@ class DecisionDynamics:
             z = random.random()
             if z < prob_beta:
                 layer_B.B[i] = -(layer_B.B[i])
+                self.B_COUNT += 1
         return layer_A, layer_B
+
 
 if __name__ == "__main__" :
     print("DecisionDynamics")

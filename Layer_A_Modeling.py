@@ -48,12 +48,12 @@ class Layer_A_Modeling:
     def making_interconnected_edges(self):
         self.AB_edges = []
         self.AB_neighbor = []
-        for i in range(int(self.SS.A_node / self.SS.inter_edges)):
-            for j in range(self.SS.inter_edges):
-                connected_A_node = np.array(self.A_edges.nodes).reshape(-1, self.SS.inter_edges)[i][j]
+        for i in range(int(self.SS.A_node / self.SS.B_inter_edges)):
+            for j in range(self.SS.B_inter_edges):
+                connected_A_node = np.array(self.A_edges.nodes).reshape(-1, self.SS.B_inter_edges)[i][j]
                 self.AB_neighbor.append(connected_A_node)
                 self.AB_edges.append((i, connected_A_node))
-        self.AB_neighbor = np.array(self.AB_neighbor).reshape(-1, self.SS.inter_edges)
+        self.AB_neighbor = np.array(self.AB_neighbor).reshape(-1, self.SS.B_inter_edges)
         return self.AB_edges, self.AB_neighbor
 
 

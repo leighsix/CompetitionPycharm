@@ -24,3 +24,4 @@ if __name__ == "__main__":
     repeat = RepeatDynamics()
     repeat.repeat_dynamics(prob_p, beta)
     # print(sum(result[0])/2048, sum(result[1])/2048)
+    print("Operating end")
