@@ -87,6 +87,23 @@ def making_dataframe():
     return data_result, DATA_MFPBS, DATA_MFAS, DATA_MFBS
 
 
+def fraction_different_state():
+    global A_layer_fraction, B_layer_fraction
+    A_plus = sum(A > 0)
+    A_minus = sum(A < 0)
+    if A_plus >= A_minus:
+        A_layer_fraction = min(A_plus, A_minus) / len(A)
+    elif A_plus < A_minus:
+        A_layer_fraction = -(min(A_plus, A_minus)) / len(A)
+    B_plus = sum(B > 0)
+    B_minus = sum(B < 0)
+    if B_plus >= B_minus:
+        B_layer_fraction = min(B_plus, B_minus) / len(B)
+    elif B_plus < B_minus:
+        B_layer_fraction = -(min(B_plus, B_minus)) / len(B)
+    return A_layer_fraction, B_layer_fraction
+
+
 def saving_data(a):
     Total_data.to_pickle('result' + str(a) + '_data.pickle')
     DATA_MFPBS.to_pickle('flow_prob_beta' + str(a) + '_data.pickle')
