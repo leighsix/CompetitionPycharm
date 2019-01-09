@@ -19,3 +19,7 @@ class SelectDB:
                 + " AND B_node_number = %s;" % int(self.SS.B_node)
         df = pd.read_sql_query(query, engine)
         return df
+
+
+if __name__ == "__main__":
+    print("Select DB")

@@ -11,6 +11,30 @@ class Visualization:
     def __init__(self):
         self.select_db = SelectDB.SelectDB()
 
+    def plot_2D_gamma_for_average_state(self, table, step, beta_min, beta_max):
+        df = self.select_db.select_data_from_DB(table)
+        df2 = df[df.Steps == step]
+        df3 = df2[df2.beta > beta_min]
+        df4 = df3[df3.beta < beta_max]
+        sns.set_style("whitegrid")
+        plt.plot(df4['gamma'], (df4['LAYER_A_MEAN']+df4['LAYER_B_MEAN']), '-', label='gamma')
+        plt.legend(framealpha=1, frameon=True)
+        plt.ylim(-1.3, 1.3)
+        plt.xlabel('gamma')
+        plt.ylabel('Average States')
+
+    def plot_2D_beta_for_average_state(self, table, step, gamma_min, gamma_max):
+        df = self.select_db.select_data_from_DB(table)
+        df2 = df[df.Steps == step]
+        df3 = df2[df2.beta > gamma_min]
+        df4 = df3[df3.beta < gamma_max]
+        sns.set_style("whitegrid")
+        plt.plot(df4['beta'], (df4['LAYER_A_MEAN']+df4['LAYER_B_MEAN']), '-', label='beta')
+        plt.legend(framealpha=1, frameon=True)
+        plt.ylim(-1.3, 1.3)
+        plt.xlabel('beta')
+        plt.ylabel('Average States')
+
     def plot_3D_for_average_state(self, table, step):
         df = self.select_db.select_data_from_DB(table)
         df2 = df[df.Steps == step]
@@ -43,7 +67,7 @@ class Visualization:
     def z_function(result, a):
         final_data = pd.read_pickle(result)
         z = np.array(final_data[str(a)]).reshape(41, 41)
-        Z = np.zeros((1681, 1681))
+        Z = np.zeros((len(), SS.))
         for i in range(0, 41):
             for j in range(0, 41):
                 for k in range(0, 41):
@@ -51,33 +75,6 @@ class Visualization:
                         Z[(i * 41) + k][(j * 41) + l] = z[i][j]
         return Z
 
-
-
-
-
-    def plot_2D_gamma_for_average_state(self, table, beta_min, beta_max):
-        df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == 30]
-        df3 = df2[df2.beta > beta_min]
-        df4 = df3[df3.beta < beta_max]
-        sns.set_style("whitegrid")
-        plt.plot(df4['gamma'], (df4['LAYER_A_MEAN']+df4['LAYER_B_MEAN']), '-', label='gamma')
-        plt.legend(framealpha=1, frameon=True)
-        plt.ylim(-1.3, 1.3)
-        plt.xlabel('gamma')
-        plt.ylabel('Average States')
-
-    def plot_2D_beta_for_average_state(self, table, gamma_min, gamma_max):
-        df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == 30]
-        df3 = df2[df2.beta > gamma_min]
-        df4 = df3[df3.beta < gamma_max]
-        sns.set_style("whitegrid")
-        plt.plot(df4['beta'], (df4['LAYER_A_MEAN']+df4['LAYER_B_MEAN']), '-', label='beta')
-        plt.legend(framealpha=1, frameon=True)
-        plt.ylim(-1.3, 1.3)
-        plt.xlabel('beta')
-        plt.ylabel('Average States')
 
 
     def prob_beta_plot_3D(result, number_ganma, t, initial, gap, a, b, c, d, e):
@@ -100,9 +97,9 @@ class Visualization:
         ax.set_zlabel(str(c))
         ax.view_init(d, e)
 
-
-
 # ex__  prob_beta_plot_3D('flow_prob_beta5.0_data.pickle', 51, 20, 10, 101, 'time', 'ganma', 'prob_beta', 45, 45)
+
+
 def total_flow_prob_beta_chart(filename):
     plt.figure()
     sns.set()
@@ -136,6 +133,8 @@ def beta_scale_for_chart(filename, y_axis, a, b):  # 0 < a, b < 3
         plt.plot(pic, linewidth=0.3)
 
 
+
+
 def ganma_scale_for_chart(filename, y_axis, a, b):  # 0 < a, b < 3
     plt.figure()
     sns.set()
@@ -155,5 +154,6 @@ def ganma_scale_for_chart(filename, y_axis, a, b):  # 0 < a, b < 3
         plt.plot(pic, linewidth=0.3)
 
 
-
+if __name__ == "__main__":
+    print("Visualization")
 
