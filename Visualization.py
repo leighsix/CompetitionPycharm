@@ -1,59 +1,84 @@
+import SelectDB
 import matplotlib.pyplot as plt
 import seaborn as sns
-from mpl_toolkits.mplot3d import Axes3D
+import pandas as pd
+from sympy import *
+import numpy as np
+from mpl_toolkits import mplot3d
 
 
-class Visualization :
+class Visualization:
     def __init__(self):
+        self.select_db = SelectDB.SelectDB()
+
+    def plot_3D_for_average_state(self, table):
+        df = self.select_db.select_data_from_DB(table)
+        df2 = df[df.Steps == 30]
+        sns.set_style("whitegrid")
+        ax = plt.axes(projection='3d')
+        ax.plot_trisurf(df2['beta'], df2['gamma'], (df2['LAYER_A_MEAN']+df2['LAYER_B_MEAN']),
+                         cmap='RdBu', edgecolor='none')
+        ax.set_xlabel('beta')
+        ax.set_ylabel('gamma')
+        ax.set_zlabel('Average States')
+        ax.set_title('beta-gamma-States')
+        ax.view_init(45, 45)
+
+    def plot_2D_gamma_for_average_state(self, table, beta_min, beta_max):
+        df = self.select_db.select_data_from_DB(table)
+        df2 = df[df.Steps == 30]
+        df3 = df2[df2.beta > beta_min]
+        df4 = df3[df3.beta < beta_max]
+        sns.set_style("whitegrid")
+        plt.plot(df4['gamma'], (df4['LAYER_A_MEAN']+df4['LAYER_B_MEAN']), '-', label='gamma')
+        plt.legend(framealpha=1, frameon=True)
+        plt.ylim(-1.3, 1.3)
+        plt.xlabel('gamma')
+        plt.ylabel('Average States')
+
+
+    def plot_2D_beta_for_average_state(self, table, gamma_min, gamma_max):
+        df = self.select_db.select_data_from_DB(table)
+        df2 = df[df.Steps == 30]
+        df3 = df2[df2.beta > gamma_min]
+        df4 = df3[df3.beta < gamma_max]
+        sns.set_style("whitegrid")
+        plt.plot(df4['beta'], (df4['LAYER_A_MEAN']+df4['LAYER_B_MEAN']), '-', label='beta')
+        plt.legend(framealpha=1, frameon=True)
+        plt.ylim(-1.3, 1.3)
+        plt.xlabel('beta')
+        plt.ylabel('Average States')
 
 
 
-def plot_3D(result, a, b, c, d, e,
-            f):  # ex__  plot_3D('result11_data2.pickle', 'ganma', 'beta', 'B layer mean', 45, 45, 'A b layer mean')
-    sns.set_style("whitegrid")
-    final_data = pd.read_pickle(result)
-    ax = plt.axes(projection='3d')
-    ax.plot_trisurf(final_data[a], final_data[b], final_data[c], cmap='RdBu', edgecolor='none')
-    ax.set_xlabel(str(a))
-    ax.set_ylabel(str(b))
-    ax.set_zlabel(str(c))
-    ax.set_title(str(f))
-    ax.view_init(d, e)
-    # ax.scatter(final_data[a], final_data[b], final_data[c], c=final_data[c], cmap='RdBu', linewidth=0.1) ax.view_init(d, e)
+    def prob_beta_plot_3D(result, number_ganma, t, initial, gap, a, b, c, d, e):
+        df = self.select_db.select_data_from_DB(table)
 
 
-def plot_2D(result, a, b, c, d,
-            e):  # ex__  plot_2D('result2.3_data.pickle', 'beta', 'B layer mean', 'ganma', 1.0, 'ganma = 1')
-    sns.set_style("whitegrid")
-    final_data = pd.read_pickle(result)
-    mini = final_data[final_data[c] > (d - 0.01)]
-    two_dimension = mini[mini[c] < (d + 0.01)]
-    plt.plot(two_dimension[a], two_dimension[b], '-', label=e)
-    plt.legend(framealpha=1, frameon=True)
-    plt.ylim(-1.1, 1.1)
-    plt.xlabel(str(a))
-    plt.ylabel(str(b))
 
 
-def prob_beta_plot_3D(result, number_ganma, t, initial, gap, a, b, c, d, e):
-    flow_probbeta_data = pd.read_pickle(result)
-    ganma_data = []
-    probbeta = []
-    times = np.linspace(0, t - 1, t)
-    time = sorted(sorted(times) * number_ganma)
-    for i in range(number_ganma):
-        ganma_data.append(flow_probbeta_data.iloc[0, initial + (gap * i)])
-    ganma_datas = (ganma_data) * t
-    for j in range(t):
+
+
+
+
+        flow_probbeta_data = pd.read_pickle(result)
+        ganma_data = []
+        probbeta = []
+        times = np.linspace(0, t - 1, t)
+        time = sorted(sorted(times) * number_ganma)
         for i in range(number_ganma):
-            probbeta.append(flow_probbeta_data.iloc[2 + j, initial + (gap * i)])
-    sns.set_style("whitegrid")
-    ax = plt.axes(projection='3d')
-    ax.plot_trisurf(time, ganma_datas, probbeta, cmap='viridis', edgecolor='none')
-    ax.set_xlabel(str(a))
-    ax.set_ylabel(str(b))
-    ax.set_zlabel(str(c))
-    ax.view_init(d, e)
+            ganma_data.append(flow_probbeta_data.iloc[0, initial + (gap * i)])
+        ganma_datas = (ganma_data) * t
+        for j in range(t):
+            for i in range(number_ganma):
+                probbeta.append(flow_probbeta_data.iloc[2 + j, initial + (gap * i)])
+        sns.set_style("whitegrid")
+        ax = plt.axes(projection='3d')
+        ax.plot_trisurf(time, ganma_datas, probbeta, cmap='viridis', edgecolor='none')
+        ax.set_xlabel(str(a))
+        ax.set_ylabel(str(b))
+        ax.set_zlabel(str(c))
+        ax.view_init(d, e)
 
 
 # ex__  prob_beta_plot_3D('flow_prob_beta5.0_data.pickle', 51, 20, 10, 101, 'time', 'ganma', 'prob_beta', 45, 45)
@@ -109,28 +134,27 @@ def ganma_scale_for_chart(filename, y_axis, a, b):  # 0 < a, b < 3
         pic = final_table[ganma_scale[i]]
         plt.plot(pic, linewidth=0.3)
 
+    def z_function(result, a):
+        final_data = pd.read_pickle(result)
+        z = np.array(final_data[str(a)]).reshape(41, 41)
+        Z = np.zeros((1681, 1681))
+        for i in range(0, 41):
+            for j in range(0, 41):
+                for k in range(0, 41):
+                    for l in range(0, 41):
+                        Z[(i * 41) + k][(j * 41) + l] = z[i][j]
+        return Z
 
-def z_function(result, a):
-    final_data = pd.read_pickle(result)
-    z = np.array(final_data[str(a)]).reshape(41, 41)
-    Z = np.zeros((1681, 1681))
-    for i in range(0, 41):
-        for j in range(0, 41):
-            for k in range(0, 41):
-                for l in range(0, 41):
-                    Z[(i * 41) + k][(j * 41) + l] = z[i][j]
-    return Z
 
-# plot_3D_to_2D_contour('result128128_1(5)_1(5)ver2_data.pickle', 'beta','ganma', 'A B layer mean','beta', 'ganma', 'A B layer mean')
-def plot_3D_to_2D_contour(result, a, b, c, d, e, f):
-    sns.set_style("whitegrid")
-    final_data = pd.read_pickle(result)
-    result_a = sorted(np.array(final_data[str(a)]))
-    result_b = sorted(np.array(final_data[str(b)]))
-    result_c = np.array(final_data[str(c)]).reshape(41, 41)
-    X, Y = np.meshgrid(result_a, result_b)
-    Z = z_function(result, c)
-    plt.contourf(X, Y, Z, 50, cmap='RdBu')
-    plt.xlabel(str(d))
-    plt.ylabel(str(e))
-    plt.colorbar(label=str(f))
+    def plot_3D_to_2D_contour(result, a, b, c, d, e, f):
+        sns.set_style("whitegrid")
+        final_data = pd.read_pickle(result)
+        result_a = sorted(np.array(final_data[str(a)]))
+        result_b = sorted(np.array(final_data[str(b)]))
+        result_c = np.array(final_data[str(c)]).reshape(41, 41)
+        X, Y = np.meshgrid(result_a, result_b)
+        Z = z_function(result, c)
+        plt.contourf(X, Y, Z, 50, cmap='RdBu')
+        plt.xlabel(str(d))
+        plt.ylabel(str(e))
+        plt.colorbar(label=str(f))
