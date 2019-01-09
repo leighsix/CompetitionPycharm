@@ -1,8 +1,8 @@
 import random
 import Setting_Simulation_Value
 import networkx as nx
-import Layer_A_Modeling
-import Layer_B_Modeling
+#import Layer_A_Modeling
+#import Layer_B_Modeling
 
 
 class DecisionDynamics:
@@ -31,9 +31,9 @@ class DecisionDynamics:
 
 if __name__ == "__main__" :
     print("DecisionDynamics")
-    Layer_A = Layer_A_Modeling.Layer_A_Modeling()
-    Layer_B = Layer_B_Modeling.Layer_B_Modeling()
-    decision = DecisionDynamics()
-    decision.B_layer_dynamics(Layer_A, Layer_B, 1.5)
-    print(sum(Layer_A.A)/2048, sum(Layer_B.B)/2048)
+    #Layer_A = Layer_A_Modeling.Layer_A_Modeling()
+    #Layer_B = Layer_B_Modeling.Layer_B_Modeling()
+    #decision = DecisionDynamics()
+    #decision.B_layer_dynamics(Layer_A, Layer_B, 1.5)
+    #print(sum(Layer_A.A)/2048, sum(Layer_B.B)/2048)
 

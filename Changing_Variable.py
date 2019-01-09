@@ -2,6 +2,8 @@ import numpy as np
 import Setting_Simulation_Value
 import MakingPandas
 import RepeatDynamics
+import sqlalchemy
+
 
 class Changing_Variable:
     def __init__(self):
@@ -17,9 +19,10 @@ class Changing_Variable:
                 panda_db = self.mp.making_dataframe_per_step(self.repeat_dynamics.Num_Data)
                 panda_db['gamma'] = gamma
                 panda_db['beta'] = beta
+                engine = sqlalchemy.create_engine('mysql+pymysql://root:2853@localhost:3306/renew_competition')
+                panda_db.to_sql(name='average_layer_state', con=engine, index=False, if_exists='append')
                 self.repeat_dynamics.num_data = np.zeros([30, 11])
                 self.repeat_dynamics.Num_Data = np.zeros([30, 11])
-                print(panda_db)
 
 
 if __name__ == "__main__":

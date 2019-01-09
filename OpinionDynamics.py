@@ -1,7 +1,7 @@
 import random
 import Setting_Simulation_Value
-import Layer_A_Modeling
-import Layer_B_Modeling
+#import Layer_A_Modeling
+#import Layer_B_Modeling
 
 
 class OpinionDynamics:
@@ -102,10 +102,11 @@ class OpinionDynamics:
             a = Max
         return a
 
+
 if __name__ == "__main__":
     print("OpinionDynamics")
-    Layer_A = Layer_A_Modeling.Layer_A_Modeling()
-    Layer_B = Layer_B_Modeling.Layer_B_Modeling()
-    opinion = OpinionDynamics()
-    opinion.A_layer_dynamics(Layer_A, Layer_B, 1)
-    print(Layer_A.A, Layer_B.B)
+    #Layer_A = Layer_A_Modeling.Layer_A_Modeling()
+    #Layer_B = Layer_B_Modeling.Layer_B_Modeling()
+    #opinion = OpinionDynamics()
+    #opinion.A_layer_dynamics(Layer_A, Layer_B, 1)
+    #print(Layer_A.A, Layer_B.B)

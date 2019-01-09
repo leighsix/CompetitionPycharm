@@ -1,4 +1,3 @@
-import pandas as pd
 import numpy as np
 import Setting_Simulation_Value
 import InterconnectedDynamics
@@ -24,10 +23,11 @@ class RepeatDynamics:
         self.Num_Data = self.num_data / self.SS.Repeating_number
         return self.Num_Data
 
+
 if __name__ == "__main__":
     print("RepeatDynamics")
-    prob_p = 0.1
-    beta = 1.5
-    repeat = RepeatDynamics()
-    result = repeat.repeat_dynamics(prob_p, beta)
-    print(result)
+    #prob_p = 0.1
+    #beta = 1.5
+    #repeat = RepeatDynamics()
+    #result = repeat.repeat_dynamics(prob_p, beta)
+    #print(result)

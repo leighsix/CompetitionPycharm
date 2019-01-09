@@ -3,9 +3,10 @@ import networkx as nx
 import Setting_Simulation_Value
 import OpinionDynamics
 import DecisionDynamics
-import Layer_A_Modeling
-import Layer_B_Modeling
 import MakingPandas
+#import Layer_A_Modeling
+#import Layer_B_Modeling
+
 
 
 class InterconnectedDynamics:
@@ -63,13 +64,13 @@ class InterconnectedDynamics:
 
 if __name__ == "__main__" :
     print("InterconnectedDynamics")
-    Layer_A = Layer_A_Modeling.Layer_A_Modeling()
-    Layer_B = Layer_B_Modeling.Layer_B_Modeling()
-    prob_p = 0.5
-    beta = 1.5
-    inter_dynamics = InterconnectedDynamics()
-    inter_dynamics.interconnected_dynamics(Layer_A, Layer_B, prob_p, beta)
-    print(sum(Layer_A.A)/2048, sum(Layer_B.B)/2048)
+    #Layer_A = Layer_A_Modeling.Layer_A_Modeling()
+    #Layer_B = Layer_B_Modeling.Layer_B_Modeling()
+    #prob_p = 0.5
+    #beta = 1.5
+    #inter_dynamics = InterconnectedDynamics()
+    #inter_dynamics.interconnected_dynamics(Layer_A, Layer_B, prob_p, beta)
+    #print(sum(Layer_A.A)/2048, sum(Layer_B.B)/2048)
 
 
 
