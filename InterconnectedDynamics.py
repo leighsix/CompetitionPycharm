@@ -5,7 +5,7 @@ import OpinionDynamics
 import DecisionDynamics
 import Layer_A_Modeling
 import Layer_B_Modeling
-import MakingDB
+import MakingPandas
 
 
 class InterconnectedDynamics:
@@ -13,7 +13,8 @@ class InterconnectedDynamics:
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
         self.opinion = OpinionDynamics.OpinionDynamics()
         self.decision = DecisionDynamics.DecisionDynamics()
-        self.making_db = MakingDB.MakingDB()
+        self.mp = MakingPandas.MakingPandas()
+        self.total_value = np.zeros(11)
 
     def interconnected_dynamics(self, layer_A, layer_B, prob_p, beta):
         step_number = 0
@@ -23,16 +24,23 @@ class InterconnectedDynamics:
             self.decision.B_layer_dynamics(layer_A, layer_B, beta)
             step_number += 1
             time_count = self.opinion.A_COUNT + self.decision.B_COUNT
+            array_value = np.array([self.mp.layer_state_mean(layer_A, layer_B)[0],
+                                    self.mp.layer_state_mean(layer_A, layer_B)[1], prob_p, prob_beta_mean,
+                                    self.mp.different_state_ratio(layer_A, layer_B)[0],
+                                    self.mp.different_state_ratio(layer_A, layer_B)[1],
+                                    self.mp.different_state_ratio(layer_A, layer_B)[2],
+                                    self.mp.judging_consensus(layer_A, layer_B),
+                                    self.mp.counting_negative_node(layer_A, layer_B),
+                                    self.mp.counting_positive_node(layer_A, layer_B), time_count])
+            if step_number == 1:
+                self.total_value = array_value
+            elif step_number > 1:
+                self.total_value = np.vstack([self.total_value, array_value])
             self.opinion.A_COUNT = 0
-            self.decision.A_COUNT = 0
-            gamma = prob_p/(1-prob_p)
-            self.making_db.setting_value_saving(layer_A, layer_B, step_number, beta, gamma, prob_beta_mean, time_count)
-
-            if (((np.all(layer_A.A > 0) == 1) and (np.all(layer_B.B > 0) == 1)) or
-                    ((np.all(layer_A.A < 0) == 1) and (np.all(layer_B.B < 0) == 1)) or
-                    (step_number >= self.SS.Limited_step)):
+            self.decision.B_COUNT = 0
+            if step_number >= self.SS.Limited_step:
                 break
-        return layer_A, layer_B
+        return layer_A, layer_B, self.total_value
 
     def calculate_prob_beta_mean(self, layer_A, layer_B, beta):
         global prob_beta_mean

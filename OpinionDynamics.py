@@ -19,23 +19,20 @@ class OpinionDynamics:
                 layer_A.A[j] = self.A_layer_compromise_function(layer_A.A[i], layer_A.A[j], prob_p)[1]
         for i, j in sorted(layer_A.AB_edges):
             if layer_A.A[j] * layer_B.B[i] > 0:
-                layer_A.A[j] = self.AB_layer_persuasion_function(layer_A.A[j], layer_B.B[i], prob_p)[0]
+                layer_A.A[j] = self.AB_layer_persuasion_function(layer_A.A[j], prob_p)
             elif layer_A.A[j] * layer_B.B[i] < 0:
-                layer_A.A[j] = self.AB_layer_compromise_function(layer_A.A[j], layer_B.B[i], prob_p)[0]
+                layer_A.A[j] = self.AB_layer_compromise_function(layer_A.A[j], layer_B.B[i], prob_p)
         return layer_A, layer_B
 
     def A_layer_persuasion_function(self, a, b, prob_p):  # A layer 중에서 same orientation 에서 일어나는  변동 현상
         z = random.random()
         if z < prob_p:
-            if a > 0:
+            if a > 0 and b > 0:
                 a = self.A_layer_node_right(a, self.SS.MAX)
                 b = self.A_layer_node_right(b, self.SS.MAX)
-            elif a < 0:
+            elif a < 0 and b < 0:
                 a = self.A_layer_node_left(a, self.SS.MIN)
                 b = self.A_layer_node_left(b, self.SS.MIN)
-        elif z > prob_p:
-            a = a
-            b = b
         return a, b
 
     def A_layer_compromise_function(self, a, b, prob_p):  # A layer  중에서 opposite orientation 에서 일어나는 변동 현상
@@ -48,30 +45,22 @@ class OpinionDynamics:
                 elif z > ((1 - prob_p) / 2):
                     a = -1
                     b = -1
-            elif a > b:
+            elif a > 0:
                 a = self.A_layer_node_left(a, self.SS.MIN)
                 b = self.A_layer_node_right(b, self.SS.MAX)
-            elif a < b:
+            elif a < 0:
                 a = self.A_layer_node_right(a, self.SS.MAX)
                 b = self.A_layer_node_left(b, self.SS.MIN)
-        elif z > (1 - prob_p):
-            a = a
-            b = b
         return a, b
 
-    def AB_layer_persuasion_function(self, a, b, prob_p):  # A-B layer 중에서 same orientation 에서 일어나는  변동 현상
+    def AB_layer_persuasion_function(self, a, prob_p):  # A-B layer 중에서 same orientation 에서 일어나는  변동 현상
         z = random.random()
         if z < prob_p:
             if a > 0:
                 a = self.A_layer_node_right(a, self.SS.MAX)
-                b = b
             elif a < 0:
                 a = self.A_layer_node_left(a, self.SS.MIN)
-                b = b
-        elif z > prob_p:
-            a = a
-            b = b
-        return a, b
+        return a
 
     def AB_layer_compromise_function(self, a, b, prob_p):  # A-B layer  중에서 opposite orientation 에서 일어나는 변동 현상
         z = random.random()
@@ -79,46 +68,37 @@ class OpinionDynamics:
             if a * b == -1:
                 if z < ((1 - prob_p) / 2):
                     a = 1
-                    b = b
                 elif z > ((1 - prob_p) / 2):
                     a = -1
-                    b = b
-            elif a > b:
+            elif a > 0:
                 a = self.A_layer_node_left(a, self.SS.MIN)
-                b = b
-            elif a < b:
+            elif a < 0:
                 a = self.A_layer_node_right(a, self.SS.MAX)
-                b = b
         elif z > (1 - prob_p):
             a = a
-            b = b
-        return a, b
+        return a
 
     def A_layer_node_left(self, a, Min):
-        if a >= Min:
-            if a == Min:
-                a = a
-            elif a < 0 or a > 1:
+        if a > Min:
+            if a < 0 or a > 1:
                 a = a - 1
-                self.A_COUNT +=1
+                self.A_COUNT += 1
             elif a == 1:
                 a = -1
-                self.A_COUNT +=1
-        elif a < Min:
+                self.A_COUNT += 1
+        elif a <= Min:
             a = Min
         return a
 
     def A_layer_node_right(self, a, Max):
-        if a <= Max:
-            if a == Max:
-                a = a
-            elif a > 0 or a < -1:
+        if a < Max:
+            if a > 0 or a < -1:
                 a = a + 1
-                self.A_COUNT +=1
+                self.A_COUNT += 1
             elif a == -1:
                 a = 1
-                self.A_COUNT +=1
-        elif a > Max:
+                self.A_COUNT += 1
+        elif a >= Max:
             a = Max
         return a
 
