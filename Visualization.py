@@ -1,171 +1,179 @@
 import SelectDB
+import Setting_Simulation_Value
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import pandas as pd
 from sympy import *
-import numpy as np
-from mpl_toolkits import mplot3d
+from mpl_toolkits.mplot3d.axes3d import *
 
 
 class Visualization:
     def __init__(self):
         self.select_db = SelectDB.SelectDB()
+        self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
 
-    def plot_2D_gamma_for_average_state(self, table, step, beta_min, beta_max):
+    def making_select_list(self, table, list_name):
         df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == step]
-        df3 = df2[df2.beta > beta_min]
-        df4 = df3[df3.beta < beta_max]
+        df = pd.DataFrame(df[list_name])
+        select_list = np.array(df.drop_duplicates())
+        np.sort(select_list)
+        return select_list
+
+    def plot_2D_gamma_for_average_state(self, table, beta_value):
+        df = self.select_db.select_data_from_DB(table)
+        beta_list = self.making_select_list(table, 'beta')
+        temp_value = Visualization.covert_to_select_list_value(beta_list, beta_value)
+        df = df[df.Steps == self.SS.Limited_step]
+        df = df[df.beta == temp_value]
+        plt.figure()
         sns.set_style("whitegrid")
-        plt.plot(df4['gamma'], (df4['LAYER_A_MEAN']+df4['LAYER_B_MEAN']), '-', label='gamma')
+        plt.plot(df['gamma'], (df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']), '-', label='beta=%s' % temp_value)
         plt.legend(framealpha=1, frameon=True)
-        plt.ylim(-1.3, 1.3)
+        plt.ylim(-3.3, 3.3)
         plt.xlabel('gamma')
         plt.ylabel('Average States')
+        plt.show()
 
-    def plot_2D_beta_for_average_state(self, table, step, gamma_min, gamma_max):
+    def plot_2D_beta_for_average_state(self, table, gamma_value):
         df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == step]
-        df3 = df2[df2.beta > gamma_min]
-        df4 = df3[df3.beta < gamma_max]
+        gamma_list = self.making_select_list(table, 'gamma')
+        temp_value = Visualization.covert_to_select_list_value(gamma_list, gamma_value)
+        df = df[df.Steps == self.SS.Limited_step]
+        df = df[df.gamma == temp_value]
+        plt.figure()
         sns.set_style("whitegrid")
-        plt.plot(df4['beta'], (df4['LAYER_A_MEAN']+df4['LAYER_B_MEAN']), '-', label='beta')
+        plt.plot(df['beta'], (df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']), '-', label='gamma=%s' % temp_value)
         plt.legend(framealpha=1, frameon=True)
-        plt.ylim(-1.3, 1.3)
+        plt.ylim(-3.3, 3.3)
         plt.xlabel('beta')
         plt.ylabel('Average States')
+        plt.show()
 
-    def plot_3D_for_average_state(self, table, step):
+    def plot_3D_trisurf_for_average_state(self, table):
         df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == step]
+        df2 = df[df.Steps == self.SS.Limited_step]
         sns.set_style("whitegrid")
+        plt.figure()
         ax = plt.axes(projection='3d')
-        ax.plot_trisurf(df2['beta'], df2['gamma'], (df2['LAYER_A_MEAN']+df2['LAYER_B_MEAN']),
+        ax.plot_trisurf(df2['beta'], df2['gamma'], (df2['LAYER_A_MEAN'] + df2['LAYER_B_MEAN']),
                         cmap='RdBu', edgecolor='none')
         ax.set_xlabel('beta')
         ax.set_ylabel('gamma')
         ax.set_zlabel('Average States')
         ax.set_title('beta-gamma-States')
         ax.view_init(45, 45)
+        plt.show()
 
-    def plot_3D_to_2D_contour_for_average_state(self, table, step):
+    def plot_3D_contour_for_average_state(self, table):
         df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == step]
+        df = df[df.Steps == self.SS.Limited_step]
         sns.set_style("whitegrid")
-        result_beta = sorted(np.array(df2['beta']))
-        result_gamma = sorted(np.array(df2['gamma']))
+        beta_list = list(self.making_select_list(table, 'beta'))  # list이지만 실제로는 array
+        gamma_list = list(self.making_select_list(table, 'gamma'))
+        state_list = np.array(df['LAYER_A_MEAN'] + df['LAYER_B_MEAN'])
+        result_beta = sorted(beta_list * len(gamma_list))
+        result_gamma = sorted(gamma_list * len(beta_list))
         X, Y = np.meshgrid(result_beta, result_gamma)
-        Z = self.z_function(table, step)
+        Z = Visualization.contour_Z_function(beta_list, gamma_list, state_list)
+        plt.figure()
+        ax = plt.axes(projection='3d')
+        ax.contour3D(X, Y, Z, 50, cmap='RdBu')
+        ax.set_xlabel('beta')
+        ax.set_ylabel('gamma')
+        ax.set_zlabel('Average States')
+        ax.set_title('beta-gamma-States')
+        ax.view_init(45, 45)
+        plt.show()
+
+    def plot_3D_to_2D_contour_for_average_state(self, table):
+        df = self.select_db.select_data_from_DB(table)
+        df = df[df.Steps == self.SS.Limited_step]
+        sns.set_style("whitegrid")
+        beta_list = list(self.making_select_list(table, 'beta'))  # list이지만 실제로는 array
+        gamma_list = list(self.making_select_list(table, 'gamma'))
+        state_list = np.array(df['LAYER_A_MEAN'] + df['LAYER_B_MEAN'])
+        result_beta = sorted(beta_list * len(gamma_list))
+        result_gamma = sorted(gamma_list * len(beta_list))
+        X, Y = np.meshgrid(result_beta, result_gamma)
+        Z = Visualization.contour_Z_function(beta_list, gamma_list, state_list)
+        plt.figure()
+        sns.set()
         plt.contourf(X, Y, Z, 50, cmap='RdBu')
         plt.xlabel('beta')
         plt.ylabel('gamma')
         plt.colorbar(label='Average states')
+        plt.show()
 
-    def z_function(self, table, step):
+    def flow_prob_beta_chart(self, table, beta_value, gamma_value):
+        #beta_value = [min, max], #gamma_value =[min, max]
         df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == step]
-        df_beta = df2['beta']
-        df_beta = df_beta.drop_duplicate()
-        beta_gap = len(df2['beta']) / df_beta
-        df_gamma = df2['gamma']
-        df_gamma = df_gamma.drop_dupicate()
-        gamma_gap = len(df2['gamma']) / df_gamma
-        z = np.array(df2['LAYER_A_MEAN'] + df2['LAYER_B_MEAN']).reshape(len(df_beta), len(df_gamma))
-        Z = np.zeros(len(df_beta), len(df_gamma))
-        for i in range(0, len(df_beta)):
-            for j in range(0, len(df_gamma)):
-                for k in range(0, beta_gap):
-                    for l in range(0, gamma_gap):
-                        Z[(i * 41) + k][(j * 41) + l] = z[i][j]
-        return Z
-
-
-
-
-
-
-
-
-
-
-
-    def prob_beta_plot_3D(result, number_ganma, t, initial, gap, a, b, c, d, e):
-        df = self.select_db.select_data_from_DB(table)
-        ganma_data = []
-        probbeta = []
-        times = np.linspace(0, t - 1, t)
-        time = sorted(sorted(times) * number_ganma)
-        for i in range(number_ganma):
-            ganma_data.append(flow_probbeta_data.iloc[0, initial + (gap * i)])
-        ganma_datas = (ganma_data) * t
-        for j in range(t):
-            for i in range(number_ganma):
-                probbeta.append(flow_probbeta_data.iloc[2 + j, initial + (gap * i)])
-        sns.set_style("whitegrid")
-        ax = plt.axes(projection='3d')
-        ax.plot_trisurf(time, ganma_datas, probbeta, cmap='viridis', edgecolor='none')
-        ax.set_xlabel(str(a))
-        ax.set_ylabel(str(b))
-        ax.set_zlabel(str(c))
-        ax.view_init(d, e)
-
-# ex__  prob_beta_plot_3D('flow_prob_beta5.0_data.pickle', 51, 20, 10, 101, 'time', 'ganma', 'prob_beta', 45, 45)
-
-
-    def total_flow_prob_beta_chart(self, table, step):
+        beta_list = self.making_select_list(table, 'beta')  # 이름은 list이지만 실제로는 array
+        gamma_list = self.making_select_list(table, 'gamma') # 이름은 list이지만 실제로는 array
+        beta_min = Visualization.covert_to_select_list_value(beta_list, beta_value[0])
+        beta_max = Visualization.covert_to_select_list_value(beta_list, beta_value[1])
+        gamma_min = Visualization.covert_to_select_list_value(gamma_list, gamma_value[0])
+        gamma_max = Visualization.covert_to_select_list_value(gamma_list, gamma_value[1])
+        df = df[df.beta >= beta_min]
+        df = df[df.beta <= beta_max]
+        df = df[df.gamma >= gamma_min]
+        df = df[df.beta <= gamma_max]
         plt.figure()
         sns.set()
-        da = pd.read_pickle(filename)
-        plt.plot(da, linewidth=0.2)
+        for i in range(0, self.SS.Limited_step):
+            df1 = df.loc[0 + (self.SS.Limited_step*i): (self.SS.Limited_step-1) + (self.SS.Limited_step*i)]
+            plt.plot(df1['Steps'], df1['PROB_BETA'], linewidth=0.7)
         plt.ylabel('probability for layer B')
         plt.xlabel('time(step)')
+        plt.show()
 
-
-    def total_different_state_ratio_chart(filename, ylabel):
+    def different_state_ratio_chart(self, table, beta_value, gamma_value, select_layer):
+        df = self.select_db.select_data_from_DB(table)
+        beta_list = self.making_select_list(table, 'beta')    # 이름은 list이지만 실제로는 array
+        gamma_list = self.making_select_list(table, 'gamma')  # 이름은 list이지만 실제로는 array
+        beta_min = Visualization.covert_to_select_list_value(beta_list, beta_value[0])
+        beta_max = Visualization.covert_to_select_list_value(beta_list, beta_value[1])
+        gamma_min = Visualization.covert_to_select_list_value(gamma_list, gamma_value[0])
+        gamma_max = Visualization.covert_to_select_list_value(gamma_list, gamma_value[1])
+        df = df[df.beta >= beta_min]
+        df = df[df.beta <= beta_max]
+        df = df[df.gamma >= gamma_min]
+        df = df[df.beta <= gamma_max]
         plt.figure()
         sns.set()
-        da = pd.read_pickle(filename)
-        plt.plot(da, linewidth=0.2)
-        plt.ylabel(ylabel)
+        for i in range(0, self.SS.Limited_step):
+            df1 = df.loc[0 + (self.SS.Limited_step*i): (self.SS.Limited_step-1) + (self.SS.Limited_step*i)]
+            plt.plot(df1['Steps'], df1['%s_DIFFERENT_STATE_RATIO'%select_layer], linewidth=0.7)
+        plt.ylabel('different state ratio for layer %s'%select_layer)
         plt.xlabel('time(step)')
+        plt.show()
 
+    @staticmethod
+    def contour_Z_function(beta_list, gamma_list, state_list ):
+        if len(state_list) == len(gamma_list) * len(beta_list):
+            state_list = state_list.reshape(len(gamma_list), len(beta_list))
+        elif len(state_list) != len(gamma_list) * len(beta_list):
+            state_list = list(state_list)
+            for i in range((len(gamma_list) * len(beta_list)) - len(state_list)):
+                state_list.append(0*i)
+            state_list = np.array(state_list)
+            state_list = state_list.reshape(len(gamma_list), len(beta_list))
+        Z = np.zeros([len(beta_list) * len(gamma_list), len(beta_list) * len(gamma_list)])
+        for i in range(0, len(gamma_list)):
+            for j in range(0, len(beta_list)):
+                for k in range(0, len(beta_list)):
+                    for l in range(0, len(gamma_list)):
+                        Z[(i * len(beta_list)) + k][(j * len(gamma_list)) + l] = state_list[i][j]
+        return Z
 
-    def beta_scale_for_chart(filename, y_axis, a, b):  # 0 < a, b < 3
-        plt.figure()
-        sns.set()
-        da = pd.read_pickle(filename)
-        plt.ylim(-0.5, 0.5)
-        plt.ylabel(y_axis)
-        plt.xlabel('time(step)')
-        beta_scale = da.columns.levels[0]
-        min_beta = sum(beta_scale < a)
-        max_beta = sum(beta_scale < b)
-        for i in range(min_beta, max_beta):
-            pic = da[beta_scale[i]]
-            plt.plot(pic, linewidth=0.3)
-
-
-
-
-    def ganma_scale_for_chart(filename, y_axis, a, b):  # 0 < a, b < 3
-        plt.figure()
-        sns.set()
-        da = pd.read_pickle(filename)
-        unstack = da.unstack()
-        reset = unstack.reset_index(name='different_state')
-        Reset = pd.DataFrame(reset)
-        final_table = Reset.pivot_table('different_state', 'time', ['ganma', 'beta'])
-        plt.ylim(-0.5, 0.5)
-        plt.ylabel(y_axis)
-        plt.xlabel('time(step)')
-        ganma_scale = final_table.columns.levels[0]
-        min_beta = sum(ganma_scale < a)
-        max_beta = sum(ganma_scale < b)
-        for i in range(min_beta, max_beta):
-            pic = final_table[ganma_scale[i]]
-            plt.plot(pic, linewidth=0.3)
-
+    @staticmethod
+    def covert_to_select_list_value(select_list, input_value):  # list가 만들어져 있는 곳에 사용
+        loc = sum(select_list <= input_value)  # select_list는 making_select_list를 사용, array로 만들어져 있음
+        temp_value = select_list[loc - 1][0]
+        return temp_value[0]
 
 if __name__ == "__main__":
     print("Visualization")
-
+    visualization = Visualization()
+    visualization.plot_3D_to_2D_contour_for_average_state('average_layer_state')
+    visualization.plot_3D_contour_for_average_state('average_layer_state')
+    print("paint finished")

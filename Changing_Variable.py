@@ -21,6 +21,7 @@ class Changing_Variable:
                 panda_db['beta'] = beta
                 engine = sqlalchemy.create_engine('mysql+pymysql://root:2853@localhost:3306/renew_competition')
                 panda_db.to_sql(name='average_layer_state', con=engine, index=False, if_exists='append')
+                print(panda_db.loc[0])   # 프로그램 잘 실행되고 있는지 확인을 위해서 프린트 실시
                 self.repeat_dynamics.num_data = np.zeros([30, 11])
                 self.repeat_dynamics.Num_Data = np.zeros([30, 11])
 
