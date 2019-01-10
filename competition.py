@@ -4,7 +4,7 @@ import numpy as np
 import OpinionDynamics
 import DecisionDynamics
 import Visualization
-import MakingDB
+import MakingMovie
 import Modeling
 
 Modeling
@@ -16,7 +16,7 @@ class Competition:
         self.opinion_dynamics = OpinionDynamics.OpinionDynamics()
         self.decision_dynamics = DecisionDynamics.DecisionDynamics()
         self.visualization = Visualization.Visualization()
-        self.makingDB = MakingDB.MakingDB()
+        self.makingDB = MakingMovie.MakingDB()
 
 
 
