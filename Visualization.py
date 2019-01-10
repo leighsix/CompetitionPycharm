@@ -11,6 +11,13 @@ class Visualization:
     def __init__(self):
         self.select_db = SelectDB.SelectDB()
 
+    def making_select_list(self, table, step, list_name):
+        df = self.select_db.select_data_from_DB(table)
+        df = df[df.Steps == step]
+        df = pd.DataFrame(df[list_name])
+        select_list = np.array(df.drop_duplicates())
+        return select_list
+
     def plot_2D_gamma_for_average_state(self, table, step, beta_min, beta_max):
         df = self.select_db.select_data_from_DB(table)
         df2 = df[df.Steps == step]
@@ -50,40 +57,32 @@ class Visualization:
 
     def plot_3D_to_2D_contour_for_average_state(self, table, step):
         df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == step]
+        df = df[df.Steps == step]
         sns.set_style("whitegrid")
-        result_beta = sorted(np.array(df2['beta']))
-        result_gamma = sorted(np.array(df2['gamma']))
+        beta_list = list(self.making_select_list(table, step, 'beta'))    # list이지만 실제로는 array
+        gamma_list = list(self.making_select_list(table, step, 'gamma'))
+        state_list = np.array(df['LAYER_A_MEAN'] + df['LAYER_B_MEAN'])
+        result_beta = sorted(beta_list * len(gamma_list))
+        result_gamma = sorted(gamma_list * len(beta_list))
         X, Y = np.meshgrid(result_beta, result_gamma)
-        Z = self.z_function(table, step)
+        if len(state_list) == len(gamma_list) * len(beta_list) :
+            state_list = state_list.reshape(len(gamma_list), len(beta_list))
+        elif len(state_list) != len(gamma_list) * len(beta_list) :
+            state_list = list(state_list)
+            for i in range((len(gamma_list) * len(beta_list)) - len(state_list)) :
+                state_list.append(0)
+            state_list = np.array(state_list)
+            state_list = state_list.reshape(len(gamma_list), len(beta_list))
+        Z = np.zeros([len(beta_list)*len(gamma_list), len(beta_list)*len(gamma_list)])
+        for i in range(0, len(gamma_list)):
+            for j in range(0, len(beta_list)):
+                for k in range(0, len(beta_list)):
+                    for l in range(0, len(gamma_list)):
+                        Z[(i * len(beta_list)) + k][(j * len(gamma_list)) + l] = state_list[i][j]
         plt.contourf(X, Y, Z, 50, cmap='RdBu')
         plt.xlabel('beta')
         plt.ylabel('gamma')
         plt.colorbar(label='Average states')
-
-    def z_function(self, table, step):
-        df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == step]
-        df_beta = df2['beta']
-        df_beta = df_beta.drop_duplicate()
-        beta_gap = len(df2['beta']) / df_beta
-        df_gamma = df2['gamma']
-        df_gamma = df_gamma.drop_dupicate()
-        gamma_gap = len(df2['gamma']) / df_gamma
-        z = np.array(df2['LAYER_A_MEAN'] + df2['LAYER_B_MEAN']).reshape(len(df_beta), len(df_gamma))
-        Z = np.zeros(len(df_beta), len(df_gamma))
-        for i in range(0, len(df_beta)):
-            for j in range(0, len(df_gamma)):
-                for k in range(0, beta_gap):
-                    for l in range(0, gamma_gap):
-                        Z[(i * 41) + k][(j * 41) + l] = z[i][j]
-        return Z
-
-
-
-
-
-
 
 
 
