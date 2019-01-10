@@ -19,12 +19,6 @@ class Visualization:
         np.sort(select_list)
         return select_list
 
-    @staticmethod
-    def covert_to_select_list_value(select_list, input_value):   # list가 만들어져 있는 곳에 사용
-        loc = sum(select_list <= input_value)    # select_list는 making_select_list를 사용, array로 만들어져 있음
-        temp_value = select_list[loc-1][0]
-        return temp_value[0]
-
     def plot_2D_gamma_for_average_state(self, table, beta_value):
         df = self.select_db.select_data_from_DB(table)
         beta_list = self.making_select_list(table, 'beta')
@@ -38,6 +32,7 @@ class Visualization:
         plt.ylim(-3.3, 3.3)
         plt.xlabel('gamma')
         plt.ylabel('Average States')
+        plt.show()
 
     def plot_2D_beta_for_average_state(self, table, gamma_value):
         df = self.select_db.select_data_from_DB(table)
@@ -52,6 +47,7 @@ class Visualization:
         plt.ylim(-3.3, 3.3)
         plt.xlabel('beta')
         plt.ylabel('Average States')
+        plt.show()
 
     def plot_3D_trisurf_for_average_state(self, table):
         df = self.select_db.select_data_from_DB(table)
@@ -66,6 +62,7 @@ class Visualization:
         ax.set_zlabel('Average States')
         ax.set_title('beta-gamma-States')
         ax.view_init(45, 45)
+        plt.show()
 
     def plot_3D_contour_for_average_state(self, table):
         df = self.select_db.select_data_from_DB(table)
@@ -86,6 +83,7 @@ class Visualization:
         ax.set_zlabel('Average States')
         ax.set_title('beta-gamma-States')
         ax.view_init(45, 45)
+        plt.show()
 
     def plot_3D_to_2D_contour_for_average_state(self, table):
         df = self.select_db.select_data_from_DB(table)
@@ -104,26 +102,7 @@ class Visualization:
         plt.xlabel('beta')
         plt.ylabel('gamma')
         plt.colorbar(label='Average states')
-
-    @staticmethod
-    def contour_Z_function(beta_list, gamma_list, state_list ):
-        if len(state_list) == len(gamma_list) * len(beta_list):
-            state_list = state_list.reshape(len(gamma_list), len(beta_list))
-        elif len(state_list) != len(gamma_list) * len(beta_list):
-            state_list = list(state_list)
-            for i in range((len(gamma_list) * len(beta_list)) - len(state_list)):
-                state_list.append(0*i)
-            state_list = np.array(state_list)
-            state_list = state_list.reshape(len(gamma_list), len(beta_list))
-        Z = np.zeros([len(beta_list) * len(gamma_list), len(beta_list) * len(gamma_list)])
-        for i in range(0, len(gamma_list)):
-            for j in range(0, len(beta_list)):
-                for k in range(0, len(beta_list)):
-                    for l in range(0, len(gamma_list)):
-                        Z[(i * len(beta_list)) + k][(j * len(gamma_list)) + l] = state_list[i][j]
-        return Z
-
-
+        plt.show()
 
     def flow_prob_beta_chart(self, table, beta_value, gamma_value):
         #beta_value = [min, max], #gamma_value =[min, max]
@@ -145,6 +124,7 @@ class Visualization:
             plt.plot(df1['Steps'], df1['PROB_BETA'], linewidth=0.7)
         plt.ylabel('probability for layer B')
         plt.xlabel('time(step)')
+        plt.show()
 
     def different_state_ratio_chart(self, table, beta_value, gamma_value, select_layer):
         df = self.select_db.select_data_from_DB(table)
@@ -165,12 +145,35 @@ class Visualization:
             plt.plot(df1['Steps'], df1['%s_DIFFERENT_STATE_RATIO'%select_layer], linewidth=0.7)
         plt.ylabel('different state ratio for layer %s'%select_layer)
         plt.xlabel('time(step)')
+        plt.show()
 
+    @staticmethod
+    def contour_Z_function(beta_list, gamma_list, state_list ):
+        if len(state_list) == len(gamma_list) * len(beta_list):
+            state_list = state_list.reshape(len(gamma_list), len(beta_list))
+        elif len(state_list) != len(gamma_list) * len(beta_list):
+            state_list = list(state_list)
+            for i in range((len(gamma_list) * len(beta_list)) - len(state_list)):
+                state_list.append(0*i)
+            state_list = np.array(state_list)
+            state_list = state_list.reshape(len(gamma_list), len(beta_list))
+        Z = np.zeros([len(beta_list) * len(gamma_list), len(beta_list) * len(gamma_list)])
+        for i in range(0, len(gamma_list)):
+            for j in range(0, len(beta_list)):
+                for k in range(0, len(beta_list)):
+                    for l in range(0, len(gamma_list)):
+                        Z[(i * len(beta_list)) + k][(j * len(gamma_list)) + l] = state_list[i][j]
+        return Z
+
+    @staticmethod
+    def covert_to_select_list_value(select_list, input_value):  # list가 만들어져 있는 곳에 사용
+        loc = sum(select_list <= input_value)  # select_list는 making_select_list를 사용, array로 만들어져 있음
+        temp_value = select_list[loc - 1][0]
+        return temp_value[0]
 
 if __name__ == "__main__":
     print("Visualization")
     visualization = Visualization()
     visualization.plot_3D_to_2D_contour_for_average_state('average_layer_state')
-    result = visualization.making_select_list('average_layer_state', 'beta')
-    print(result)
+    visualization.plot_3D_contour_for_average_state('average_layer_state')
     print("paint finished")
