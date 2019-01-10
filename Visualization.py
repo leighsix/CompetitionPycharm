@@ -4,7 +4,7 @@ import seaborn as sns
 import pandas as pd
 from sympy import *
 import numpy as np
-from mpl_toolkits import mplot3d
+from mplimport mplot3d
 
 
 class Visualization:
@@ -16,38 +16,44 @@ class Visualization:
         df = df[df.Steps == step]
         df = pd.DataFrame(df[list_name])
         select_list = np.array(df.drop_duplicates())
+        np.sort(select_list)
         return select_list
 
-    def plot_2D_gamma_for_average_state(self, table, step, beta_min, beta_max):
+    def plot_2D_gamma_for_average_state(self, table, step, beta_value):
         df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == step]
-        df3 = df2[df2.beta > beta_min]
-        df4 = df3[df3.beta < beta_max]
+        beta_list = self.making_select_list(table, step, 'beta')
+        loc = sum(beta_list <= beta_value)[0]
+        temp_value = beta_list[loc][0]
+        df = df[df.Steps == step]
+        df = df[df.beta == temp_value]
         sns.set_style("whitegrid")
-        plt.plot(df4['gamma'], (df4['LAYER_A_MEAN']+df4['LAYER_B_MEAN']), '-', label='gamma')
+        plt.plot(df['gamma'], (df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']), '-', label='beta=%s' % temp_value)
         plt.legend(framealpha=1, frameon=True)
-        plt.ylim(-1.3, 1.3)
+        plt.ylim(-3.3, 3.3)
         plt.xlabel('gamma')
         plt.ylabel('Average States')
 
-    def plot_2D_beta_for_average_state(self, table, step, gamma_min, gamma_max):
+    def plot_2D_beta_for_average_state(self, table, step, gamma_value):
         df = self.select_db.select_data_from_DB(table)
-        df2 = df[df.Steps == step]
-        df3 = df2[df2.beta > gamma_min]
-        df4 = df3[df3.beta < gamma_max]
+        gamma_list = self.making_select_list(table, step, 'gamma')
+        loc = sum(gamma_list <= gamma_value)[0]
+        temp_value = gamma_list[loc][0]
+        df = df[df.Steps == step]
+        df = df[df.gamma == temp_value]
         sns.set_style("whitegrid")
-        plt.plot(df4['beta'], (df4['LAYER_A_MEAN']+df4['LAYER_B_MEAN']), '-', label='beta')
+        plt.plot(df['beta'], (df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']), '-', label='gamma=%s' % temp_value)
         plt.legend(framealpha=1, frameon=True)
-        plt.ylim(-1.3, 1.3)
+        plt.ylim(-3.3, 3.3)
         plt.xlabel('beta')
         plt.ylabel('Average States')
 
-    def plot_3D_for_average_state(self, table, step):
+    def plot_3D_trisurf_for_average_state(self, table, step):
         df = self.select_db.select_data_from_DB(table)
         df2 = df[df.Steps == step]
         sns.set_style("whitegrid")
+        fig = plt.figure()
         ax = plt.axes(projection='3d')
-        ax.plot_trisurf(df2['beta'], df2['gamma'], (df2['LAYER_A_MEAN']+df2['LAYER_B_MEAN']),
+        ax.plot_trisurf(df2['beta'], df2['gamma'], (df2['LAYER_A_MEAN'] + df2['LAYER_B_MEAN']),
                         cmap='RdBu', edgecolor='none')
         ax.set_xlabel('beta')
         ax.set_ylabel('gamma')
@@ -55,25 +61,58 @@ class Visualization:
         ax.set_title('beta-gamma-States')
         ax.view_init(45, 45)
 
-    def plot_3D_to_2D_contour_for_average_state(self, table, step):
+    def plot_3D_contour_for_average_state(self, table, step):
         df = self.select_db.select_data_from_DB(table)
         df = df[df.Steps == step]
         sns.set_style("whitegrid")
-        beta_list = list(self.making_select_list(table, step, 'beta'))    # list이지만 실제로는 array
+        beta_list = list(self.making_select_list(table, step, 'beta'))  # list이지만 실제로는 array
         gamma_list = list(self.making_select_list(table, step, 'gamma'))
         state_list = np.array(df['LAYER_A_MEAN'] + df['LAYER_B_MEAN'])
         result_beta = sorted(beta_list * len(gamma_list))
         result_gamma = sorted(gamma_list * len(beta_list))
         X, Y = np.meshgrid(result_beta, result_gamma)
-        if len(state_list) == len(gamma_list) * len(beta_list) :
+        if len(state_list) == len(gamma_list) * len(beta_list):
             state_list = state_list.reshape(len(gamma_list), len(beta_list))
-        elif len(state_list) != len(gamma_list) * len(beta_list) :
+        elif len(state_list) != len(gamma_list) * len(beta_list):
             state_list = list(state_list)
-            for i in range((len(gamma_list) * len(beta_list)) - len(state_list)) :
+            for i in range((len(gamma_list) * len(beta_list)) - len(state_list)):
                 state_list.append(0)
             state_list = np.array(state_list)
             state_list = state_list.reshape(len(gamma_list), len(beta_list))
-        Z = np.zeros([len(beta_list)*len(gamma_list), len(beta_list)*len(gamma_list)])
+        Z = np.zeros([len(beta_list) * len(gamma_list), len(beta_list) * len(gamma_list)])
+        for i in range(0, len(gamma_list)):
+            for j in range(0, len(beta_list)):
+                for k in range(0, len(beta_list)):
+                    for l in range(0, len(gamma_list)):
+                        Z[(i * len(beta_list)) + k][(j * len(gamma_list)) + l] = state_list[i][j]
+        ax = plt.axes(projection='3d')
+        ax.contour3D(X, Y, Z, 50, cmap='RdBu')
+        ax.set_xlabel('beta')
+        ax.set_ylabel('gamma')
+        ax.set_zlabel('Average States')
+        ax.set_title('beta-gamma-States')
+        ax.view_init(45, 45)
+
+
+    def plot_3D_to_2D_contour_for_average_state(self, table, step):
+        df = self.select_db.select_data_from_DB(table)
+        df = df[df.Steps == step]
+        sns.set_style("whitegrid")
+        beta_list = list(self.making_select_list(table, step, 'beta'))  # list이지만 실제로는 array
+        gamma_list = list(self.making_select_list(table, step, 'gamma'))
+        state_list = np.array(df['LAYER_A_MEAN'] + df['LAYER_B_MEAN'])
+        result_beta = sorted(beta_list * len(gamma_list))
+        result_gamma = sorted(gamma_list * len(beta_list))
+        X, Y = np.meshgrid(result_beta, result_gamma)
+        if len(state_list) == len(gamma_list) * len(beta_list):
+            state_list = state_list.reshape(len(gamma_list), len(beta_list))
+        elif len(state_list) != len(gamma_list) * len(beta_list):
+            state_list = list(state_list)
+            for i in range((len(gamma_list) * len(beta_list)) - len(state_list)):
+                state_list.append(0)
+            state_list = np.array(state_list)
+            state_list = state_list.reshape(len(gamma_list), len(beta_list))
+        Z = np.zeros([len(beta_list) * len(gamma_list), len(beta_list) * len(gamma_list)])
         for i in range(0, len(gamma_list)):
             for j in range(0, len(beta_list)):
                 for k in range(0, len(beta_list)):
