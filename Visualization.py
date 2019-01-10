@@ -54,26 +54,38 @@ class Visualization:
         sns.set_style("whitegrid")
         result_beta = sorted(np.array(df2['beta']))
         result_gamma = sorted(np.array(df2['gamma']))
-        result_state = np.array(df2['LAYER_A_MEAN'] + df2['LAYER_B_MEAN']).reshape(41, 41)
-
         X, Y = np.meshgrid(result_beta, result_gamma)
-        Z = z_function(result, c)
+        Z = self.z_function(table, step)
         plt.contourf(X, Y, Z, 50, cmap='RdBu')
         plt.xlabel('beta')
         plt.ylabel('gamma')
         plt.colorbar(label='Average states')
 
-    @staticmethod
-    def z_function(result, a):
-        final_data = pd.read_pickle(result)
-        z = np.array(final_data[str(a)]).reshape(41, 41)
-        Z = np.zeros((len(), SS.))
-        for i in range(0, 41):
-            for j in range(0, 41):
-                for k in range(0, 41):
-                    for l in range(0, 41):
+    def z_function(self, table, step):
+        df = self.select_db.select_data_from_DB(table)
+        df2 = df[df.Steps == step]
+        df_beta = df2['beta']
+        df_beta = df_beta.drop_duplicate()
+        beta_gap = len(df2['beta']) / df_beta
+        df_gamma = df2['gamma']
+        df_gamma = df_gamma.drop_dupicate()
+        gamma_gap = len(df2['gamma']) / df_gamma
+        z = np.array(df2['LAYER_A_MEAN'] + df2['LAYER_B_MEAN']).reshape(len(df_beta), len(df_gamma))
+        Z = np.zeros(len(df_beta), len(df_gamma))
+        for i in range(0, len(df_beta)):
+            for j in range(0, len(df_gamma)):
+                for k in range(0, beta_gap):
+                    for l in range(0, gamma_gap):
                         Z[(i * 41) + k][(j * 41) + l] = z[i][j]
         return Z
+
+
+
+
+
+
+
+
 
 
 
@@ -100,58 +112,58 @@ class Visualization:
 # ex__  prob_beta_plot_3D('flow_prob_beta5.0_data.pickle', 51, 20, 10, 101, 'time', 'ganma', 'prob_beta', 45, 45)
 
 
-def total_flow_prob_beta_chart(filename):
-    plt.figure()
-    sns.set()
-    da = pd.read_pickle(filename)
-    plt.plot(da, linewidth=0.2)
-    plt.ylabel('probability for layer B')
-    plt.xlabel('time(step)')
+    def total_flow_prob_beta_chart(self, table, step):
+        plt.figure()
+        sns.set()
+        da = pd.read_pickle(filename)
+        plt.plot(da, linewidth=0.2)
+        plt.ylabel('probability for layer B')
+        plt.xlabel('time(step)')
 
 
-def total_different_state_ratio_chart(filename, ylabel):
-    plt.figure()
-    sns.set()
-    da = pd.read_pickle(filename)
-    plt.plot(da, linewidth=0.2)
-    plt.ylabel(ylabel)
-    plt.xlabel('time(step)')
+    def total_different_state_ratio_chart(filename, ylabel):
+        plt.figure()
+        sns.set()
+        da = pd.read_pickle(filename)
+        plt.plot(da, linewidth=0.2)
+        plt.ylabel(ylabel)
+        plt.xlabel('time(step)')
 
 
-def beta_scale_for_chart(filename, y_axis, a, b):  # 0 < a, b < 3
-    plt.figure()
-    sns.set()
-    da = pd.read_pickle(filename)
-    plt.ylim(-0.5, 0.5)
-    plt.ylabel(y_axis)
-    plt.xlabel('time(step)')
-    beta_scale = da.columns.levels[0]
-    min_beta = sum(beta_scale < a)
-    max_beta = sum(beta_scale < b)
-    for i in range(min_beta, max_beta):
-        pic = da[beta_scale[i]]
-        plt.plot(pic, linewidth=0.3)
+    def beta_scale_for_chart(filename, y_axis, a, b):  # 0 < a, b < 3
+        plt.figure()
+        sns.set()
+        da = pd.read_pickle(filename)
+        plt.ylim(-0.5, 0.5)
+        plt.ylabel(y_axis)
+        plt.xlabel('time(step)')
+        beta_scale = da.columns.levels[0]
+        min_beta = sum(beta_scale < a)
+        max_beta = sum(beta_scale < b)
+        for i in range(min_beta, max_beta):
+            pic = da[beta_scale[i]]
+            plt.plot(pic, linewidth=0.3)
 
 
 
 
-def ganma_scale_for_chart(filename, y_axis, a, b):  # 0 < a, b < 3
-    plt.figure()
-    sns.set()
-    da = pd.read_pickle(filename)
-    unstack = da.unstack()
-    reset = unstack.reset_index(name='different_state')
-    Reset = pd.DataFrame(reset)
-    final_table = Reset.pivot_table('different_state', 'time', ['ganma', 'beta'])
-    plt.ylim(-0.5, 0.5)
-    plt.ylabel(y_axis)
-    plt.xlabel('time(step)')
-    ganma_scale = final_table.columns.levels[0]
-    min_beta = sum(ganma_scale < a)
-    max_beta = sum(ganma_scale < b)
-    for i in range(min_beta, max_beta):
-        pic = final_table[ganma_scale[i]]
-        plt.plot(pic, linewidth=0.3)
+    def ganma_scale_for_chart(filename, y_axis, a, b):  # 0 < a, b < 3
+        plt.figure()
+        sns.set()
+        da = pd.read_pickle(filename)
+        unstack = da.unstack()
+        reset = unstack.reset_index(name='different_state')
+        Reset = pd.DataFrame(reset)
+        final_table = Reset.pivot_table('different_state', 'time', ['ganma', 'beta'])
+        plt.ylim(-0.5, 0.5)
+        plt.ylabel(y_axis)
+        plt.xlabel('time(step)')
+        ganma_scale = final_table.columns.levels[0]
+        min_beta = sum(ganma_scale < a)
+        max_beta = sum(ganma_scale < b)
+        for i in range(min_beta, max_beta):
+            pic = final_table[ganma_scale[i]]
+            plt.plot(pic, linewidth=0.3)
 
 
 if __name__ == "__main__":
