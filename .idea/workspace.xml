@@ -6,10 +6,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f61e140-c926-40e5-8bea-a8253fe2eb3f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MakingDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/MakingMovie.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/competition.py" beforeDir="false" afterPath="$PROJECT_DIR$/competition.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/making_visualization-Copy1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/making_visualization-Copy1.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MakingMovie.py" beforeDir="false" afterPath="$PROJECT_DIR$/MakingMovie.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,13 +34,13 @@
         <counts>
           <entry key="Python Console" value="40" />
           <entry key="dummy" value="29" />
-          <entry key="py" value="2229" />
+          <entry key="py" value="2241" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="29" />
-          <entry key="Python" value="2269" />
+          <entry key="Python" value="2281" />
         </counts>
       </usages-collector>
     </session>
@@ -107,8 +104,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MakingMovie.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2794">
-              <caret line="127" column="36" lean-forward="true" selection-start-line="127" selection-start-column="36" selection-end-line="127" selection-end-column="36" />
+            <state relative-caret-position="506">
+              <caret line="32" column="34" lean-forward="true" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="34" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -352,7 +349,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1026" extended-state="7" />
+    <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49775785" visible="true" weight="0.11580217" />
@@ -531,8 +528,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MakingMovie.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2794">
-          <caret line="127" column="36" lean-forward="true" selection-start-line="127" selection-start-column="36" selection-end-line="127" selection-end-column="36" />
+        <state relative-caret-position="506">
+          <caret line="32" column="34" lean-forward="true" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="34" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

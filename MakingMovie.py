@@ -19,9 +19,9 @@ class MakingMovie:
         inter_net.add_layer('A_layer')
         for i in sorted(A_edges.nodes):
             inter_net.add_node(i)
-            if self.SS == 2:
+            if layer_A.A[i] == 2:
                 A_nodecolor.append((i, 'A_layer', 2))
-            elif A[i] == 1:
+            elif layer_A.A[i] == 1:
                 A_nodecolor.append((i, 'A_layer', 1))
         for i, j in sorted(A_edges.edges):
             inter_net[i, j, 'A_layer'] = 1
@@ -144,4 +144,20 @@ class MakingMovie:
 
 if __name__ == "__main__":
     print("Making the movie for competition")
-
+    making_interconnected_edges()
+    static_variable(0.5, 2)
+    fig = plt.figure()
+    ims = [np.array(drawing_graph('dynamic_image.png'))]
+    limited_time = 1000
+    total = 0
+    while True:
+        im = animation_interconnected_dynamics('dynamic_image.png')
+        ims.append(np.array(im))
+        total += 1
+        if (np.all(A > 0) == 1 and np.all(B > 0) == 1) or (np.all(A < 0) == 1 and np.all(B < 0) == 1) or (
+                total == limited_time):
+            break
+    im = animation_interconnected_dynamics('dynamic_image.png')
+    ims.append(np.array(im))
+    IMS = np.array(ims)
+    plot_movie_mp4(IMS, 'dynamic_images_no_leader(128（BA), 128(RR), ganma=0.5, beta=2).mp4')
