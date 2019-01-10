@@ -26,6 +26,7 @@ class Visualization:
         temp_value = beta_list[loc][0]
         df = df[df.Steps == step]
         df = df[df.beta == temp_value]
+        plt.figure()
         sns.set_style("whitegrid")
         plt.plot(df['gamma'], (df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']), '-', label='beta=%s' % temp_value)
         plt.legend(framealpha=1, frameon=True)
@@ -40,6 +41,7 @@ class Visualization:
         temp_value = gamma_list[loc][0]
         df = df[df.Steps == step]
         df = df[df.gamma == temp_value]
+        plt.figure()
         sns.set_style("whitegrid")
         plt.plot(df['beta'], (df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']), '-', label='gamma=%s' % temp_value)
         plt.legend(framealpha=1, frameon=True)
@@ -71,20 +73,7 @@ class Visualization:
         result_beta = sorted(beta_list * len(gamma_list))
         result_gamma = sorted(gamma_list * len(beta_list))
         X, Y = np.meshgrid(result_beta, result_gamma)
-        if len(state_list) == len(gamma_list) * len(beta_list):
-            state_list = state_list.reshape(len(gamma_list), len(beta_list))
-        elif len(state_list) != len(gamma_list) * len(beta_list):
-            state_list = list(state_list)
-            for i in range((len(gamma_list) * len(beta_list)) - len(state_list)):
-                state_list.append(0)
-            state_list = np.array(state_list)
-            state_list = state_list.reshape(len(gamma_list), len(beta_list))
-        Z = np.zeros([len(beta_list) * len(gamma_list), len(beta_list) * len(gamma_list)])
-        for i in range(0, len(gamma_list)):
-            for j in range(0, len(beta_list)):
-                for k in range(0, len(beta_list)):
-                    for l in range(0, len(gamma_list)):
-                        Z[(i * len(beta_list)) + k][(j * len(gamma_list)) + l] = state_list[i][j]
+        Z = Visualization.contour_Z_function(beta_list, gamma_list, state_list)
         ax = plt.axes(projection='3d')
         ax.contour3D(X, Y, Z, 50, cmap='RdBu')
         ax.set_xlabel('beta')
@@ -92,7 +81,6 @@ class Visualization:
         ax.set_zlabel('Average States')
         ax.set_title('beta-gamma-States')
         ax.view_init(45, 45)
-
 
     def plot_3D_to_2D_contour_for_average_state(self, table, step):
         df = self.select_db.select_data_from_DB(table)
@@ -104,12 +92,22 @@ class Visualization:
         result_beta = sorted(beta_list * len(gamma_list))
         result_gamma = sorted(gamma_list * len(beta_list))
         X, Y = np.meshgrid(result_beta, result_gamma)
+        Z = Visualization.contour_Z_function(beta_list, gamma_list, state_list)
+        plt.figure()
+        sns.set()
+        plt.contourf(X, Y, Z, 50, cmap='RdBu')
+        plt.xlabel('beta')
+        plt.ylabel('gamma')
+        plt.colorbar(label='Average states')
+
+    @staticmethod
+    def contour_Z_function(beta_list, gamma_list, state_list ):
         if len(state_list) == len(gamma_list) * len(beta_list):
             state_list = state_list.reshape(len(gamma_list), len(beta_list))
         elif len(state_list) != len(gamma_list) * len(beta_list):
             state_list = list(state_list)
             for i in range((len(gamma_list) * len(beta_list)) - len(state_list)):
-                state_list.append(0)
+                state_list.append(0*i)
             state_list = np.array(state_list)
             state_list = state_list.reshape(len(gamma_list), len(beta_list))
         Z = np.zeros([len(beta_list) * len(gamma_list), len(beta_list) * len(gamma_list)])
@@ -118,39 +116,11 @@ class Visualization:
                 for k in range(0, len(beta_list)):
                     for l in range(0, len(gamma_list)):
                         Z[(i * len(beta_list)) + k][(j * len(gamma_list)) + l] = state_list[i][j]
-        plt.contourf(X, Y, Z, 50, cmap='RdBu')
-        plt.xlabel('beta')
-        plt.ylabel('gamma')
-        plt.colorbar(label='Average states')
+        return Z
 
 
 
-
-
-    def prob_beta_plot_3D(result, number_ganma, t, initial, gap, a, b, c, d, e):
-        df = self.select_db.select_data_from_DB(table)
-        ganma_data = []
-        probbeta = []
-        times = np.linspace(0, t - 1, t)
-        time = sorted(sorted(times) * number_ganma)
-        for i in range(number_ganma):
-            ganma_data.append(flow_probbeta_data.iloc[0, initial + (gap * i)])
-        ganma_datas = (ganma_data) * t
-        for j in range(t):
-            for i in range(number_ganma):
-                probbeta.append(flow_probbeta_data.iloc[2 + j, initial + (gap * i)])
-        sns.set_style("whitegrid")
-        ax = plt.axes(projection='3d')
-        ax.plot_trisurf(time, ganma_datas, probbeta, cmap='viridis', edgecolor='none')
-        ax.set_xlabel(str(a))
-        ax.set_ylabel(str(b))
-        ax.set_zlabel(str(c))
-        ax.view_init(d, e)
-
-# ex__  prob_beta_plot_3D('flow_prob_beta5.0_data.pickle', 51, 20, 10, 101, 'time', 'ganma', 'prob_beta', 45, 45)
-
-
-    def total_flow_prob_beta_chart(self, table, step):
+    def flow_prob_beta_chart(self, table, step):
         plt.figure()
         sns.set()
         da = pd.read_pickle(filename)
