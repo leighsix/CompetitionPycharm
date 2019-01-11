@@ -12,12 +12,12 @@ class MakingMovie:
     def __init__(self):
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
 
-    def making_A_layer_graph():
+    def making_layer_A_graph(self, layer_A):
         global A_pair, A_nodecolor
         A_pair = []
         A_nodecolor = []
         inter_net.add_layer('A_layer')
-        for i in sorted(A_edges.nodes):
+        for i in sorted(layer_A.A_edges.nodes):
             inter_net.add_node(i)
             if layer_A.A[i] == 2:
                 A_nodecolor.append((i, 'A_layer', 2))
@@ -27,31 +27,36 @@ class MakingMovie:
             inter_net[i, j, 'A_layer'] = 1
             A_pair.append(((i, 'A_layer'), (j, 'A_layer')))
         return inter_net
+
+
       # "rule":"edgeweight","colormap":"jet","scaleby":0.1
 
-    def making_B_layer_graph():
+    def making_layer_B_graph(self, layer_B):
         global B_pair, B_nodecolor
         B_pair = []
         B_nodecolor = []
         inter_net.add_layer('B_layer')
-        for i in sorted(B_edges.nodes):
+        for i in sorted(layer_B.B_edges.nodes):
             inter_net.add_node(i)
             if B[i] == 1:
                 B_nodecolor.append((i, 'B_layer', 1))
             elif B[i] == -1:
                 B_nodecolor.append((i, 'B_layer', -1))
-        for i, j in sorted(B_edges.edges):
+        for i, j in sorted(layer_B.B_edges.edges):
             inter_net[i, j, 'B_layer'] = 1
             B_pair.append(((i, 'B_layer'), (j, 'B_layer')))
         return inter_net
 
-    def inter_edge_graph():
+    def making_interconnected_edges_graph(self, layer_A):
         global inter_pair, inter_net
         inter_pair = []
         inter_net = MultilayerNetwork(aspects=1)
-        making_A_layer_graph()
-        making_B_layer_graph()
-        for i, j in sorted(AB_edges):
+        self.making_layer_A_graph(layer_A)
+        self.making_layer_B_graph(layer_B)
+
+
+
+        for i, j in sorted(layer_A.AB_edges):
             inter_net[j, 'A_layer'][i, 'B_layer'] = 1
             inter_pair.append(((j, 'A_layer'), (i, 'B_layer')))
         return inter_net
@@ -88,21 +93,21 @@ class MakingMovie:
                 nodeColorDict[(B_nodecolor[i][0], 'B_layer')] = 'deepskyblue'
         return nodeColorDict
 
-    def nodecoordsdic():
+    def nodecoordsdic(self, layer_A, layer_B):
         global nodeCoordsDict
         nodeCoordsDict = {}
-        for i in sorted(A_edges.nodes):
+        for i in sorted(layer_A.A_edges.nodes):
             nodeCoordsDict[i, 'A_layer'] = ((1 / (i + 1)), 0.9)
-        for i in sorted(B_edges.nodes):
+        for i in sorted(layer_B.B_edges.nodes):
             nodeCoordsDict[i, 'B_layer'] = ((1 / (i + 1)), 0.1)
         return nodeCoordsDict
 
-    def nodelayercoordsdic():
+    def nodelayercoordsdic(self, layer_A, layer_B):
         global nodelayerCoordsDict
         nodelayerCoordsDict = {'A_layer': (1, 1), 'B_layer': (0, 0)}
         return nodelayerCoordsDict
 
-    def drawing_graph(result):  # drawing_graph("inter_net_BA_leaderasdf.png")
+    def drawing_graph(self, result):  # drawing_graph("inter_net_BA_leaderasdf.png")
         inter_edge_graph()
         fig = draw(inter_net, layout='spring', show=False, layergap=1.3,
                    nodeCoords=nodecoordsdic(), nodelayerCoords=nodelayercoordsdic(),
@@ -121,13 +126,13 @@ class MakingMovie:
         image = plt.imread(result)
         return image
 
-    def animation_interconnected_dynamics(result):
+    def animation_interconnected_dynamics(self, result):
         A_layer_dynamics()
         B_layer_dynamics()
         drawing_graph(result)
         return drawing_graph(result)
 
-    def plot_movie_mp4(image_array, result):
+    def plot_movie_mp4(self, image_array, result):
         dpi = 72.0
         xpixels, ypixels = image_array[0].shape[0], image_array[0].shape[1]
         fig = plt.figure(figsize=(ypixels / dpi, xpixels / dpi), dpi=dpi)
