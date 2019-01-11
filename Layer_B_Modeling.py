@@ -43,7 +43,7 @@ class Layer_B_Modeling:
         node_info= [{'node_number': i, 'layer': 'B', 'location': (random.random(), random.random()),
                      'state' : self.B[i]}
                     for i in sorted(self.B_edges.nodes)]
-        node_info = pd.DataFrame(node_info, columns = ['node_number', 'layer', 'location', 'state'])
+        node_info = pd.DataFrame(node_info, columns=['node_number', 'layer', 'location', 'state'])
         return node_info
 
 
