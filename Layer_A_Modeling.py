@@ -1,5 +1,6 @@
 import networkx as nx
 import numpy as np
+import pandas as pd
 import random
 import Setting_Simulation_Value
 ## A layer Modeling : A, A_edges, AB_edges, AB_neighbor
@@ -13,6 +14,7 @@ class Layer_A_Modeling:
         self.A_edges = self.A_layer_config()[1]
         self.AB_edges = self.A_layer_config()[2]
         self.AB_neighbor = self.A_layer_config()[3]
+        self.A_node_info = self.making_node_info()
 
     def A_layer_config(self):
         # A_layer 구성요소 A_layer_config(state = [1,2], node = 2048, edge = 5, Max = 2, Min = -2)
@@ -55,6 +57,16 @@ class Layer_A_Modeling:
                 self.AB_edges.append((i, connected_A_node))
         self.AB_neighbor = np.array(self.AB_neighbor).reshape(-1, self.SS.B_inter_edges)
         return self.AB_edges, self.AB_neighbor
+        # AB_neighbor은 B노드번호 기준으로 연결된 A노드번호  ex) AB_neighbor[0]= array([0, 1])
+        # B 노드 0에 A노드 0번, 1번이 연결되어 있다는 뜻
+        # AB_edges는 (0, 1)은 B 노드 0번과 A 노드 1번이 연결되어 있다는 뜻
+
+    def making_node_info(self):  # layer, node_number, location
+        node_info= [{'node_number': i, 'layer': 'A', 'location': (random.random(), random.random()),
+                     'state' : self.A[i]}
+                    for i in sorted(self.A_edges.nodes)]
+        node_info = pd.DataFrame(node_info, columns = ['node_number', 'layer', 'location', 'state'])
+        return node_info
 
 
 

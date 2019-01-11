@@ -1,5 +1,6 @@
 import networkx as nx
 import numpy as np
+import pandas as pd
 import random
 import Setting_Simulation_Value
 ## B layer : B, B_edges
@@ -11,6 +12,7 @@ class Layer_B_Modeling:
         self.B_layer_config()
         self.B = self.B_layer_config()[0]
         self.B_edges = self.B_layer_config()[1]
+        self.B_node_info = self.making_node_info()
 
     def B_layer_config(self):  # B_layer 구성요소 B_layer_config(state = [-1], node = 2048, edge = 5, inter_edge= 1)
         self.select_layer_B_model(self.SS.B_network)
@@ -36,6 +38,13 @@ class Layer_B_Modeling:
         random.shuffle(B)
         B_edges = nx.barabasi_albert_graph(self.SS.B_node, self.SS.B_edge, seed=None)
         return B, B_edges
+
+    def making_node_info(self):  # layer, node_number, location
+        node_info= [{'node_number': i, 'layer': 'B', 'location': (random.random(), random.random()),
+                     'state' : self.B[i]}
+                    for i in sorted(self.B_edges.nodes)]
+        node_info = pd.DataFrame(node_info, columns = ['node_number', 'layer', 'location', 'state'])
+        return node_info
 
 
 if __name__ == "__main__":
