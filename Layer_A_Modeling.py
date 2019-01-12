@@ -15,8 +15,6 @@ class Layer_A_Modeling:
         self.AB_edges = self.A_layer_config()[2]
         self.AB_neighbor = self.A_layer_config()[3]
         self.A_node_info = self.making_node_info()
-        self.layer_A_internal_edge_dic = self.making_layer_A_internal_edge()
-        self.external_edge_dic = self.making_external_edge()
 
     def A_layer_config(self):
         # A_layer 구성요소 A_layer_config(state = [1,2], node = 2048, edge = 5, Max = 2, Min = -2)

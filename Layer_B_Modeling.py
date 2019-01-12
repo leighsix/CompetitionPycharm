@@ -13,7 +13,6 @@ class Layer_B_Modeling:
         self.B = self.B_layer_config()[0]
         self.B_edges = self.B_layer_config()[1]
         self.B_node_info = self.making_node_info()
-        self.layer_B_internal_edge_dic = self.making_layer_B_internal_edge()
 
     def B_layer_config(self):  # B_layer 구성요소 B_layer_config(state = [-1], node = 2048, edge = 5, inter_edge= 1)
         self.select_layer_B_model(self.SS.B_network)

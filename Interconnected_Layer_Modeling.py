@@ -37,17 +37,19 @@ class Interconnected_Layer_Modeling:
     def making_node_color(self, layer_A, layer_B):
         node_color_dic = {}
         for i in sorted(layer_A.A_edges.nodes):
-            node_color_dic[(i, 'layer_A')] = self.SS.ColorDict[layer_A.A[i]]
+            node_color_dic[(i, 'layer_A')] = self.SS.NodeColorDict[layer_A.A[i]]
         for i in sorted(layer_B.B_edges.nodes):
-            node_color_dic[(i, 'layer_B')] = self.SS.ColorDict[layer_B.B[i]]
+            node_color_dic[(i, 'layer_B')] = self.SS.NodeColorDict[layer_B.B[i]]
         return node_color_dic
 
     def making_edge_color(self, layer_A, layer_B):
         edge_color_dic = {}
         for i, j in sorted(layer_A.A_edges.edges):
-            edge_color_dic[(i, 'layer_A'), (j, 'layer_A')] = 'red'
+            edge_color_dic[(i, 'layer_A'), (j, 'layer_A')] = self.SS.EdgeColorDict[layer_A.A[i]*layer_A.A[j]]
         for i, j in sorted(layer_B.B_edges.edges):
-            edge_color_dic[(i, 'layer_B'), (j, 'layer_B')] = 'blue'
+            edge_color_dic[(i, 'layer_B'), (j, 'layer_B')] = self.SS.EdgeColorDict[layer_B.B[i]*layer_B.B[j]]
+        for i, j in sorted(layer_A.AB_edges):
+            edge_color_dic[(j, 'layer_A'), (i, 'layer_B')] = self.SS.EdgeColorDict[layer_A.A[j]*layer_B.B[i]]
         return edge_color_dic
 
     def making_node_coordinates(self, layer_A, layer_B):
