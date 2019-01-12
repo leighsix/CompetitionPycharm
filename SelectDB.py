@@ -8,7 +8,7 @@ class SelectDB:
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
 
     def select_data_from_DB(self, table):
-        engine = sqlalchemy.create_engine('mysql+pymysql://root:2853@localhost:3306/renew_competition')
+        engine = sqlalchemy.create_engine('mysql+pymysql://root:2853@localhost:3306/%s' % self.SS.database)
         query = "SELECT * FROM %s" % table \
                 + " WHERE Structure = '%s'" % str(self.SS.Structure) \
                 + " AND A_internal_edges = %s" % int(self.SS.A_edge) \

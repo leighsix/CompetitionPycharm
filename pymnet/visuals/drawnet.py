@@ -46,7 +46,6 @@ class NetFigure(object):
         for edge in self.edges:
             edge.draw()
 
-
     def draw(self,**kwargs):
         #Override this method
         raise NotImplemented()
@@ -64,8 +63,7 @@ class Node(object):
         self.layer=layer
         self.net=layer.net
         self.label=label
-        self.labelArgs=labelArgs 
-
+        self.labelArgs=labelArgs
         self.net.register_node(self)        
 
     def draw(self):

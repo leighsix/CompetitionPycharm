@@ -64,6 +64,22 @@ class Visualization:
         ax.view_init(45, 45)
         plt.show()
 
+
+    def plot_3D_scatter_for_average_state(self, table):
+        df = self.select_db.select_data_from_DB(table)
+        df2 = df[df.Steps == self.SS.Limited_step]
+        sns.set_style("whitegrid")
+        plt.figure()
+        ax = plt.axes(projection='3d')
+        ax.scatter(df2['beta'], df2['gamma'], (df2['LAYER_A_MEAN'] + df2['LAYER_B_MEAN']),
+                        c =(df2['LAYER_A_MEAN'] + df2['LAYER_B_MEAN']), cmap='RdBu', linewidth = 0.2)
+        ax.set_xlabel('beta')
+        ax.set_ylabel('gamma')
+        ax.set_zlabel('Average States')
+        ax.set_title('beta-gamma-States')
+        ax.view_init(45, 45)
+        plt.show()
+
     def plot_3D_contour_for_average_state(self, table):
         df = self.select_db.select_data_from_DB(table)
         df = df[df.Steps == self.SS.Limited_step]
@@ -174,6 +190,12 @@ class Visualization:
 if __name__ == "__main__":
     print("Visualization")
     visualization = Visualization()
-    visualization.plot_3D_to_2D_contour_for_average_state('average_layer_state')
-    visualization.plot_3D_contour_for_average_state('average_layer_state')
+    #visualization.plot_3D_to_2D_contour_for_average_state('result2')
+    #visualization.plot_3D_contour_for_average_state('result2')
+    #visualization.plot_3D_scatter_for_average_state('previous_research')    #previous_research
+    #visualization.plot_3D_trisurf_for_average_state('previous_research')
+    #visualization.plot_2D_beta_for_average_state('previous_research', 0.2)
+    #visualization.plot_2D_beta_for_average_state('previous_research', 0.4)
+    #visualization.plot_2D_beta_for_average_state('previous_research', 0.6)
+
     print("paint finished")
