@@ -69,18 +69,6 @@ class Layer_A_Modeling:
         node_info = pd.DataFrame(node_info, columns=['node_number', 'layer', 'location'])
         return node_info
 
-    def making_layer_A_internal_edge(self):
-        layer_A_internal_edge_dic = {}
-        for i, j in sorted(self.A_edges.edges):
-            layer_A_internal_edge_dic[((i, 'layer_A'), (j, 'layer_A'))] = 1
-        return layer_A_internal_edge_dic
-
-    def making_external_edge(self):
-        external_edge_dic = {}
-        for i, j in sorted(self.AB_edges):
-            external_edge_dic[((j, 'layer_A'), (i, 'layer_B'))] = 1
-        return external_edge_dic
-
 
 if __name__ == "__main__" :
     Layer_A = Layer_A_Modeling()
@@ -88,8 +76,6 @@ if __name__ == "__main__" :
     print(Layer_A.A_edges.edges)
     print(Layer_A.AB_edges)
     print(Layer_A.AB_neighbor)
-    print(Layer_A.external_edge_dic)
-    print(Layer_A.layer_A_internal_edge_dic)
 
 
 

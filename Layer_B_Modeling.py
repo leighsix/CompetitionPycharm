@@ -46,11 +46,6 @@ class Layer_B_Modeling:
         node_info = pd.DataFrame(node_info, columns=['node_number', 'layer', 'location'])
         return node_info
 
-    def making_layer_B_internal_edge(self):
-        layer_B_internal_edge_dic ={}
-        for i, j in sorted(self.B_edges.edges):
-            layer_B_internal_edge_dic[((i, 'layer_B'), (j, 'layer_B'))] = 1
-        return layer_B_internal_edge_dic
 
 
 if __name__ == "__main__":

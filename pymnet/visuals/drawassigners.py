@@ -11,7 +11,7 @@ except ImportError:
     matplotlib_loaded=False
 
 class PropertyAssigner(object):
-    rules=set(["order","name","f"])
+    rules=set(["order", "name", "f"])
     def __init__(self,propDict,propRule,defaultProp,net):
         self.propDict=propDict
         self.propRule=propRule
