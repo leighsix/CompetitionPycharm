@@ -13,6 +13,7 @@ class Layer_B_Modeling:
         self.B = self.B_layer_config()[0]
         self.B_edges = self.B_layer_config()[1]
         self.B_node_info = self.making_node_info()
+        self.layer_B_internal_edge_dic = self.making_layer_B_internal_edge()
 
     def B_layer_config(self):  # B_layer 구성요소 B_layer_config(state = [-1], node = 2048, edge = 5, inter_edge= 1)
         self.select_layer_B_model(self.SS.B_network)
@@ -40,11 +41,16 @@ class Layer_B_Modeling:
         return B, B_edges
 
     def making_node_info(self):  # layer, node_number, location
-        node_info= [{'node_number': i, 'layer': 'B', 'location': (random.random(), random.random()),
-                     'state' : self.B[i]}
+        node_info = [{'node_number': i, 'layer': 'B', 'location': (random.random(), random.random())}
                     for i in sorted(self.B_edges.nodes)]
-        node_info = pd.DataFrame(node_info, columns=['node_number', 'layer', 'location', 'state'])
+        node_info = pd.DataFrame(node_info, columns=['node_number', 'layer', 'location'])
         return node_info
+
+    def making_layer_B_internal_edge(self):
+        layer_B_internal_edge_dic ={}
+        for i, j in sorted(self.B_edges.edges):
+            layer_B_internal_edge_dic[((i, 'layer_B'), (j, 'layer_B'))] = 1
+        return layer_B_internal_edge_dic
 
 
 if __name__ == "__main__":

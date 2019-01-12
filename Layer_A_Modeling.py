@@ -15,6 +15,8 @@ class Layer_A_Modeling:
         self.AB_edges = self.A_layer_config()[2]
         self.AB_neighbor = self.A_layer_config()[3]
         self.A_node_info = self.making_node_info()
+        self.layer_A_internal_edge_dic = self.making_layer_A_internal_edge()
+        self.external_edge_dic = self.making_external_edge()
 
     def A_layer_config(self):
         # A_layer 구성요소 A_layer_config(state = [1,2], node = 2048, edge = 5, Max = 2, Min = -2)
@@ -62,24 +64,32 @@ class Layer_A_Modeling:
         # AB_edges는 (0, 1)은 B 노드 0번과 A 노드 1번이 연결되어 있다는 뜻
 
     def making_node_info(self):  # layer, node_number, location
-        node_info= [{'node_number': i, 'layer': 'A', 'location': (random.random(), random.random()),
-                     'state' : self.A[i]}
-                    for i in sorted(self.A_edges.nodes)]
-        node_info = pd.DataFrame(node_info, columns=['node_number', 'layer', 'location', 'state'])
+        node_info = [{'node_number': i, 'layer': 'A', 'location': (random.random(), random.random())}
+                     for i in sorted(self.A_edges.nodes)]
+        node_info = pd.DataFrame(node_info, columns=['node_number', 'layer', 'location'])
         return node_info
 
+    def making_layer_A_internal_edge(self):
+        layer_A_internal_edge_dic = {}
+        for i, j in sorted(self.A_edges.edges):
+            layer_A_internal_edge_dic[((i, 'layer_A'), (j, 'layer_A'))] = 1
+        return layer_A_internal_edge_dic
+
+    def making_external_edge(self):
+        external_edge_dic = {}
+        for i, j in sorted(self.AB_edges):
+            external_edge_dic[((j, 'layer_A'), (i, 'layer_B'))] = 1
+        return external_edge_dic
 
 
 if __name__ == "__main__" :
     Layer_A = Layer_A_Modeling()
-    A = Layer_A.A
-    A_edges = Layer_A.A_edges
-    AB_edges = Layer_A.AB_edges
-    AB_neighbor = Layer_A.AB_neighbor
-    print(A)
-    print(A_edges.edges)
-    print(AB_edges)
-    print(AB_neighbor)
+    print(Layer_A.A)
+    print(Layer_A.A_edges.edges)
+    print(Layer_A.AB_edges)
+    print(Layer_A.AB_neighbor)
+    print(Layer_A.external_edge_dic)
+    print(Layer_A.layer_A_internal_edge_dic)
 
 
 

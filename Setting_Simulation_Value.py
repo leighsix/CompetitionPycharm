@@ -22,6 +22,8 @@ class Setting_Simulation_Value :
         self.Limited_step = 30
         self.R = self.simulation_condition(self.gap)[0]
         self.D = self.simulation_condition(self.gap)[1]
+        self.ColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
+
 
     def simulation_condition(self, gap):
         self.R = np.linspace(0, 2, gap)
@@ -32,6 +34,8 @@ class Setting_Simulation_Value :
         scale = math.log((1 / (self.B_edge + 1)) ** 3)\
                 / math.log(self.B_inter_edges / (self.B_edge + self.B_inter_edges))
         return 0, scale, a
+
+
 
 
 if __name__ == "__main__":

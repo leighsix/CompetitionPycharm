@@ -10,36 +10,30 @@ class Interconnected_Layer_Modeling:
         self.interconnected_network = self.making_interconnected_layer(layer_A, layer_B)
 
     def making_layer_A_graph(self, layer_A, interconnected_network):
-        A_edge_color_dic ={}
         interconnected_network.add_layer('layer_A')
         for i in sorted(layer_A.A_edges.nodes):
             interconnected_network.add_node(i)
         for i, j in sorted(layer_A.A_edges.edges):
             interconnected_network[i, j, 'layer_A'] = 1
-            A_edge_color_dic[((i, 'layer_A'), (j, 'layer_A'))] = 'r'
-        return interconnected_network, A_edge_color_dic
+        return interconnected_network
+
 
     def making_layer_B_graph(self, layer_B, interconnected_network):
-        B_edge_color_dic = {}
         interconnected_network.add_layer('layer_B')
         for i in sorted(layer_B.B_edges.nodes):
             interconnected_network.add_node(i)
         for i, j in sorted(layer_B.B_edges.edges):
             interconnected_network[i, j, 'layer_B'] = 1
-            B_edge_color_dic[((i, 'layer_B'), (j, 'layer_B'))] = 'b'
-        return interconnected_network, B_edge_color_dic
+        return interconnected_network
 
 
     def making_interconnected_layer(self, layer_A, layer_B):
-        external_edge_color_dic = {}
         interconnected_network = MultilayerNetwork(aspects=1)
         self.making_layer_A_graph(layer_A, interconnected_network)
         self.making_layer_B_graph(layer_B, interconnected_network)
         for i, j in sorted(layer_A.AB_edges):
             interconnected_network[j, 'layer_A'][i, 'layer_B'] = 1
-            external_edge_color_dic[((j, 'layer_A'), (i, 'layer_B'))] = 'g'
-        interconnected_network.get_supra_adjacency_matrix()
-        return interconnected_network, external_edge_color_dic
+        return interconnected_network
 
 
 if __name__ == "__main__":
