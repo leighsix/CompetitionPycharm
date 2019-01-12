@@ -17,14 +17,14 @@ class Setting_Simulation_Value :
         self.B_inter_edges = 1
         self.A_inter_edges = 1
         self.B_network = 1        # network : 1 = random regular graph   2 = barabasi-albert graph
-        self.gap = 41
+        self.gap = 50
         self.Repeating_number = 100
         self.Limited_step = 30
         self.R = self.simulation_condition(self.gap)[0]
         self.D = self.simulation_condition(self.gap)[1]
 
     def simulation_condition(self, gap):
-        self.R = np.linspace(0, 2, gap)
+        self.R = np.linspace(1, 2, gap)
         self.D = np.linspace(self.making_beta_scale(gap)[0], self.making_beta_scale(gap)[1], gap)
         return self.R, self.D
 
