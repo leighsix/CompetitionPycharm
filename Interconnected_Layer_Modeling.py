@@ -1,8 +1,10 @@
 from pymnet import *
+import matplotlib.pyplot as plt
 import numpy as np
 import Setting_Simulation_Value
 import Layer_A_Modeling
 import Layer_B_Modeling
+from mpl_toolkits.mplot3d.axes3d import *
 
 
 class Interconnected_Layer_Modeling:
@@ -60,23 +62,25 @@ class Interconnected_Layer_Modeling:
             node_coordinates_dic[i] = np.array(layer_B.B_node_info['location'][i])
         return node_coordinates_dic
 
-
-    def draw_interconnected_network(self, layer_A, layer_B, result):
-        fig = draw(self.interconnected_network, layout='spring', layergap=1.3,
-                   nodeCoords=self.making_node_coordinates(layer_A, layer_B), nodelayerCoords={}, layerPadding=0.05,
-                   alignedNodes=True, ax=None,
-                   layerColorDict={'layer_A': 'pink', 'layer_B': 'steelblue'}, layerColorRule={},
-                   edgeColorDict=self.making_edge_color(layer_A, layer_B),
-                   edgeColorRule={'rule': 'edgetype', 'inter': 'g'},
-                   edgeWidthDict={}, edgeWidthRule={}, defaultEdgeWidth=0.01,
-                   edgeStyleDict={}, edgeStyleRule={'rule': 'edgetype', 'inter': ':', 'intra': '-'},
-                   defaultEdgeStyle='-',
-                   nodeLabelDict={}, nodeLabelRule={}, defaultNodeLabel=None,
-                   nodeColorDict=self.making_node_color(layer_A, layer_B), nodeColorRule={},
-                   defaultNodeColor=None,
-                   nodeLabelColorDict={}, nodeLabelColorRule={}, defaultNodeLabelColor='k',
-                   nodeSizeDict={}, nodeSizeRule={'scalecoeff': 0.1, 'rule': 'scaled'}, defaultNodeSize=None)
-        fig.savefig(result)
+    def draw_interconnected_network(self, layer_A, layer_B, save_file_name):
+        plt.figure()
+        ax = plt.axes(projection='3d')
+        draw(self.interconnected_network, layout='circular', layergap=1.3, layershape='rectangle',
+             nodeCoords=self.making_node_coordinates(layer_A, layer_B), nodelayerCoords={}, layerPadding=0.05,
+             alignedNodes=True, show=True, ax=ax,
+             layerColorDict={'layer_A': 'pink', 'layer_B': 'steelblue'}, layerColorRule={},
+             edgeColorDict=self.making_edge_color(layer_A, layer_B),
+             edgeColorRule={'rule': 'edgetype', 'inter': 'g'},
+             edgeWidthDict={}, edgeWidthRule={}, defaultEdgeWidth=0.01,
+             edgeStyleDict={}, edgeStyleRule={'rule': 'edgetype', 'inter': ':', 'intra': '-'},
+             defaultEdgeStyle='-',
+             nodeLabelDict={}, nodeLabelRule={}, defaultNodeLabel=None,
+             nodeColorDict=self.making_node_color(layer_A, layer_B), nodeColorRule={},
+             defaultNodeColor=None,
+             nodeLabelColorDict={}, nodeLabelColorRule={}, defaultNodeLabelColor='k',
+             nodeSizeDict={}, nodeSizeRule={'scalecoeff': 0.1, 'rule': 'scaled'}, defaultNodeSize=None)
+        plt.savefig(save_file_name)
+        plt.show()
 
 
 if __name__ == "__main__":
@@ -84,5 +88,5 @@ if __name__ == "__main__":
     layer_A = Layer_A_Modeling.Layer_A_Modeling()
     layer_B = Layer_B_Modeling.Layer_B_Modeling()
     ILM = Interconnected_Layer_Modeling()
-    ILM.draw_interconnected_network(layer_A, layer_B, 'result2')
+    ILM.draw_interconnected_network(layer_A, layer_B, 'result3')
     print("Operating finished")
