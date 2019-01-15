@@ -3,8 +3,9 @@ import Interconnected_Layer_Modeling
 import numpy as np
 from IPython.display import display, HTML
 import matplotlib.pyplot as plt
-from matplotlib import animation
 from mpl_toolkits.mplot3d.axes3d import *
+import time
+import matplotlib.animation as animation
 from sympy import *
 import Layer_A_Modeling
 import Layer_B_Modeling
@@ -14,12 +15,17 @@ class MakingMovie:
     def __init__(self):
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
         self.InterNetwork = Interconnected_Layer_Modeling.Interconnected_Layer_Modeling()
+        self.ti = time.time()
 
     def making_movie_for_interconneted_dynamics(self, layer_A, layer_B, img_file_name, save_file_name):
         ims = [np.array(self.InterNetwork.draw_interconnected_network(layer_A, layer_B, img_file_name))]
 
 
         self.plot_movie_mp4(image_array, save_file_name)
+
+    def update(self, i):
+        tempo = time.time() - selt.
+
 
 
 
