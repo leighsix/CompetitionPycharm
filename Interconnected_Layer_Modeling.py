@@ -4,6 +4,7 @@ import Setting_Simulation_Value
 import Layer_A_Modeling
 import Layer_B_Modeling
 from mpl_toolkits.mplot3d.axes3d import *
+import matplotlib.image as mpimg
 import matplotlib.animation as animation
 
 
@@ -79,8 +80,9 @@ class Interconnected_Layer_Modeling:
              nodeLabelColorDict={}, nodeLabelColorRule={}, defaultNodeLabelColor='k',
              nodeSizeDict={}, nodeSizeRule={'scalecoeff': 0.1, 'rule': 'scaled'}, defaultNodeSize=None)
         plt.savefig(save_file_name)
-        image = plt.imread(save_file_name)
-        return image
+        img = mpimg.imread(save_file_name)
+        plt.imshow(img)
+
 
     def making_movie_for_dynamics(self, layer_A, layer_B, save_file_name):
         imgs = []

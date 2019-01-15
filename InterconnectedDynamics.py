@@ -25,8 +25,7 @@ class InterconnectedDynamics:
             self.opinion.A_layer_dynamics(layer_A, layer_B, prob_p)
             self.calculate_prob_beta_mean(layer_A, layer_B, beta)
             self.decision.B_layer_dynamics(layer_A, layer_B, beta)
-            img = self.network.draw_interconnected_network(layer_A, layer_B, 'result.png')
-            imgs.append(np.array(img))
+            self.network.draw_interconnected_network(layer_A, layer_B, 'result.png')
             step_number += 1
             time_count = self.opinion.A_COUNT + self.decision.B_COUNT
             array_value = np.array([self.mp.layer_state_mean(layer_A, layer_B)[0],
@@ -45,8 +44,6 @@ class InterconnectedDynamics:
             self.decision.B_COUNT = 0
             if step_number >= self.SS.Limited_step:
                 break
-        IMS = np.array(imgs)
-        self.network.plot_movie_mp4(IMS, 'dynamics.mp4')
         return layer_A, layer_B, self.total_value
 
     def calculate_prob_beta_mean(self, layer_A, layer_B, beta):
