@@ -1,17 +1,21 @@
 from pymnet import *
 import matplotlib.pyplot as plt
+import numpy as np
 import Setting_Simulation_Value
 import Layer_A_Modeling
 import Layer_B_Modeling
 from mpl_toolkits.mplot3d.axes3d import *
-import matplotlib.image as mpimg
+<<<<<<< HEAD
+=======
 import matplotlib.animation as animation
 
+>>>>>>> parent of c7c534f... 이미지 저장 코드 변경
 
 
 class Interconnected_Layer_Modeling:
     def __init__(self):
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
+        self.interconnected_network = self.making_interconnected_layer(layer_A, layer_B)
 
     def making_layer_A_graph(self, layer_A, interconnected_network):
         interconnected_network.add_layer('layer_A')
@@ -66,11 +70,12 @@ class Interconnected_Layer_Modeling:
     def draw_interconnected_network(self, layer_A, layer_B, save_file_name):
         plt.figure()
         ax = plt.axes(projection='3d')
-        draw(self.making_interconnected_layer(layer_A, layer_B), layout='circular', layergap=1.3, layershape='rectangle',
+        draw(self.interconnected_network, layout='circular', layergap=1.3, layershape='rectangle',
              nodeCoords=self.making_node_coordinates(layer_A, layer_B), nodelayerCoords={}, layerPadding=0.05,
-             alignedNodes=True, ax=ax,
+             alignedNodes=True, show=True, ax=ax,
              layerColorDict={'layer_A': 'pink', 'layer_B': 'steelblue'}, layerColorRule={},
-             edgeColorDict = self.making_edge_color(layer_A, layer_B), edgeColorRule={},
+             edgeColorDict=self.making_edge_color(layer_A, layer_B),
+             edgeColorRule={'rule': 'edgetype', 'inter': 'g'},
              edgeWidthDict={}, edgeWidthRule={}, defaultEdgeWidth=0.01,
              edgeStyleDict={}, edgeStyleRule={'rule': 'edgetype', 'inter': ':', 'intra': '-'},
              defaultEdgeStyle='-',
@@ -80,9 +85,11 @@ class Interconnected_Layer_Modeling:
              nodeLabelColorDict={}, nodeLabelColorRule={}, defaultNodeLabelColor='k',
              nodeSizeDict={}, nodeSizeRule={'scalecoeff': 0.1, 'rule': 'scaled'}, defaultNodeSize=None)
         plt.savefig(save_file_name)
-        img = mpimg.imread(save_file_name)
-        plt.imshow(img)
-
+<<<<<<< HEAD
+        plt.show()
+=======
+        image = plt.imread(save_file_name)
+        return image
 
     def making_movie_for_dynamics(self, layer_A, layer_B, save_file_name):
         imgs = []
@@ -101,6 +108,7 @@ class Interconnected_Layer_Modeling:
             return (im,)
         anim = animation.FuncAnimation(fig, animate, frames=len(image_array), repeat=False, interval=500)
         anim.save(result)
+>>>>>>> parent of c7c534f... 이미지 저장 코드 변경
 
 
 if __name__ == "__main__":
