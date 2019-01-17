@@ -4,6 +4,7 @@ import Setting_Simulation_Value
 import OpinionDynamics
 import DecisionDynamics
 import MakingPandas
+import Interconnected_Layer_Modeling
 import Layer_A_Modeling
 import Layer_B_Modeling
 
@@ -14,14 +15,17 @@ class InterconnectedDynamics:
         self.opinion = OpinionDynamics.OpinionDynamics()
         self.decision = DecisionDynamics.DecisionDynamics()
         self.mp = MakingPandas.MakingPandas()
+        self.network = Interconnected_Layer_Modeling.Interconnected_Layer_Modeling()
         self.total_value = np.zeros(11)
 
     def interconnected_dynamics(self, layer_A, layer_B, prob_p, beta):
         step_number = 0
+        imgs = []
         while True:
             self.opinion.A_layer_dynamics(layer_A, layer_B, prob_p)
             self.calculate_prob_beta_mean(layer_A, layer_B, beta)
             self.decision.B_layer_dynamics(layer_A, layer_B, beta)
+            self.network.draw_interconnected_network(layer_A, layer_B, 'result.png')
             step_number += 1
             time_count = self.opinion.A_COUNT + self.decision.B_COUNT
             array_value = np.array([self.mp.layer_state_mean(layer_A, layer_B)[0],
@@ -70,6 +74,7 @@ if __name__ == "__main__" :
     inter_dynamics = InterconnectedDynamics()
     inter_dynamics.interconnected_dynamics(Layer_A, Layer_B, prob_p, beta)
     print(sum(Layer_A.A)/2048, sum(Layer_B.B)/2048)
+    print("Operating finished")
 
 
 

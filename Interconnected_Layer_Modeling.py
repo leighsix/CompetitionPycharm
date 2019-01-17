@@ -1,14 +1,17 @@
 from pymnet import *
-import numpy as np
+import matplotlib.pyplot as plt
 import Setting_Simulation_Value
 import Layer_A_Modeling
 import Layer_B_Modeling
+from mpl_toolkits.mplot3d.axes3d import *
+import matplotlib.image as mpimg
+import matplotlib.animation as animation
+
 
 
 class Interconnected_Layer_Modeling:
     def __init__(self):
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
-        self.interconnected_network = self.making_interconnected_layer(layer_A, layer_B)
 
     def making_layer_A_graph(self, layer_A, interconnected_network):
         interconnected_network.add_layer('layer_A')
@@ -60,23 +63,44 @@ class Interconnected_Layer_Modeling:
             node_coordinates_dic[i] = np.array(layer_B.B_node_info['location'][i])
         return node_coordinates_dic
 
+    def draw_interconnected_network(self, layer_A, layer_B, save_file_name):
+        plt.figure()
+        ax = plt.axes(projection='3d')
+        draw(self.making_interconnected_layer(layer_A, layer_B), layout='circular', layergap=1.3, layershape='rectangle',
+             nodeCoords=self.making_node_coordinates(layer_A, layer_B), nodelayerCoords={}, layerPadding=0.05,
+             alignedNodes=True, ax=ax,
+             layerColorDict={'layer_A': 'pink', 'layer_B': 'steelblue'}, layerColorRule={},
+             edgeColorDict = self.making_edge_color(layer_A, layer_B), edgeColorRule={},
+             edgeWidthDict={}, edgeWidthRule={}, defaultEdgeWidth=0.01,
+             edgeStyleDict={}, edgeStyleRule={'rule': 'edgetype', 'inter': ':', 'intra': '-'},
+             defaultEdgeStyle='-',
+             nodeLabelDict={}, nodeLabelRule={}, defaultNodeLabel=None,
+             nodeColorDict=self.making_node_color(layer_A, layer_B), nodeColorRule={},
+             defaultNodeColor=None,
+             nodeLabelColorDict={}, nodeLabelColorRule={}, defaultNodeLabelColor='k',
+             nodeSizeDict={}, nodeSizeRule={'scalecoeff': 0.1, 'rule': 'scaled'}, defaultNodeSize=None)
+        plt.savefig(save_file_name)
+        img = mpimg.imread(save_file_name)
+        plt.imshow(img)
 
-    def draw_interconnected_network(self, layer_A, layer_B, result):
-        fig = draw(self.interconnected_network, layout='spring', layergap=1.3,
-                   nodeCoords=self.making_node_coordinates(layer_A, layer_B), nodelayerCoords={}, layerPadding=0.05,
-                   alignedNodes=True, ax=None,
-                   layerColorDict={'layer_A': 'pink', 'layer_B': 'steelblue'}, layerColorRule={},
-                   edgeColorDict=self.making_edge_color(layer_A, layer_B),
-                   edgeColorRule={'rule': 'edgetype', 'inter': 'g'},
-                   edgeWidthDict={}, edgeWidthRule={}, defaultEdgeWidth=0.01,
-                   edgeStyleDict={}, edgeStyleRule={'rule': 'edgetype', 'inter': ':', 'intra': '-'},
-                   defaultEdgeStyle='-',
-                   nodeLabelDict={}, nodeLabelRule={}, defaultNodeLabel=None,
-                   nodeColorDict=self.making_node_color(layer_A, layer_B), nodeColorRule={},
-                   defaultNodeColor=None,
-                   nodeLabelColorDict={}, nodeLabelColorRule={}, defaultNodeLabelColor='k',
-                   nodeSizeDict={}, nodeSizeRule={'scalecoeff': 0.1, 'rule': 'scaled'}, defaultNodeSize=None)
-        fig.savefig(result)
+
+    def making_movie_for_dynamics(self, layer_A, layer_B, save_file_name):
+        imgs = []
+        img = self.draw_interconnected_network(layer_A, layer_B, save_file_name)
+        imgs.append(np.array(img))
+        images = np.array(imgs)
+        self.plot_movie_mp4(images, 'dynamic_images_no_leader(128(BA), 128(RR), ganma=0.5, beta=2).mp4')
+
+    def plot_movie_mp4(self, image_array, result):
+        dpi = 72
+        xpixels, ypixels = image_array[0].shape[0], image_array[0].shape[1]
+        fig = plt.figure(figsize=(ypixels / dpi, xpixels / dpi), dpi=dpi)
+        im = plt.figimage(image_array[0])
+        def animate(i):
+            im.set_array(image_array[i])
+            return (im,)
+        anim = animation.FuncAnimation(fig, animate, frames=len(image_array), repeat=False, interval=500)
+        anim.save(result)
 
 
 if __name__ == "__main__":
@@ -84,5 +108,5 @@ if __name__ == "__main__":
     layer_A = Layer_A_Modeling.Layer_A_Modeling()
     layer_B = Layer_B_Modeling.Layer_B_Modeling()
     ILM = Interconnected_Layer_Modeling()
-    ILM.draw_interconnected_network(layer_A, layer_B, 'result2')
+    ILM.draw_interconnected_network(layer_A, layer_B, 'result3')
     print("Operating finished")
