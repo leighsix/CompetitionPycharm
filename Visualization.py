@@ -191,9 +191,9 @@ if __name__ == "__main__":
     print("Visualization")
     visualization = Visualization()
     #visualization.plot_3D_to_2D_contour_for_average_state('result2')
-    #visualization.plot_3D_contour_for_average_state('result2')
-    #visualization.plot_3D_scatter_for_average_state('previous_research')    #previous_research
-    #visualization.plot_3D_trisurf_for_average_state('previous_research')
+    visualization.plot_3D_contour_for_average_state('average_layer_state')
+    #visualization.plot_3D_scatter_for_average_state('average_layer_state')    #previous_research
+    #visualization.plot_3D_trisurf_for_average_state('average_layer_state')
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.2)
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.4)
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.6)
