@@ -17,19 +17,18 @@ class Setting_Simulation_Value :
         self.B_inter_edges = 1
         self.A_inter_edges = 1
         self.B_network = 1        # network : 1 = random regular graph   2 = barabasi-albert graph
-        self.gap = 50
+        self.gap = 30
         self.Repeating_number = 100
         self.Limited_step = 30
         self.R = self.simulation_condition(self.gap)[0]
         self.D = self.simulation_condition(self.gap)[1]
         self.NodeColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
         self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'darkblue'}
-        self.database = 'competition'   #'renew_competition
-
-
+        self.database = 'renew_competition'   #'competition'
+        self.drawing_graph = False
 
     def simulation_condition(self, gap):
-        self.R = np.linspace(1, 2, gap)
+        self.R = np.linspace(0.4, 1, gap)
         self.D = np.linspace(self.making_beta_scale(gap)[0], self.making_beta_scale(gap)[1], gap)
         return self.R, self.D
 
