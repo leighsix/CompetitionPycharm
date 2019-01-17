@@ -23,14 +23,8 @@ class Setting_Simulation_Value :
         self.R = self.simulation_condition(self.gap)[0]
         self.D = self.simulation_condition(self.gap)[1]
         self.NodeColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
-<<<<<<< HEAD
-        self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'deepblue'}
-        self.database = 'renew_competition'   #'renew_competition'
-=======
         self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'darkblue'}
-        self.database = 'competition'   #'renew_competition
->>>>>>> c7c534fa460f950a556d0228e3b38ec91c554044
-
+        self.database = 'competition'   #'renew_competition'
 
 
     def simulation_condition(self, gap):
