@@ -7,6 +7,8 @@ import MakingPandas
 import Interconnected_Layer_Modeling
 import Layer_A_Modeling
 import Layer_B_Modeling
+import matplotlib
+matplotlib.use("Agg")
 
 
 class InterconnectedDynamics:
@@ -27,10 +29,10 @@ class InterconnectedDynamics:
             self.decision.B_layer_dynamics(layer_A, layer_B, beta)
             if self.SS.drawing_graph == 0:
                 im = self.network.draw_interconnected_network(layer_A, layer_B, 'result.png')
-                ims.append([im])
+                ims.append(im)
                 if (np.all(layer_A.A > 0) == 1 and np.all(layer_B.B > 0) == 1) or \
                         (np.all(layer_A.A < 0) == 1 and np.all(layer_B.B < 0) == 1):
-                    print('Consensus :' + step_number+1)
+                    print('Consensus')
                     break
             step_number += 1
             print(step_number)
@@ -51,6 +53,8 @@ class InterconnectedDynamics:
             self.decision.B_COUNT = 0
             if step_number >= self.SS.Limited_step:
                 break
+        ims = np.array(ims)
+        print(ims.shape)
         self.network.making_movie_for_dynamics(ims)
         return layer_A, layer_B, self.total_value
 

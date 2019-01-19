@@ -75,13 +75,19 @@ class Interconnected_Layer_Modeling:
              nodeLabelColorDict={}, nodeLabelColorRule={}, defaultNodeLabelColor='k',
              nodeSizeDict={}, nodeSizeRule={'scalecoeff': 0.1, 'rule': 'scaled'}, defaultNodeSize=None)
         plt.savefig(save_file_name)
-        img = Image.open(save_file_name)
-        im = plt.imshow(img)
-        return im
+        im = plt.imread(save_file_name)
+        return np.array(im)
 
     def making_movie_for_dynamics(self, ims):
-        fig = plt.figure()
-        ani = animation.ArtistAnimation(fig, ims, interval=10, blit=True)
+        dpi = 72
+        x_pixels, y_pixels = ims[0].shape[0], ims[0].shape[1]
+        fig = plt.figure(figsize=(y_pixels / dpi, x_pixels / dpi), dpi=dpi)
+        im = plt.figimage(ims[0])
+
+        def animate(i):
+            im.set_array(ims[i])
+            return (im,)
+        ani = animation.FuncAnimation(fig, animate, frames=len(ims), repeat=False, interval=500)
         ani.save('dynamics.mp4')
 
 
