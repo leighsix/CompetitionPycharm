@@ -21,13 +21,14 @@ class InterconnectedDynamics:
         self.total_value = np.zeros(11)
 
     def interconnected_dynamics(self, layer_A, layer_B, prob_p, beta):
-        step_number = 0
         ims = []
+        step_number = 0
         while True:
             self.opinion.A_layer_dynamics(layer_A, layer_B, prob_p)
             self.calculate_prob_beta_mean(layer_A, layer_B, beta)
             self.decision.B_layer_dynamics(layer_A, layer_B, beta)
-            if self.SS.drawing_graph == 0:
+            if self.SS.drawing_graph == 1:
+                print(step_number)
                 im = self.network.draw_interconnected_network(layer_A, layer_B, 'result.png')
                 ims.append(im)
                 if (np.all(layer_A.A > 0) == 1 and np.all(layer_B.B > 0) == 1) or \
@@ -35,7 +36,6 @@ class InterconnectedDynamics:
                     print('Consensus')
                     break
             step_number += 1
-            print(step_number)
             time_count = self.opinion.A_COUNT + self.decision.B_COUNT
             array_value = np.array([self.mp.layer_state_mean(layer_A, layer_B)[0],
                                     self.mp.layer_state_mean(layer_A, layer_B)[1], prob_p, prob_beta_mean,
@@ -54,8 +54,9 @@ class InterconnectedDynamics:
             if step_number >= self.SS.Limited_step:
                 break
         ims = np.array(ims)
-        print(ims.shape)
-        self.network.making_movie_for_dynamics(ims)
+        if self.SS.drawing_graph == 1:
+            gamma = prob_p / (1 - prob_p)
+            self.network.making_movie_for_dynamics(ims, gamma, beta)
         return layer_A, layer_B, self.total_value
 
     def calculate_prob_beta_mean(self, layer_A, layer_B, beta):

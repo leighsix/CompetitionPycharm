@@ -4,7 +4,6 @@ import Setting_Simulation_Value
 import Layer_A_Modeling
 import Layer_B_Modeling
 from mpl_toolkits.mplot3d.axes3d import *
-from PIL import Image
 import matplotlib.animation as animation
 
 
@@ -78,7 +77,7 @@ class Interconnected_Layer_Modeling:
         im = plt.imread(save_file_name)
         return np.array(im)
 
-    def making_movie_for_dynamics(self, ims):
+    def making_movie_for_dynamics(self, ims, gamma, beta):
         dpi = 72
         x_pixels, y_pixels = ims[0].shape[0], ims[0].shape[1]
         fig = plt.figure(figsize=(y_pixels / dpi, x_pixels / dpi), dpi=dpi)
@@ -87,8 +86,8 @@ class Interconnected_Layer_Modeling:
         def animate(i):
             im.set_array(ims[i])
             return (im,)
-        ani = animation.FuncAnimation(fig, animate, frames=len(ims), repeat=False, interval=500)
-        ani.save('dynamics.mp4')
+        ani = animation.FuncAnimation(fig, animate, frames=len(ims), repeat=False, interval=1000)
+        ani.save('dynamics_%s_%s.mp4' % gamma % beta)
 
 
 if __name__ == "__main__":

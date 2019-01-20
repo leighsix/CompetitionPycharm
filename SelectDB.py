@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import Setting_Simulation_Value
 import sqlalchemy
 
@@ -20,6 +21,12 @@ class SelectDB:
         df = pd.read_sql_query(query, engine)
         return df
 
+    def making_select_list(self, table, list_name):
+        df = self.select_data_from_DB(table)
+        df = pd.DataFrame(df[list_name])
+        select_list = np.array(df.drop_duplicates())
+        np.sort(select_list)
+        return select_list
 
 if __name__ == "__main__":
     print("Select DB")

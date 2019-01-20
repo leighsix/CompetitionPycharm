@@ -12,16 +12,9 @@ class Visualization:
         self.select_db = SelectDB.SelectDB()
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
 
-    def making_select_list(self, table, list_name):
-        df = self.select_db.select_data_from_DB(table)
-        df = pd.DataFrame(df[list_name])
-        select_list = np.array(df.drop_duplicates())
-        np.sort(select_list)
-        return select_list
-
     def plot_2D_gamma_for_average_state(self, table, beta_value):
         df = self.select_db.select_data_from_DB(table)
-        beta_list = self.making_select_list(table, 'beta')
+        beta_list = self.select_db.making_select_list(table, 'beta')
         temp_value = Visualization.covert_to_select_list_value(beta_list, beta_value)
         df = df[df.Steps == self.SS.Limited_step]
         df = df[df.beta == temp_value]
@@ -36,7 +29,7 @@ class Visualization:
 
     def plot_2D_beta_for_average_state(self, table, gamma_value):
         df = self.select_db.select_data_from_DB(table)
-        gamma_list = self.making_select_list(table, 'gamma')
+        gamma_list = self.select_db.making_select_list(table, 'gamma')
         temp_value = Visualization.covert_to_select_list_value(gamma_list, gamma_value)
         df = df[df.Steps == self.SS.Limited_step]
         df = df[df.gamma == temp_value]
@@ -84,8 +77,8 @@ class Visualization:
         df = self.select_db.select_data_from_DB(table)
         df = df[df.Steps == self.SS.Limited_step]
         sns.set_style("whitegrid")
-        beta_list = list(self.making_select_list(table, 'beta'))  # list이지만 실제로는 array
-        gamma_list = list(self.making_select_list(table, 'gamma'))
+        beta_list = list(self.select_db.making_select_list(table, 'beta'))  # list이지만 실제로는 array
+        gamma_list = list(self.select_db.making_select_list(table, 'gamma'))
         state_list = np.array(df['LAYER_A_MEAN'] + df['LAYER_B_MEAN'])
         result_beta = sorted(beta_list * len(gamma_list))
         result_gamma = sorted(gamma_list * len(beta_list))
@@ -105,8 +98,8 @@ class Visualization:
         df = self.select_db.select_data_from_DB(table)
         df = df[df.Steps == self.SS.Limited_step]
         sns.set_style("whitegrid")
-        beta_list = list(self.making_select_list(table, 'beta'))  # list이지만 실제로는 array
-        gamma_list = list(self.making_select_list(table, 'gamma'))
+        beta_list = list(self.select_db.making_select_list(table, 'beta'))  # list이지만 실제로는 array
+        gamma_list = list(self.select_db.making_select_list(table, 'gamma'))
         state_list = np.array(df['LAYER_A_MEAN'] + df['LAYER_B_MEAN'])
         result_beta = sorted(beta_list * len(gamma_list))
         result_gamma = sorted(gamma_list * len(beta_list))
@@ -123,8 +116,8 @@ class Visualization:
     def flow_prob_beta_chart(self, table, beta_value, gamma_value):
         #beta_value = [min, max], #gamma_value =[min, max]
         df = self.select_db.select_data_from_DB(table)
-        beta_list = self.making_select_list(table, 'beta')  # 이름은 list이지만 실제로는 array
-        gamma_list = self.making_select_list(table, 'gamma') # 이름은 list이지만 실제로는 array
+        beta_list = self.select_db.making_select_list(table, 'beta')  # 이름은 list이지만 실제로는 array
+        gamma_list = self.select_db.making_select_list(table, 'gamma') # 이름은 list이지만 실제로는 array
         beta_min = Visualization.covert_to_select_list_value(beta_list, beta_value[0])
         beta_max = Visualization.covert_to_select_list_value(beta_list, beta_value[1])
         gamma_min = Visualization.covert_to_select_list_value(gamma_list, gamma_value[0])
@@ -144,8 +137,8 @@ class Visualization:
 
     def different_state_ratio_chart(self, table, beta_value, gamma_value, select_layer):
         df = self.select_db.select_data_from_DB(table)
-        beta_list = self.making_select_list(table, 'beta')    # 이름은 list이지만 실제로는 array
-        gamma_list = self.making_select_list(table, 'gamma')  # 이름은 list이지만 실제로는 array
+        beta_list = self.select_db.making_select_list(table, 'beta')    # 이름은 list이지만 실제로는 array
+        gamma_list = self.select_db.making_select_list(table, 'gamma')  # 이름은 list이지만 실제로는 array
         beta_min = Visualization.covert_to_select_list_value(beta_list, beta_value[0])
         beta_max = Visualization.covert_to_select_list_value(beta_list, beta_value[1])
         gamma_min = Visualization.covert_to_select_list_value(gamma_list, gamma_value[0])
@@ -190,9 +183,9 @@ class Visualization:
 if __name__ == "__main__":
     print("Visualization")
     visualization = Visualization()
-    #visualization.plot_3D_to_2D_contour_for_average_state('average_layer_state')
+    visualization.plot_3D_to_2D_contour_for_average_state('average_layer_state')
     #visualization.plot_3D_contour_for_average_state('average_layer_state')
-    visualization.plot_3D_scatter_for_average_state('average_layer_state')    #previous_research
+    #visualization.plot_3D_scatter_for_average_state('average_layer_state')    #previous_research
     #visualization.plot_3D_trisurf_for_average_state('previous_research')
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.2)
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.4)

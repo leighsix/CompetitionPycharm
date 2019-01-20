@@ -22,22 +22,29 @@ class Setting_Simulation_Value :
         self.Limited_step = 30
         self.R = self.simulation_condition(self.gap)[0]
         self.D = self.simulation_condition(self.gap)[1]
+        self.variable_list = self.gamma_and_beta_list(self.R, self.D)
         self.NodeColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
         self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'darkblue'}
         self.database = 'renew_competition'   #'competition'
         self.drawing_graph = False
+        self.workers = 4
 
     def simulation_condition(self, gap):
-        self.R = np.linspace(0.4, 1, gap)
+        self.R = np.linspace(0, 2, gap)
         self.D = np.linspace(self.making_beta_scale(gap)[0], self.making_beta_scale(gap)[1], gap)
         return self.R, self.D
+
+    def gamma_and_beta_list(self, gamma_list, beta_list):
+        variable_list = []
+        for gamma in gamma_list:
+            for beta in beta_list:
+                variable_list.append((gamma, beta))
+        return variable_list
 
     def making_beta_scale(self, a):
         scale = math.log((1 / (self.B_edge + 1)) ** 3)\
                 / math.log(self.B_inter_edges / (self.B_edge + self.B_inter_edges))
         return 0, scale, a
-
-
 
 
 if __name__ == "__main__":
