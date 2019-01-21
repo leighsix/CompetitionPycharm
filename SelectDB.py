@@ -19,6 +19,7 @@ class SelectDB:
                 + " AND A_node_number = %s" % int(self.SS.A_node) \
                 + " AND B_node_number = %s;" % int(self.SS.B_node)
         df = pd.read_sql_query(query, engine)
+        df.drop_duplicates(inplace=True)
         return df
 
     def making_select_list(self, table, list_name):
@@ -27,6 +28,7 @@ class SelectDB:
         select_list = np.array(df.drop_duplicates())
         np.sort(select_list)
         return select_list
+
 
 if __name__ == "__main__":
     print("Select DB")

@@ -1,6 +1,5 @@
 import SelectDB
 import Setting_Simulation_Value
-import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sympy import *
@@ -157,7 +156,7 @@ class Visualization:
         plt.show()
 
     @staticmethod
-    def contour_Z_function(beta_list, gamma_list, state_list ):
+    def contour_Z_function(beta_list, gamma_list, state_list):
         if len(state_list) == len(gamma_list) * len(beta_list):
             state_list = state_list.reshape(len(gamma_list), len(beta_list))
         elif len(state_list) != len(gamma_list) * len(beta_list):
@@ -186,7 +185,7 @@ if __name__ == "__main__":
     visualization.plot_3D_to_2D_contour_for_average_state('average_layer_state')
     #visualization.plot_3D_contour_for_average_state('average_layer_state')
     #visualization.plot_3D_scatter_for_average_state('average_layer_state')    #previous_research
-    #visualization.plot_3D_trisurf_for_average_state('previous_research')
+    #visualization.plot_3D_trisurf_for_average_state('average_layer_state')
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.2)
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.4)
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.6)

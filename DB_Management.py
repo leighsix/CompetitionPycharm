@@ -2,7 +2,6 @@ import pandas as pd
 import Setting_Simulation_Value
 import SelectDB
 import mysql.connector
-import sqlalchemy
 
 
 class DB_Management:
@@ -13,17 +12,19 @@ class DB_Management:
     def drop_duplicate(self, table):
         cnx = mysql.connector.connect(user='root', password='2853',
                                       host='127.0.0.1', database='renew_competition')
-        curA = cnx.cursor()
+        curA = cnx.cursor(buffered=True)
         curB = cnx.cursor(buffered=True)
         gamma_list = (self.select_db.making_select_list(table, 'gamma')).tolist()
         beta_list = (self.select_db.making_select_list(table, 'beta')).tolist()
         for gamma in gamma_list:
             for beta in beta_list:
                 for i in range(1, self.SS.Limited_step+1):
-                    query1 = (
-                        "SELECT LAYER_A_MEAN, LAYER_B_MEAN, PROB_P, PROB_BETA, A_DIFFERENT_STATE_RATIO, "
-                        "B_DIFFERENT_STATE_RATIO, CONSENSUS_INDEX, CONSENSUS, NEGATIVE_STATE_NUMBER, "
-                        "POSITIVE_STATE_NUMBER, TIME_COUNT "
+                    average_query = (
+                        "SELECT AVG(LAYER_A_MEAN), AVG(LAYER_B_MEAN), AVG(PROB_P), AVG(PROB_BETA), "
+                        "AVG(A_DIFFERENT_STATE_RATIO), "
+                        "AVG(B_DIFFERENT_STATE_RATIO), AVG(CONSENSUS_INDEX), AVG(CONSENSUS), "
+                        "AVG(NEGATIVE_STATE_NUMBER), "
+                        "AVG(POSITIVE_STATE_NUMBER), AVG(TIME_COUNT) "
                         "FROM %s" % table + " WHERE Structure = '%s'" % str(self.SS.Structure)
                         + " AND A_internal_edges = %s" % int(self.SS.A_edge)
                         + " AND B_internal_edges = %s" % int(self.SS.B_edge)
@@ -33,22 +34,13 @@ class DB_Management:
                         + " AND B_node_number = %s" % int(self.SS.B_node)
                         + " AND gamma = %s" % gamma[0] + " AND beta = %s" % beta[0]
                         + " AND Steps = %s;" % i)
-                    curA.execute(query1)
-                    for (LAYER_A_MEAN, LAYER_B_MEAN, PROB_P, PROB_BETA, A_DIFFERENT_STATE_RATIO,
-                         B_DIFFERENT_STATE_RATIO, CONSENSUS_INDEX, CONSENSUS, NEGATIVE_STATE_NUMBER,
-                         POSITIVE_STATE_NUMBER, TIME_COUNT) in curA:
-                        print("{},{}, {}, {}, {}, {}, {}, {}, {}, {}".format(LAYER_A_MEAN,
-                              LAYER_B_MEAN, PROB_P, PROB_BETA, A_DIFFERENT_STATE_RATIO,
-                              B_DIFFERENT_STATE_RATIO, CONSENSUS_INDEX, CONSENSUS, NEGATIVE_STATE_NUMBER,
-                              POSITIVE_STATE_NUMBER, TIME_COUNT))
 
-                    update_average = (
-                        "UPDATE %s" % table + " SET LAYER_A_MEAN = %s," %s +
-                        " LAYER_B_MEAN = %s," %s + " PROB_BETA = %s," %s +
-                        " A_DIFFERENT_STATE_RATIO = %s," % s + " B_DIFFERENT_STATE_RATIO = %s," % s +
-                        " CONSENSUS_INDEX = %s," % s + " CONSENSUS = %s," % s +
-                        " NEGATIVE_STATE_NUMBER = %s," % s + " POSITIVE_STATE_NUMBER = %s," % s +
-                        " TIME_COUNT = %s" % s +
+                    update_query = (
+                        "UPDATE %s" % table + " SET LAYER_A_MEAN = %s,"
+                        " LAYER_B_MEAN = %s, PROB_P = %s, PROB_BETA = %s," 
+                        " A_DIFFERENT_STATE_RATIO = %s, B_DIFFERENT_STATE_RATIO = %s," 
+                        " CONSENSUS_INDEX = %s, CONSENSUS = %s,"
+                        " NEGATIVE_STATE_NUMBER = %s, POSITIVE_STATE_NUMBER = %s, TIME_COUNT = %s" +
                         " WHERE Structure = '%s'" % str(self.SS.Structure)
                         + " AND A_internal_edges = %s" % int(self.SS.A_edge)
                         + " AND B_internal_edges = %s" % int(self.SS.B_edge)
@@ -58,10 +50,19 @@ class DB_Management:
                         + " AND B_node_number = %s" % int(self.SS.B_node)
                         + " AND gamma = %s" % gamma[0] + " AND beta = %s" % beta[0]
                         + " AND Steps = %s;" % i)
-                    
 
+                    curA.execute(average_query)
+                    for (LAYER_A_MEAN, LAYER_B_MEAN, PROB_P, PROB_BETA,
+                         A_DIFFERENT_STATE_RATIO, B_DIFFERENT_STATE_RATIO, CONSENSUS_INDEX,
+                         CONSENSUS, NEGATIVE_STATE_NUMBER, POSITIVE_STATE_NUMBER, TIME_COUNT) in curA:
 
-        cnx.commit()
+                        curB.execute(update_query, (LAYER_A_MEAN, LAYER_B_MEAN, PROB_P, PROB_BETA,
+                                                    A_DIFFERENT_STATE_RATIO, B_DIFFERENT_STATE_RATIO, CONSENSUS_INDEX,
+                                                    CONSENSUS, NEGATIVE_STATE_NUMBER, POSITIVE_STATE_NUMBER,
+                                                    TIME_COUNT))
+
+                        cnx.commit()
+                        print("{}, {}".format(PROB_P, PROB_BETA))
         cnx.close()
 
 
@@ -71,7 +72,3 @@ if __name__ == "__main__":
     db_management.drop_duplicate('average_layer_state')
     print("DB_Management_finished")
 
-
-# LAYER_A_MEAN, LAYER_B_MEAN, PROB_P, PROB_BETA, A_DIFFERENT_STATE_RATIO, B_DIFFERENT_STATE_RATIO,
-# CONSENSUS_INDEX, CONSENSUS, NEGATIVE_STATE_NUMBER,
-# POSITIVE_STATE_NUMBER, TIME_COUNT

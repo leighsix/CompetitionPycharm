@@ -30,7 +30,7 @@ class Setting_Simulation_Value :
         self.workers = 4
 
     def simulation_condition(self, gap):
-        self.R = np.linspace(0, 2, gap)
+        self.R = np.linspace(1, 1.5, gap)
         self.D = np.linspace(self.making_beta_scale(gap)[0], self.making_beta_scale(gap)[1], gap)
         return self.R, self.D
 
