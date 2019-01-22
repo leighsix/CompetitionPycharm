@@ -76,13 +76,10 @@ class Visualization:
         df = self.select_db.select_data_from_DB(table)
         df = df[df.Steps == self.SS.Limited_step]
         sns.set_style("whitegrid")
-        beta_list = list(self.select_db.making_select_list(table, 'beta'))  # list이지만 실제로는 array
-        gamma_list = list(self.select_db.making_select_list(table, 'gamma'))
-        state_list = np.array(df['LAYER_A_MEAN'] + df['LAYER_B_MEAN'])
-        result_beta = sorted(beta_list * len(gamma_list))
-        result_gamma = sorted(gamma_list * len(beta_list))
-        X, Y = np.meshgrid(result_beta, result_gamma)
-        Z = Visualization.contour_Z_function(beta_list, gamma_list, state_list)
+        beta_list = self.select_db.making_select_list(table, 'beta')  # list이지만 실제로는 array
+        gamma_list = self.select_db.making_select_list(table, 'gamma')
+        X, Y = np.meshgrid(beta_list, gamma_list)
+        Z = Visualization.state_list_function(df, gamma_list, beta_list)
         plt.figure()
         ax = plt.axes(projection='3d')
         ax.contour3D(X, Y, Z, 50, cmap='RdBu')
@@ -97,19 +94,17 @@ class Visualization:
         df = self.select_db.select_data_from_DB(table)
         df = df[df.Steps == self.SS.Limited_step]
         sns.set_style("whitegrid")
-        beta_list = list(self.select_db.making_select_list(table, 'beta'))  # list이지만 실제로는 array
-        gamma_list = list(self.select_db.making_select_list(table, 'gamma'))
-        state_list = np.array(df['LAYER_A_MEAN'] + df['LAYER_B_MEAN'])
-        result_beta = sorted(beta_list * len(gamma_list))
-        result_gamma = sorted(gamma_list * len(beta_list))
-        X, Y = np.meshgrid(result_beta, result_gamma)
-        Z = Visualization.contour_Z_function(beta_list, gamma_list, state_list)
+        beta_list = self.select_db.making_select_list(table, 'beta')  # list이지만 실제로는 array
+        gamma_list = self.select_db.making_select_list(table, 'gamma')
+        X, Y = np.meshgrid(beta_list, gamma_list)
+        Z = Visualization.state_list_function(df, gamma_list, beta_list)
         plt.figure()
         sns.set()
         plt.contourf(X, Y, Z, 50, cmap='RdBu')
         plt.xlabel('beta')
         plt.ylabel('gamma')
         plt.colorbar(label='Average states')
+        plt.clim(-3, 3)
         plt.show()
 
     def flow_prob_beta_chart(self, table, beta_value, gamma_value):
@@ -156,34 +151,29 @@ class Visualization:
         plt.show()
 
     @staticmethod
-    def contour_Z_function(beta_list, gamma_list, state_list):
-        if len(state_list) == len(gamma_list) * len(beta_list):
-            state_list = state_list.reshape(len(gamma_list), len(beta_list))
-        elif len(state_list) != len(gamma_list) * len(beta_list):
-            state_list = list(state_list)
-            for i in range((len(gamma_list) * len(beta_list)) - len(state_list)):
-                state_list.append(0*i)
-            state_list = np.array(state_list)
-            state_list = state_list.reshape(len(gamma_list), len(beta_list))
-        Z = np.zeros([len(beta_list) * len(gamma_list), len(beta_list) * len(gamma_list)])
-        for i in range(0, len(gamma_list)):
-            for j in range(0, len(beta_list)):
-                for k in range(0, len(beta_list)):
-                    for l in range(0, len(gamma_list)):
-                        Z[(i * len(beta_list)) + k][(j * len(gamma_list)) + l] = state_list[i][j]
+    def state_list_function(df, gamma_list, beta_list):
+        Z = np.zeros([len(gamma_list), len(beta_list)])
+        for i, gamma in enumerate(gamma_list):
+            for j, beta in enumerate(beta_list):
+                df1 = df[df.gamma==gamma]
+                df2 = df1[df1.beta==beta]
+                if len(df2) == 0 :
+                    Z[i][j] = 0
+                else:
+                    Z[i][j] = df2['LAYER_A_MEAN'].iloc[0] + df2['LAYER_B_MEAN'].iloc[0]
         return Z
 
     @staticmethod
     def covert_to_select_list_value(select_list, input_value):  # list가 만들어져 있는 곳에 사용
         loc = sum(select_list <= input_value)  # select_list는 making_select_list를 사용, array로 만들어져 있음
-        temp_value = select_list[loc - 1][0]
-        return temp_value[0]
+        temp_value = select_list[loc - 1]
+        return temp_value
 
 if __name__ == "__main__":
     print("Visualization")
     visualization = Visualization()
-    visualization.plot_3D_to_2D_contour_for_average_state('average_layer_state')
-    #visualization.plot_3D_contour_for_average_state('average_layer_state')
+    #visualization.plot_3D_to_2D_contour_for_average_state('average_layer_state')
+    visualization.plot_3D_contour_for_average_state('average_layer_state')
     #visualization.plot_3D_scatter_for_average_state('average_layer_state')    #previous_research
     #visualization.plot_3D_trisurf_for_average_state('average_layer_state')
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.2)

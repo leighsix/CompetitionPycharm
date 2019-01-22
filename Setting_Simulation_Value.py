@@ -19,7 +19,7 @@ class Setting_Simulation_Value :
         self.B_network = 1        # network : 1 = random regular graph   2 = barabasi-albert graph
         self.gap = 30
         self.Repeating_number = 100
-        self.Limited_step = 30
+        self.Limited_step = 100
         self.R = self.simulation_condition(self.gap)[0]
         self.D = self.simulation_condition(self.gap)[1]
         self.variable_list = self.gamma_and_beta_list(self.R, self.D)
@@ -30,7 +30,7 @@ class Setting_Simulation_Value :
         self.workers = 4
 
     def simulation_condition(self, gap):
-        self.R = np.linspace(1, 1.5, gap)
+        self.R = np.linspace(0, 2, gap)
         self.D = np.linspace(self.making_beta_scale(gap)[0], self.making_beta_scale(gap)[1], gap)
         return self.R, self.D
 

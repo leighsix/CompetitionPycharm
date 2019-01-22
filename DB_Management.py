@@ -9,7 +9,7 @@ class DB_Management:
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
         self.select_db = SelectDB.SelectDB()
 
-    def drop_duplicate(self, table):
+    def db_update_query(self, table):
         cnx = mysql.connector.connect(user='root', password='2853',
                                       host='127.0.0.1', database='renew_competition')
         curA = cnx.cursor(buffered=True)
@@ -69,6 +69,6 @@ class DB_Management:
 if __name__ == "__main__":
     print("DB_Management")
     db_management = DB_Management()
-    db_management.drop_duplicate('average_layer_state')
+    db_management.db_update_query('average_layer_state')
     print("DB_Management_finished")
 

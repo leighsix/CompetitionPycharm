@@ -23,11 +23,13 @@ class SelectDB:
         return df
 
     def making_select_list(self, table, list_name):
+        list = []
         df = self.select_data_from_DB(table)
         df = pd.DataFrame(df[list_name])
         select_list = np.array(df.drop_duplicates())
-        np.sort(select_list)
-        return select_list
+        for i in range(len(select_list)):
+            list.append(select_list[i][0])
+        return np.array(sorted(list))
 
 
 if __name__ == "__main__":
