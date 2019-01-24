@@ -25,12 +25,12 @@ class Setting_Simulation_Value :
         self.variable_list = self.gamma_and_beta_list(self.R, self.D)
         self.NodeColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
         self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'darkblue'}
-        self.database = 'renew_competition'   #'competition'
+        self.database = 'renew_competition'   #'competition  renew_competition'
         self.drawing_graph = False
         self.workers = 4
 
     def simulation_condition(self, gap):
-        self.R = np.linspace(0, 2, gap)
+        self.R = np.linspace(1, 2, gap)
         self.D = np.linspace(self.making_beta_scale(gap)[0], self.making_beta_scale(gap)[1], gap)
         return self.R, self.D
 
@@ -49,5 +49,5 @@ class Setting_Simulation_Value :
 
 if __name__ == "__main__":
     SS = Setting_Simulation_Value()
-    print(SS.R)
+    print(SS.A_node)
     print(SS.D)

@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sympy import *
 from mpl_toolkits.mplot3d.axes3d import *
+from numba import jit
 
 
 class Visualization:
@@ -72,6 +73,7 @@ class Visualization:
         ax.view_init(45, 45)
         plt.show()
 
+    @jit()
     def plot_3D_contour_for_average_state(self, table):
         df = self.select_db.select_data_from_DB(table)
         df = df[df.Steps == self.SS.Limited_step]
@@ -90,6 +92,7 @@ class Visualization:
         ax.view_init(45, 45)
         plt.show()
 
+    @jit()
     def plot_3D_to_2D_contour_for_average_state(self, table):
         df = self.select_db.select_data_from_DB(table)
         df = df[df.Steps == self.SS.Limited_step]
@@ -157,7 +160,7 @@ class Visualization:
             for j, beta in enumerate(beta_list):
                 df1 = df[df.gamma==gamma]
                 df2 = df1[df1.beta==beta]
-                if len(df2) == 0 :
+                if len(df2) == 0:
                     Z[i][j] = 0
                 else:
                     Z[i][j] = df2['LAYER_A_MEAN'].iloc[0] + df2['LAYER_B_MEAN'].iloc[0]
@@ -172,8 +175,8 @@ class Visualization:
 if __name__ == "__main__":
     print("Visualization")
     visualization = Visualization()
-    #visualization.plot_3D_to_2D_contour_for_average_state('average_layer_state')
-    visualization.plot_3D_contour_for_average_state('average_layer_state')
+    visualization.plot_3D_to_2D_contour_for_average_state('average_layer_state')
+    #visualization.plot_3D_contour_for_average_state('previous_research')
     #visualization.plot_3D_scatter_for_average_state('average_layer_state')    #previous_research
     #visualization.plot_3D_trisurf_for_average_state('average_layer_state')
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.2)

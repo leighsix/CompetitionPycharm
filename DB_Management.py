@@ -1,4 +1,3 @@
-import pandas as pd
 import Setting_Simulation_Value
 import SelectDB
 import mysql.connector
@@ -32,7 +31,7 @@ class DB_Management:
                         + " AND B_external_edges = %s" % int(self.SS.B_inter_edges)
                         + " AND A_node_number = %s" % int(self.SS.A_node)
                         + " AND B_node_number = %s" % int(self.SS.B_node)
-                        + " AND gamma = %s" % gamma[0] + " AND beta = %s" % beta[0]
+                        + " AND gamma = %s" % gamma + " AND beta = %s" % beta
                         + " AND Steps = %s;" % i)
 
                     update_query = (
@@ -48,7 +47,7 @@ class DB_Management:
                         + " AND B_external_edges = %s" % int(self.SS.B_inter_edges)
                         + " AND A_node_number = %s" % int(self.SS.A_node)
                         + " AND B_node_number = %s" % int(self.SS.B_node)
-                        + " AND gamma = %s" % gamma[0] + " AND beta = %s" % beta[0]
+                        + " AND gamma = %s" % gamma + " AND beta = %s" % beta
                         + " AND Steps = %s;" % i)
 
                     curA.execute(average_query)

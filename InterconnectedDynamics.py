@@ -8,6 +8,7 @@ import Interconnected_Layer_Modeling
 import Layer_A_Modeling
 import Layer_B_Modeling
 import matplotlib
+from numba import jit
 matplotlib.use("Agg")
 
 
@@ -20,6 +21,7 @@ class InterconnectedDynamics:
         self.network = Interconnected_Layer_Modeling.Interconnected_Layer_Modeling()
         self.total_value = np.zeros(11)
 
+    @jit()
     def interconnected_dynamics(self, layer_A, layer_B, prob_p, beta):
         ims = []
         step_number = 0

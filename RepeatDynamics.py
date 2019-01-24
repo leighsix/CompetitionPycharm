@@ -3,15 +3,17 @@ import Setting_Simulation_Value
 import InterconnectedDynamics
 import Layer_A_Modeling
 import Layer_B_Modeling
+from numba import jit
 
 
 class RepeatDynamics:
     def __init__(self):
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
         self.inter_dynamics = InterconnectedDynamics.InterconnectedDynamics()
-        self.num_data = np.zeros([30, 11])
-        self.Num_Data = np.zeros([30, 11])
+        self.num_data = np.zeros([self.SS.Limited_step, 11])
+        self.Num_Data = np.zeros([self.SS.Limited_step, 11])
 
+    @jit()
     def repeat_dynamics(self, prob_p, beta):
         for i in range(self.SS.Repeating_number):
             layer_A = Layer_A_Modeling.Layer_A_Modeling()

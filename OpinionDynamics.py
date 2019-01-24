@@ -1,5 +1,6 @@
 import random
 import Setting_Simulation_Value
+from numba import jit
 #import Layer_A_Modeling
 #import Layer_B_Modeling
 
@@ -9,6 +10,7 @@ class OpinionDynamics:
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
         self.A_COUNT = 0
 
+    @jit()
     def A_layer_dynamics(self, layer_A, layer_B, prob_p):  # A_layer 다이내믹스, 감마 적용 및 설득/타협 알고리즘 적용
         for i, j in sorted(layer_A.A_edges.edges()):
             if layer_A.A[i] * layer_A.A[j] > 0:
