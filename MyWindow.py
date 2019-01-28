@@ -22,7 +22,15 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import  *
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QTableWidgetItem, QWidget, QLabel, QScrollArea, QTableWidget
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
+from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PyQt5.QtCore import QDir, Qt, QUrl
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
+        QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget)
+from PyQt5.QtWidgets import QMainWindow,QWidget, QPushButton, QAction
+from PyQt5.QtGui import QIcon
 from mpl_toolkits.mplot3d.axes3d import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib
@@ -33,6 +41,7 @@ WindowModel = uic.loadUiType("mainwindow.ui")[0]
 class MyWindow(QMainWindow, WindowModel):
     def __init__(self, setting):
         QMainWindow.__init__(self, None)
+        self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.setupUi(self)
         self.changing_variable = Changing_Variable.Changing_Variable(setting)
         self.visualization = Visualization.Visualization()
@@ -50,7 +59,7 @@ class MyWindow(QMainWindow, WindowModel):
         self.result_beta_Button.clicked.connect(lambda state, sets=setting: self.result_beta_graph(state, sets))
         self.prob_beta_Button.clicked.connect(lambda state, sets=setting: self.prob_beta_graph(state, sets))
         self.different_ratio_Button.clicked.connect(lambda state, sets=setting: self.different_state_ratio_graph(state, sets))
-        self.making_movie_Button.clicked.connect(self.making_movie_function)
+        self.play_movie_Button.clicked.connect(self.making_movie_function)
         self.drop_duplicate_Button.clicked.connect(lambda state, sets=setting: self.db_drop_duplicate_row(state, sets))
         self.duplicate_Button.clicked.connect(lambda state, sets=setting: self.duplicate_db_func(state, sets))
         self.select_db_Button.clicked.connect(lambda state, sets=setting: self.select_db_func(state, sets))
@@ -348,7 +357,13 @@ class MyWindow(QMainWindow, WindowModel):
 
     def making_movie_function(self):
         print('making movie...')
-        #layout = self.movie_layout
+        self.movie_layout.takeAt(0)
+        layout = self.movie_layout
+        videoWidget = QVideoWidget()
+        layout.addWidget(videoWidget)
+        self.mediaPlayer.setVideoOutput(videoWidget)
+        self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile('C:/Users/Purple/CompetingLayer/dynamics.mp4')))
+        self.mediaPlayer.play()
 
     def doing_simulation(self, state, setting):
         print('doing simulation...')
