@@ -8,10 +8,8 @@ from numba import jit
 
 class DecisionDynamics:
     def __init__(self):
-        self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
         self.B_COUNT = 0
 
-    @jit()
     def B_layer_dynamics(self, layer_A, layer_B, beta):  # B_layer 다이내믹스, 베타 적용 및 언어데스 알고리즘 적용
         for i in sorted(layer_B.B_edges.nodes):
             opposite = []
@@ -23,7 +21,7 @@ class DecisionDynamics:
             for j in range(external_edge_number):
                 if (layer_B.B[i]) * (layer_A.A[layer_A.AB_neighbor[i][j]]) < 0:
                     opposite.append(1)
-            prob_beta = (sum(opposite) / ((external_edge_number)+(internal_edge_number)))**beta
+            prob_beta = ((sum(opposite))/((external_edge_number)+(internal_edge_number)))**beta
             z = random.random()
             if z < prob_beta:
                 layer_B.B[i] = -(layer_B.B[i])

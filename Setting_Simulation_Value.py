@@ -2,35 +2,37 @@ import numpy as np
 import math
 
 
-class Setting_Simulation_Value :
+class Setting_Simulation_Value():
     def __init__(self):
-        self.Structure = "RR-RR"
+        self.Structure = 'RR-RR'
         self.A_state = [1, 2]
         self.A_node = 2048
         self.A_edge = 5
         self.MAX = 2
         self.MIN = -2
-        self.A_network = 1
         self.B_state = [-1]
         self.B_node = 2048
         self.B_edge = 5
         self.B_inter_edges = 1
         self.A_inter_edges = 1
-        self.B_network = 1        # network : 1 = random regular graph   2 = barabasi-albert graph
-        self.gap = 30
-        self.Repeating_number = 100
         self.Limited_step = 100
+        self.drawing_graph = False
+        self.database = 'renew_competition'  # 'competition  renew_competition'
+        self.table = 'average_layer_state'
+        self.DB = 'MySQL'
+
+        self.gap = 10
+        self.Repeating_number = 100
         self.R = self.simulation_condition(self.gap)[0]
         self.D = self.simulation_condition(self.gap)[1]
         self.variable_list = self.gamma_and_beta_list(self.R, self.D)
         self.NodeColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
-        self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'darkblue'}
-        self.database = 'renew_competition'   #'competition  renew_competition'
-        self.drawing_graph = False
+        self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red', -1: 'skyblue', -2: 'blue', -4: 'darkblue'}
         self.workers = 4
 
+
     def simulation_condition(self, gap):
-        self.R = np.linspace(1, 2, gap)
+        self.R = np.linspace(1.8, 2, gap)
         self.D = np.linspace(self.making_beta_scale(gap)[0], self.making_beta_scale(gap)[1], gap)
         return self.R, self.D
 
@@ -49,5 +51,9 @@ class Setting_Simulation_Value :
 
 if __name__ == "__main__":
     SS = Setting_Simulation_Value()
+    #layer_A1 = Layer_A_Modeling.Layer_A_Modeling(SS)
     print(SS.A_node)
-    print(SS.D)
+    #print(len(layer_A1.A))
+    #layer_A2 = Layer_A_Modeling.Layer_A_Modeling(SS)
+    print(SS.A_node)
+    #print(len(layer_A2.A))

@@ -14,55 +14,62 @@ matplotlib.use("Agg")
 
 class InterconnectedDynamics:
     def __init__(self):
-        self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
         self.opinion = OpinionDynamics.OpinionDynamics()
         self.decision = DecisionDynamics.DecisionDynamics()
         self.mp = MakingPandas.MakingPandas()
         self.network = Interconnected_Layer_Modeling.Interconnected_Layer_Modeling()
         self.total_value = np.zeros(11)
 
-    @jit()
-    def interconnected_dynamics(self, layer_A, layer_B, prob_p, beta):
+    def interconnected_dynamics(self, setting, layer_A, layer_B, prob_p, beta):
         ims = []
         step_number = 0
         while True:
-            self.opinion.A_layer_dynamics(layer_A, layer_B, prob_p)
-            self.calculate_prob_beta_mean(layer_A, layer_B, beta)
+            time_count = self.opinion.A_COUNT + self.decision.B_COUNT
+            if step_number == 0:
+                prob_beta_mean = self.calculate_prob_beta_mean(setting, layer_A, layer_B, beta)
+                initial_value = np.array([self.mp.layer_state_mean(setting, layer_A, layer_B)[0],
+                                          self.mp.layer_state_mean(setting, layer_A, layer_B)[1],
+                                          prob_p, prob_beta_mean,
+                                          self.mp.different_state_ratio(setting, layer_A, layer_B)[0],
+                                          self.mp.different_state_ratio(setting, layer_A, layer_B)[1],
+                                          self.mp.different_state_ratio(setting, layer_A, layer_B)[2],
+                                          self.mp.judging_consensus(layer_A, layer_B),
+                                          self.mp.counting_negative_node(layer_A, layer_B),
+                                          self.mp.counting_positive_node(layer_A, layer_B), time_count])
+                self.total_value = initial_value
+            self.opinion.A_layer_dynamics(setting, layer_A, layer_B, prob_p)
+            prob_beta_mean = self.calculate_prob_beta_mean(setting, layer_A, layer_B, beta)
             self.decision.B_layer_dynamics(layer_A, layer_B, beta)
-            if self.SS.drawing_graph == 1:
-                print(step_number)
-                im = self.network.draw_interconnected_network(layer_A, layer_B, 'result.png')
+            if setting.drawing_graph == 1:
+                im = self.network.draw_interconnected_network(layer_A, layer_B, 'result.png')[0]
                 ims.append(im)
                 if (np.all(layer_A.A > 0) == 1 and np.all(layer_B.B > 0) == 1) or \
                         (np.all(layer_A.A < 0) == 1 and np.all(layer_B.B < 0) == 1):
                     print('Consensus')
                     break
             step_number += 1
-            time_count = self.opinion.A_COUNT + self.decision.B_COUNT
-            array_value = np.array([self.mp.layer_state_mean(layer_A, layer_B)[0],
-                                    self.mp.layer_state_mean(layer_A, layer_B)[1], prob_p, prob_beta_mean,
-                                    self.mp.different_state_ratio(layer_A, layer_B)[0],
-                                    self.mp.different_state_ratio(layer_A, layer_B)[1],
-                                    self.mp.different_state_ratio(layer_A, layer_B)[2],
+            array_value = np.array([self.mp.layer_state_mean(setting, layer_A, layer_B)[0],
+                                    self.mp.layer_state_mean(setting, layer_A, layer_B)[1],
+                                    prob_p, prob_beta_mean,
+                                    self.mp.different_state_ratio(setting, layer_A, layer_B)[0],
+                                    self.mp.different_state_ratio(setting, layer_A, layer_B)[1],
+                                    self.mp.different_state_ratio(setting, layer_A, layer_B)[2],
                                     self.mp.judging_consensus(layer_A, layer_B),
                                     self.mp.counting_negative_node(layer_A, layer_B),
                                     self.mp.counting_positive_node(layer_A, layer_B), time_count])
-            if step_number == 1:
-                self.total_value = array_value
-            elif step_number > 1:
+            if step_number >= 1:
                 self.total_value = np.vstack([self.total_value, array_value])
             self.opinion.A_COUNT = 0
             self.decision.B_COUNT = 0
-            if step_number >= self.SS.Limited_step:
+            if step_number >= setting.Limited_step:
                 break
         ims = np.array(ims)
-        if self.SS.drawing_graph == 1:
+        if setting.drawing_graph == 1:
             gamma = prob_p / (1 - prob_p)
             self.network.making_movie_for_dynamics(ims, gamma, beta)
         return layer_A, layer_B, self.total_value
 
-    def calculate_prob_beta_mean(self, layer_A, layer_B, beta):
-        global prob_beta_mean
+    def calculate_prob_beta_mean(self, setting, layer_A, layer_B, beta):
         prob_beta_list = []
         for i in sorted(layer_B.B_edges.nodes):
             opposite = []
@@ -76,18 +83,23 @@ class InterconnectedDynamics:
                     opposite.append(1)
             prob_beta = (sum(opposite) / (external_edge_number+internal_edge_number))**beta
             prob_beta_list.append(prob_beta)
-        prob_beta_mean = sum(prob_beta_list) / self.SS.B_node
+        prob_beta_mean = sum(prob_beta_list) / setting.B_node
         return prob_beta_mean
 
-
-if __name__ == "__main__" :
+if __name__ == "__main__":
     print("InterconnectedDynamics")
-    Layer_A = Layer_A_Modeling.Layer_A_Modeling()
-    Layer_B = Layer_B_Modeling.Layer_B_Modeling()
+    setting = Setting_Simulation_Value.Setting_Simulation_Value()
+    Layer_A = Layer_A_Modeling.Layer_A_Modeling(setting)
+    Layer_B = Layer_B_Modeling.Layer_B_Modeling(setting)
     prob_p = 0.5
     beta = 1.5
     inter_dynamics = InterconnectedDynamics()
-    inter_dynamics.interconnected_dynamics(Layer_A, Layer_B, prob_p, beta)
+    prob_beta_mean = inter_dynamics.calculate_prob_beta_mean(setting, Layer_A, Layer_B, beta)
+    print(prob_beta_mean)
+    array_list = inter_dynamics.interconnected_dynamics(setting, Layer_A, Layer_B, prob_p, beta)
+    print(Layer_A.A)
+    print(array_list)
+    print(len(array_list))
     print(sum(Layer_A.A)/2048, sum(Layer_B.B)/2048)
     print("Operating finished")
 
