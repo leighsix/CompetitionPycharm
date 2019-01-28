@@ -1,13 +1,13 @@
 import random
 import Setting_Simulation_Value
 import networkx as nx
+from numba import jit
 #import Layer_A_Modeling
 #import Layer_B_Modeling
 
 
 class DecisionDynamics:
     def __init__(self):
-        self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
         self.B_COUNT = 0
 
     def B_layer_dynamics(self, layer_A, layer_B, beta):  # B_layer 다이내믹스, 베타 적용 및 언어데스 알고리즘 적용
@@ -21,7 +21,7 @@ class DecisionDynamics:
             for j in range(external_edge_number):
                 if (layer_B.B[i]) * (layer_A.A[layer_A.AB_neighbor[i][j]]) < 0:
                     opposite.append(1)
-            prob_beta = (sum(opposite) / ((external_edge_number)+(internal_edge_number)))**beta
+            prob_beta = ((sum(opposite))/((external_edge_number)+(internal_edge_number)))**beta
             z = random.random()
             if z < prob_beta:
                 layer_B.B[i] = -(layer_B.B[i])

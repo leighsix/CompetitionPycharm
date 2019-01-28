@@ -2,41 +2,38 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import random
-import Setting_Simulation_Value
 ## B layer : B, B_edges
 
 
 class Layer_B_Modeling:
-    def __init__(self):
-        self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
-        self.B_layer_config()
-        self.B = self.B_layer_config()[0]
-        self.B_edges = self.B_layer_config()[1]
+    def __init__(self, setting):
+        self.B = self.B_layer_config(setting)[0]
+        self.B_edges = self.B_layer_config(setting)[1]
         self.B_node_info = self.making_node_info()
 
-    def B_layer_config(self):  # B_layer 구성요소 B_layer_config(state = [-1], node = 2048, edge = 5, inter_edge= 1)
-        self.select_layer_B_model(self.SS.B_network)
+    def B_layer_config(self, setting):  # B_layer 구성요소 B_layer_config(state = [-1], node = 2048, edge = 5, inter_edge= 1)
+        self.select_layer_B_model(setting)
         return B, B_edges
 
-    def select_layer_B_model(self, network):
-        if network == 1:
-            self.making_layer_B_random_regular()
-        elif network == 2:
-            self.making_layer_B_barabasi_albert()
+    def select_layer_B_model(self, setting):
+        if setting.Structure.split('-')[1] == 'RR':
+            self.making_layer_B_random_regular(setting)
+        elif setting.Structure.split('-')[1] == 'BA':
+            self.making_layer_B_barabasi_albert(setting)
         return B, B_edges
 
-    def making_layer_B_random_regular(self):  # B_layer random_regular network
+    def making_layer_B_random_regular(self, setting):  # B_layer random_regular network
         global B, B_edges
-        B = np.array(self.SS.B_state * int(self.SS.B_node / len(self.SS.B_state)), int)
+        B = np.array(setting.B_state * int(setting.B_node / len(setting.B_state)), int)
         random.shuffle(B)
-        B_edges = nx.random_regular_graph(self.SS.B_edge, self.SS.B_node, seed=None)
+        B_edges = nx.random_regular_graph(setting.B_edge, setting.B_node, seed=None)
         return B, B_edges
 
-    def making_layer_B_barabasi_albert(self):  # B_layer 바바라시-알버트 네트워크
+    def making_layer_B_barabasi_albert(self, setting):  # B_layer 바바라시-알버트 네트워크
         global B, B_edges
-        B = np.array(self.SS.B_state * int(self.SS.B_node / len(self.SS.B_state)), int)
+        B = np.array(setting.B_state * int(setting.B_node / len(setting.B_state)), int)
         random.shuffle(B)
-        B_edges = nx.barabasi_albert_graph(self.SS.B_node, self.SS.B_edge, seed=None)
+        B_edges = nx.barabasi_albert_graph(setting.B_node, setting.B_edge, seed=None)
         return B, B_edges
 
     def making_node_info(self):  # layer, node_number, location
@@ -46,10 +43,8 @@ class Layer_B_Modeling:
         return node_info
 
 
-
 if __name__ == "__main__":
-    Layer_B = Layer_B_Modeling()
-    B = Layer_B.B
-    B_edges = Layer_B.B_edges
-    print(B)
-    print(B_edges.edges)
+    #Layer_B = Layer_B_Modeling(setting)
+    #B = Layer_B.B
+    #B_edges = Layer_B.B_edges
+    print("layer_B")
