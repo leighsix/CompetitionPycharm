@@ -27,10 +27,15 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtCore import QDir, Qt, QUrl
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
+from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
         QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget)
 from PyQt5.QtWidgets import QMainWindow,QWidget, QPushButton, QAction
 from PyQt5.QtGui import QIcon
+import sys
+
+
 from mpl_toolkits.mplot3d.axes3d import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib
@@ -41,8 +46,9 @@ WindowModel = uic.loadUiType("mainwindow.ui")[0]
 class MyWindow(QMainWindow, WindowModel):
     def __init__(self, setting):
         QMainWindow.__init__(self, None)
-        self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.setupUi(self)
+        self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+        self.videoWidget = QVideoWidget()
         self.changing_variable = Changing_Variable.Changing_Variable(setting)
         self.visualization = Visualization.Visualization()
         self.network = Interconnected_Layer_Modeling.Interconnected_Layer_Modeling()
@@ -63,13 +69,18 @@ class MyWindow(QMainWindow, WindowModel):
         self.duplicate_Button.clicked.connect(lambda state, sets=setting: self.duplicate_db_func(state, sets))
         self.select_db_Button.clicked.connect(lambda state, sets=setting: self.select_db_func(state, sets))
 
-
     def making_df(self, setting):
         df = pd.DataFrame()
         if setting.DB == 'MySQL':
             df = self.select_db.select_data_from_DB(setting)
         elif setting.DB == 'SQLITE':
             df = self.select_sql.select_data_from_sqlite(setting)
+        return df
+
+    def making_duplicate_df(self, setting):
+        df = pd.DataFrame()
+        if setting.DB == 'MySQL':
+            df = self.select_db.select_duplicates_from_DB(setting)
         return df
 
     def initial_state_graph(self, state, setting):
@@ -350,7 +361,7 @@ class MyWindow(QMainWindow, WindowModel):
         print('select DB...')
         table = self.DB_table
         df = self.making_df(setting)
-        df.head(100)
+        df = df.loc[0:99, :]
         table.setColumnCount(len(df.columns))
         table.setRowCount(len(df.index))
         table.setHorizontalHeaderLabels(df.columns)
@@ -362,25 +373,29 @@ class MyWindow(QMainWindow, WindowModel):
     def duplicate_db_func(self, state, setting):
         print('duplicate DB...')
         table = self.DB_table
-        df = self.making_df(setting)
-        df.head(100)
-        table.setColumnCount(len(df.columns))
-        table.setRowCount(len(df.index))
-        table.setHorizontalHeaderLabels(df.columns)
-        for i in range(len(df.index)):
-            for j in range(len(df.columns)):
-                table.setItem(i, j, QTableWidgetItem(str(df.iloc[i, j])))
-        self.table_widget.show()
+        df = self.making_duplicate_df(setting)
+        print(len(df))
+        if len(df) == 0:
+            print('no duplicates')
+            pass
+        if len(df) > 0 :
+            table.setColumnCount(len(df.columns))
+            table.setRowCount(len(df.index))
+            table.setHorizontalHeaderLabels(df.columns)
+            for i in range(len(df.index)):
+                for j in range(len(df.columns)):
+                    table.setItem(i, j, QTableWidgetItem(str(df.iloc[i, j])))
+            self.table_widget.show()
 
     def making_movie_function(self):
         print('making movie...')
-        self.movie_layout.takeAt(0)
-        layout = self.movie_layout
-        videoWidget = QVideoWidget()
-        layout.addWidget(videoWidget)
-        self.mediaPlayer.setVideoOutput(videoWidget)
-        self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile('C:/Users/Purple/CompetingLayer/dynamics.mp4')))
-        self.mediaPlayer.play()
+        self.movieLayout.takeAt(0)
+        self.movieLayout.addWidget(self.videoWidget)
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open Movie", QDir.homePath())
+        if fileName != '':
+            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(fileName)))
+        self.player.setVideoOutput(self.videoWidget)
+        self.player.play()
 
     def doing_simulation(self, state, setting):
         print('doing simulation...')
