@@ -21,7 +21,7 @@ class Setting_Simulation_Value():
         self.table = 'average_layer_state'
         self.DB = 'MySQL'
 
-        self.gap = 10
+        self.gap = 20
         self.Repeating_number = 100
         self.R = self.simulation_condition(self.gap)[0]
         self.D = self.simulation_condition(self.gap)[1]
@@ -32,7 +32,7 @@ class Setting_Simulation_Value():
 
 
     def simulation_condition(self, gap):
-        self.R = np.linspace(1.8, 2, gap)
+        self.R = np.linspace(0.5, 1.5, gap)
         self.D = np.linspace(self.making_beta_scale(gap)[0], self.making_beta_scale(gap)[1], gap)
         return self.R, self.D
 

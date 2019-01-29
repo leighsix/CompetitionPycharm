@@ -49,7 +49,6 @@ class MyWindow(QMainWindow, WindowModel):
         self.db_manager = DB_Management.DB_Management()
         self.select_db = SelectDB.SelectDB()
         self.select_sql = SelectDB.SelectSQlite()
-        self.df = self.making_df(setting)
 
         self.condition_settingButton.clicked.connect(lambda state, sets=setting: self.condition_setting(state, sets))
         self.Simulation_Start.clicked.connect(lambda state, sets=setting: self.doing_simulation(state, sets))
@@ -95,14 +94,16 @@ class MyWindow(QMainWindow, WindowModel):
             if self.display_locBox.currentText() == 'outer graph':
                 plt.figure()
                 plt.style.use('seaborn-whitegrid')
-                self.visualization.plot_3D_scatter_for_average_state(setting, self.df)
+                df = self.making_df(setting)
+                self.visualization.plot_3D_scatter_for_average_state(setting, df)
                 plt.show()
                 plt.close()
             elif self.display_locBox.currentText() == 'inner graph':
                 self.Total_Result_layout.takeAt(0)
                 fig = plt.figure()
                 plt.style.use('seaborn-whitegrid')
-                self.visualization.plot_3D_scatter_for_average_state(setting, self.df)
+                df = self.making_df(setting)
+                self.visualization.plot_3D_scatter_for_average_state(setting, df)
                 canvas = FigureCanvas(fig)
                 layout = self.Total_Result_layout
                 layout.addWidget(canvas)
@@ -115,14 +116,16 @@ class MyWindow(QMainWindow, WindowModel):
             if self.display_locBox.currentText() == 'outer graph':
                 plt.figure()
                 plt.style.use('seaborn-whitegrid')
-                self.visualization.plot_3D_trisurf_for_average_state(setting, self.df)
+                df = self.making_df(setting)
+                self.visualization.plot_3D_trisurf_for_average_state(setting, df)
                 plt.show()
                 plt.close()
             elif self.display_locBox.currentText() == 'inner graph':
                 self.Total_Result_layout.takeAt(0)
                 fig = plt.figure()
                 plt.style.use('seaborn-whitegrid')
-                self.visualization.plot_3D_trisurf_for_average_state(setting, self.df)
+                df = self.making_df(setting)
+                self.visualization.plot_3D_trisurf_for_average_state(setting, df)
                 canvas = FigureCanvas(fig)
                 layout = self.Total_Result_layout
                 layout.addWidget(canvas)
@@ -137,7 +140,8 @@ class MyWindow(QMainWindow, WindowModel):
                 plt.style.use('seaborn-whitegrid')
                 ax = fig.add_subplot(111)
                 ax.tick_params(axis='both', labelsize=14)
-                self.visualization.plot_3D_to_2D_contour_for_average_state(setting, self.df)
+                df = self.making_df(setting)
+                self.visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
                 cb = plt.colorbar()
                 cb.set_label(label='Average states', size=15, labelpad=10)
                 cb.ax.tick_params(labelsize=12)
@@ -153,7 +157,8 @@ class MyWindow(QMainWindow, WindowModel):
                 plt.style.use('seaborn-whitegrid')
                 ax = fig.add_subplot(111)
                 ax.tick_params(axis='both', labelsize=14)
-                self.visualization.plot_3D_to_2D_contour_for_average_state(setting, self.df)
+                df = self.making_df(setting)
+                self.visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
                 cb = plt.colorbar()
                 cb.set_label(label='Average states', size=15, labelpad=10)
                 cb.ax.tick_params(labelsize=12)
@@ -172,7 +177,8 @@ class MyWindow(QMainWindow, WindowModel):
             if self.display_locBox.currentText() == 'outer graph':
                 plt.figure()
                 plt.style.use('seaborn-whitegrid')
-                self.visualization.plot_3D_contour_for_average_state(setting, self.df)
+                df = self.making_df(setting)
+                self.visualization.plot_3D_contour_for_average_state(setting, df)
                 plt.show()
                 plt.close()
 
@@ -180,7 +186,8 @@ class MyWindow(QMainWindow, WindowModel):
                 self.Total_Result_layout.takeAt(0)
                 fig = plt.figure()
                 plt.style.use('seaborn-whitegrid')
-                self.visualization.plot_3D_contour_for_average_state(setting, self.df)
+                df = self.making_df(setting)
+                self.visualization.plot_3D_contour_for_average_state(setting, df)
                 canvas = FigureCanvas(fig)
                 layout = self.Total_Result_layout
                 layout.addWidget(canvas)
@@ -198,9 +205,10 @@ class MyWindow(QMainWindow, WindowModel):
             plt.style.use('seaborn-whitegrid')
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
+            df = self.making_df(setting)
             for i in box:
                 if i > 0:
-                    self.visualization.plot_2D_gamma_for_average_state(setting, self.df, i)
+                    self.visualization.plot_2D_gamma_for_average_state(setting, df, i)
             plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
             plt.ylim(-4, 4)
             plt.xlabel(r'$\gamma$', fontsize=18, labelpad=4)
@@ -213,9 +221,10 @@ class MyWindow(QMainWindow, WindowModel):
             plt.style.use('seaborn-whitegrid')
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
+            df = self.making_df(setting)
             for i in box:
                 if i > 0:
-                    self.visualization.plot_2D_gamma_for_average_state(setting, self.df, i)
+                    self.visualization.plot_2D_gamma_for_average_state(setting, df, i)
             plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
             plt.ylim(-4, 4)
             plt.xlabel(r'$\gamma$', fontsize=18, labelpad=4)
@@ -237,9 +246,10 @@ class MyWindow(QMainWindow, WindowModel):
             plt.style.use('seaborn-whitegrid')
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
+            df = self.making_df(setting)
             for i in box:
                 if i > 0:
-                    self.visualization.plot_2D_beta_for_average_state(setting, self.df, i)
+                    self.visualization.plot_2D_beta_for_average_state(setting, df, i)
             plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
             plt.ylim(-4, 4)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
@@ -252,9 +262,10 @@ class MyWindow(QMainWindow, WindowModel):
             plt.style.use('seaborn-whitegrid')
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
+            df = self.making_df(setting)
             for i in box:
                 if i > 0:
-                    self.visualization.plot_2D_beta_for_average_state(setting, self.df, i)
+                    self.visualization.plot_2D_beta_for_average_state(setting, df, i)
             plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
             plt.ylim(-4, 4)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
@@ -275,7 +286,8 @@ class MyWindow(QMainWindow, WindowModel):
             sns.set()
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
-            self.visualization.flow_prob_beta_chart(setting, self.df, beta_value, gamma_value)
+            df = self.making_df(setting)
+            self.visualization.flow_prob_beta_chart(setting, df, beta_value, gamma_value)
             plt.ylabel('probability for layer B', fontsize=18, labelpad=4)
             plt.xlabel('time(step)', fontsize=18, labelpad=4)
             plt.show()
@@ -286,7 +298,8 @@ class MyWindow(QMainWindow, WindowModel):
             sns.set()
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
-            self.visualization.flow_prob_beta_chart(setting, self.df, beta_value, gamma_value)
+            df = self.making_df(setting)
+            self.visualization.flow_prob_beta_chart(setting, df, beta_value, gamma_value)
             plt.ylabel('probability for layer B', fontsize=18, labelpad=4)
             plt.xlabel('time(step)', fontsize=18, labelpad=4)
             canvas = FigureCanvas(fig)
@@ -306,7 +319,8 @@ class MyWindow(QMainWindow, WindowModel):
             sns.set()
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
-            self.visualization.different_state_ratio_chart(setting, self.df, beta_value, gamma_value, select_layer)
+            df = self.making_df(setting)
+            self.visualization.different_state_ratio_chart(setting, df, beta_value, gamma_value, select_layer)
             plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
             plt.xlabel('time(step)', fontsize=18, labelpad=6)
             plt.show()
@@ -317,7 +331,8 @@ class MyWindow(QMainWindow, WindowModel):
             sns.set()
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
-            self.visualization.different_state_ratio_chart(setting, self.df, beta_value, gamma_value, select_layer)
+            df = self.making_df(setting)
+            self.visualization.different_state_ratio_chart(setting, df, beta_value, gamma_value, select_layer)
             plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
             plt.xlabel('time(step)', fontsize=18, labelpad=6)
             canvas = FigureCanvas(fig)
@@ -334,25 +349,27 @@ class MyWindow(QMainWindow, WindowModel):
     def select_db_func(self, state, setting):
         print('select DB...')
         table = self.DB_table
-        self.df.head(100)
-        table.setColumnCount(len(self.df.columns))
-        table.setRowCount(len(self.df.index))
-        table.setHorizontalHeaderLabels(self.df.columns)
-        for i in range(len(self.df.index)):
-            for j in range(len(self.df.columns)):
-                table.setItem(i, j, QTableWidgetItem(str(self.df.iloc[i, j])))
+        df = self.making_df(setting)
+        df.head(100)
+        table.setColumnCount(len(df.columns))
+        table.setRowCount(len(df.index))
+        table.setHorizontalHeaderLabels(df.columns)
+        for i in range(len(df.index)):
+            for j in range(len(df.columns)):
+                table.setItem(i, j, QTableWidgetItem(str(df.iloc[i, j])))
         self.table_widget.show()
 
     def duplicate_db_func(self, state, setting):
         print('duplicate DB...')
         table = self.DB_table
-        self.df.head(100)
-        table.setColumnCount(len(self.df.columns))
-        table.setRowCount(len(self.df.index))
-        table.setHorizontalHeaderLabels(self.df.columns)
-        for i in range(len(self.df.index)):
-            for j in range(len(self.df.columns)):
-                table.setItem(i, j, QTableWidgetItem(str(self.df.iloc[i, j])))
+        df = self.making_df(setting)
+        df.head(100)
+        table.setColumnCount(len(df.columns))
+        table.setRowCount(len(df.index))
+        table.setHorizontalHeaderLabels(df.columns)
+        for i in range(len(df.index)):
+            for j in range(len(df.columns)):
+                table.setItem(i, j, QTableWidgetItem(str(df.iloc[i, j])))
         self.table_widget.show()
 
     def making_movie_function(self):
