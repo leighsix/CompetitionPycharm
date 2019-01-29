@@ -1027,11 +1027,7 @@
          <height>511</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="movieLayout">
-        <item>
-         <widget class="QWidget" name="videowidget" native="true"/>
-        </item>
-       </layout>
+       <layout class="QHBoxLayout" name="movieLayout"/>
       </widget>
      </widget>
     </widget>
