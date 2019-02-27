@@ -11,7 +11,7 @@ import matplotlib
 matplotlib.use("TkAgg")
 
 
-class Interconnected_Layer_Modeling:
+class Revised_Interconnected_Layer_Modeling:
     def making_layer_A_graph(self, layer_A, interconnected_network):
         interconnected_network.add_layer('layer_A')
         for i in sorted(layer_A.A_edges.nodes):
@@ -79,7 +79,7 @@ class Interconnected_Layer_Modeling:
         im = plt.imread(save_file_name)
         return np.array(im), fig
 
-    def making_movie_for_dynamics(self, ims, gamma, beta):
+    def making_movie_for_dynamics(self, ims, beta):
         dpi = 72
         x_pixels, y_pixels = ims[0].shape[0], ims[0].shape[1]
         fig = plt.figure(figsize=(y_pixels / dpi, x_pixels / dpi), dpi=dpi)
@@ -89,7 +89,7 @@ class Interconnected_Layer_Modeling:
             im.set_array(ims[i])
             return (im,)
         ani = animation.FuncAnimation(fig, animate, frames=len(ims), repeat=False, interval=1000)
-        ani.save('dynamics_%s_%s.mp4' % gamma % beta)
+        ani.save('dynamics_%s.mp4' % beta)
 
 
 if __name__ == "__main__":
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     layer_A = Layer_A_Modeling.Layer_A_Modeling(setting)
     # print(layer_A.A)
     layer_B = Layer_B_Modeling.Layer_B_Modeling(setting)
-    ILM = Interconnected_Layer_Modeling()
-    fig = ILM.draw_interconnected_network(setting, layer_A, layer_B, 'result.png')[1]
+    RILM = Revised_Interconnected_Layer_Modeling()
+    fig = RILM.draw_interconnected_network(setting, layer_A, layer_B, 'result.png')[1]
     plt.show()
     print("Operating finished")

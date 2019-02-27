@@ -125,6 +125,29 @@ class Visualization:
                 if len(df2) >= setting.Limited_step:
                     plt.plot(df2['Steps'], df2['%s_DIFFERENT_STATE_RATIO' % select_layer], linewidth=0.7)
 
+    def total_different_state_ratio_chart(self, setting, df, beta_value, gamma_value):
+        df = df[df.Steps <= setting.Limited_step]
+        beta_list = Visualization.making_select_list(df, 'beta')    # 이름은 list이지만 실제로는 array
+        gamma_list = Visualization.making_select_list(df, 'gamma')  # 이름은 list이지만 실제로는 array
+        beta_min = Visualization.covert_to_select_list_value(beta_list, beta_value[0])
+        beta_max = Visualization.covert_to_select_list_value(beta_list, beta_value[1])
+        gamma_min = Visualization.covert_to_select_list_value(gamma_list, gamma_value[0])
+        gamma_max = Visualization.covert_to_select_list_value(gamma_list, gamma_value[1])
+        df = df[df.gamma >= gamma_min]
+        df = df[df.gamma <= gamma_max]
+        df = df[df.beta >= beta_min]
+        df = df[df.beta <= beta_max]
+        gamma_array = pd.DataFrame(df['gamma'])
+        gamma_array = np.array(gamma_array.drop_duplicates())
+        beta_array = pd.DataFrame(df['beta'])
+        beta_array = np.array(beta_array.drop_duplicates())
+        for i in sorted(gamma_array):
+            for j in beta_array:
+                df1 = df[df.gamma == i[0]]
+                df2 = df1[df1.beta == j[0]]
+                if len(df2) >= setting.Limited_step:
+                    plt.plot(df2['Steps'], abs(df2['A_DIFFERENT_STATE_RATIO'])+abs(df2['B_DIFFERENT_STATE_RATIO']), linewidth=0.7)
+
     @staticmethod
     def state_list_function(df, gamma_list, beta_list):
         Z = np.zeros([len(gamma_list), len(beta_list)])

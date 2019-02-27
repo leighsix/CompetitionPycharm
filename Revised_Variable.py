@@ -1,7 +1,7 @@
 import numpy as np
 import Setting_Simulation_Value
 import MakingPandas
-import RepeatDynamics
+import RevisedRepeatDynamics
 import sqlalchemy
 from multiprocessing import Pool
 from numba import jit
@@ -10,7 +10,7 @@ from numba import jit
 class Changing_Variable:
     def __init__(self, setting):
         self.mp = MakingPandas.MakingPandas()
-        self.repeat_dynamics = RepeatDynamics.RepeatDynamics(setting)
+        self.repeat_dynamics = RevisedRepeatDynamics.RepeatDynamics(setting)
 
     def calculate_and_input_database(self, setting_variable_tuple):
         gamma = setting_variable_tuple[1][0]
