@@ -4,7 +4,7 @@ import math
 
 class Setting_Simulation_Value():
     def __init__(self):
-        self.Structure = 'RR-RR'
+        self.Structure = 'BA-RR'
         self.A_state = [1, 2]
         self.A_node = 2048
         self.A_edge = 5
@@ -21,7 +21,7 @@ class Setting_Simulation_Value():
         self.table = 'average_layer_state'
         self.DB = 'MySQL'
 
-        self.gap = 20
+        self.gap = 40
         self.Repeating_number = 100
         self.R = self.simulation_condition(self.gap)[0]
         self.D = self.simulation_condition(self.gap)[1]
@@ -32,7 +32,7 @@ class Setting_Simulation_Value():
 
 
     def simulation_condition(self, gap):
-        self.R = np.linspace(0.5, 1.5, gap)
+        self.R = np.linspace(0, 2, gap)
         self.D = np.linspace(self.making_beta_scale(gap)[0], self.making_beta_scale(gap)[1], gap)
         return self.R, self.D
 

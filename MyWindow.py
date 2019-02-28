@@ -325,33 +325,65 @@ class MyWindow(QMainWindow, WindowModel):
         beta_value = [eval(self.beta_minBox_4.text()), eval(self.beta_maxBox_4.text())]
         gamma_value = [eval(self.gamma_minBox_4.text()), eval(self.gamma_maxBox_4.text())]
         select_layer = str(self.select_layerBox.currentText())
-        if self.prob_beta_locBox.currentText() == 'outer graph':
-            fig = plt.figure()
-            sns.set()
-            ax = fig.add_subplot(111)
-            ax.tick_params(axis='both', labelsize=14)
-            df = self.making_df(setting)
-            self.visualization.different_state_ratio_chart(setting, df, beta_value, gamma_value, select_layer)
-            plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
-            plt.xlabel('time(step)', fontsize=18, labelpad=6)
-            plt.show()
-            plt.close()
-        elif self.state_ratio_locBox.currentText() == 'inner graph':
-            self.different_state_layout.takeAt(0)
-            fig = plt.figure()
-            sns.set()
-            ax = fig.add_subplot(111)
-            ax.tick_params(axis='both', labelsize=14)
-            df = self.making_df(setting)
-            self.visualization.different_state_ratio_chart(setting, df, beta_value, gamma_value, select_layer)
-            plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
-            plt.xlabel('time(step)', fontsize=18, labelpad=6)
-            canvas = FigureCanvas(fig)
-            layout = self.different_state_layout
-            layout.addWidget(canvas)
-            canvas.draw()
-            canvas.show()
-            plt.close()
+        if select_layer != 'Total':
+            if self.prob_beta_locBox.currentText() == 'outer graph':
+                fig = plt.figure()
+                sns.set()
+                ax = fig.add_subplot(111)
+                ax.tick_params(axis='both', labelsize=14)
+                df = self.making_df(setting)
+                self.visualization.different_state_ratio_chart(setting, df, beta_value, gamma_value, select_layer)
+                plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
+                plt.xlabel('time(step)', fontsize=18, labelpad=6)
+                plt.show()
+                plt.close()
+            elif self.state_ratio_locBox.currentText() == 'inner graph':
+                self.different_state_layout.takeAt(0)
+                fig = plt.figure()
+                sns.set()
+                ax = fig.add_subplot(111)
+                ax.tick_params(axis='both', labelsize=14)
+                df = self.making_df(setting)
+                self.visualization.different_state_ratio_chart(setting, df, beta_value, gamma_value, select_layer)
+                plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
+                plt.xlabel('time(step)', fontsize=18, labelpad=6)
+                canvas = FigureCanvas(fig)
+                layout = self.different_state_layout
+                layout.addWidget(canvas)
+                canvas.draw()
+                canvas.show()
+                plt.close()
+        elif select_layer == 'Total':
+            if self.prob_beta_locBox.currentText() == 'outer graph':
+                fig = plt.figure()
+                sns.set()
+                ax = fig.add_subplot(111)
+                ax.tick_params(axis='both', labelsize=14)
+                df = self.making_df(setting)
+                self.visualization.total_different_state_ratio_chart(setting, df, beta_value, gamma_value)
+                plt.ylabel('different state ratio', fontsize=18, labelpad=6)
+                plt.xlabel('time(step)', fontsize=18, labelpad=6)
+                plt.show()
+                plt.close()
+            elif self.state_ratio_locBox.currentText() == 'inner graph':
+                self.different_state_layout.takeAt(0)
+                fig = plt.figure()
+                sns.set()
+                ax = fig.add_subplot(111)
+                ax.tick_params(axis='both', labelsize=14)
+                df = self.making_df(setting)
+                self.visualization.total_different_state_ratio_chart(setting, df, beta_value, gamma_value)
+                plt.ylabel('different state ratio', fontsize=18, labelpad=6)
+                plt.xlabel('time(step)', fontsize=18, labelpad=6)
+                canvas = FigureCanvas(fig)
+                layout = self.different_state_layout
+                layout.addWidget(canvas)
+                canvas.draw()
+                canvas.show()
+                plt.close()
+
+
+
 
     def db_drop_duplicate_row(self, state, setting):
         print('duplicate DB dropped...')

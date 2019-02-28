@@ -43,7 +43,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="Initial_State">
      <attribute name="title">
@@ -961,6 +961,11 @@
         <string>B</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Total</string>
+       </property>
+      </item>
      </widget>
      <widget class="QComboBox" name="state_ratio_locBox">
       <property name="geometry">
@@ -1175,7 +1180,7 @@
       <rect>
        <x>10</x>
        <y>29</y>
-       <width>247</width>
+       <width>251</width>
        <height>642</height>
       </rect>
      </property>
@@ -1545,6 +1550,11 @@
            <item>
             <property name="text">
              <string>renew_competition</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>revised_variable</string>
             </property>
            </item>
            <item>
