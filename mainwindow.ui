@@ -1554,6 +1554,11 @@
            </item>
            <item>
             <property name="text">
+             <string>revised_variable</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>competition</string>
             </property>
            </item>
