@@ -11,13 +11,13 @@ class Setting_Revised_Value():
         self.MAX = 2
         self.MIN = -2
         self.B_state = [-1]
-        self.B_node = 2048
+        self.B_node = 128
         self.B_edge = 5
-        self.B_inter_edges = 1
+        self.B_inter_edges = 16
         self.A_inter_edges = 1
         self.Limited_step = 100
         self.drawing_graph = False
-        self.database = 'revised_variable'  # 'competition  renew_competition'
+        self.database = 'renew_competition'  # 'competition  renew_competition'
         self.table = 'revised_layer_state'
         self.DB = 'MySQL'
 
@@ -47,4 +47,5 @@ if __name__ == "__main__":
     #print(len(layer_A1.A))
     #layer_A2 = Layer_A_Modeling.Layer_A_Modeling(SS)
     print(SS.A_node)
+    print(SS.D)
     #print(len(layer_A2.A))

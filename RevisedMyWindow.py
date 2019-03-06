@@ -2,14 +2,14 @@ import sys
 from pymnet import *
 import Layer_A_Modeling
 import Layer_B_Modeling
-from Setting_Simulation_Value import *
+from Setting_Revised_Value import *
 import Layer_A_Modeling
 import Layer_B_Modeling
 import Revised_Changing_Variable
-import Visualization
+import RevisedVisualization
 import Revised_Interconnected_Layer_Modeling
 import DB_Management
-import SelectDB
+import RevisedSelectDB
 import seaborn as sns
 import pandas as pd
 import PyQt5
@@ -40,21 +40,21 @@ from mpl_toolkits.mplot3d.axes3d import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib
 matplotlib.use("TkAgg")
-WindowModel = uic.loadUiType("mainwindow.ui")[0]
+WindowModel = uic.loadUiType("revisedmainwindow.ui")[0]
 
 
-class MyWindow(QMainWindow, WindowModel):
+class RevisedMyWindow(QMainWindow, WindowModel):
     def __init__(self, setting):
         QMainWindow.__init__(self, None)
         self.setupUi(self)
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.videoWidget = QVideoWidget()
-        self.changing_variable = Revised_Changing_Variable.Changing_Variable(setting)
-        self.visualization = Visualization.Visualization()
-        self.network = Revised_Interconnected_Layer_Modeling.Interconnected_Layer_Modeling()
+        self.changing_variable = Revised_Changing_Variable.Revised_Changing_Variable(setting)
+        self.visualization = RevisedVisualization.RevisedVisualization()
+        self.network = Revised_Interconnected_Layer_Modeling.Revised_Interconnected_Layer_Modeling()
         self.db_manager = DB_Management.DB_Management()
-        self.select_db = SelectDB.SelectDB()
-        self.select_sql = SelectDB.SelectSQlite()
+        self.select_db = RevisedSelectDB.RevisedSelectDB()
+        self.select_sql = RevisedSelectDB.SelectSQlite()
 
         self.condition_settingButton.clicked.connect(lambda state, sets=setting: self.condition_setting(state, sets))
         self.Simulation_Start.clicked.connect(lambda state, sets=setting: self.doing_simulation(state, sets))
@@ -158,7 +158,7 @@ class MyWindow(QMainWindow, WindowModel):
                 cb.ax.tick_params(labelsize=12)
                 plt.clim(-3, 3)
                 plt.xlabel(r'$\beta$', fontsize=18, labelpad=6)
-                plt.ylabel(r'$\gamma$', fontsize=18, labelpad=6)
+                plt.ylabel('PROB_P', fontsize=18, labelpad=6)
                 plt.show()
                 plt.close()
 
@@ -175,7 +175,7 @@ class MyWindow(QMainWindow, WindowModel):
                 cb.ax.tick_params(labelsize=12)
                 plt.clim(-3, 3)
                 plt.xlabel(r'$\beta$', fontsize=18, labelpad=6)
-                plt.ylabel(r'$\gamma$', fontsize=18, labelpad=6)
+                plt.ylabel('PROB_P', fontsize=18, labelpad=6)
                 canvas = FigureCanvas(fig)
                 layout = self.Total_Result_layout
                 layout.addWidget(canvas)
@@ -206,62 +206,15 @@ class MyWindow(QMainWindow, WindowModel):
                 canvas.show()
                 plt.close()
 
-    def result_gamma_graph(self, state, setting):
-        print('drawing gamma graph...')
-        box = [eval(self.beta_spinBox1.text()), eval(self.beta_spinBox2.text()),
-               eval(self.beta_spinBox3.text()), eval(self.beta_spinBox4.text()),
-               eval(self.beta_spinBox5.text()), eval(self.beta_spinBox6.text())]
-        if self.result_gamma_locBox.currentText() == 'outer graph':
-            fig = plt.figure()
-            plt.style.use('seaborn-whitegrid')
-            ax = fig.add_subplot(111)
-            ax.tick_params(axis='both', labelsize=14)
-            df = self.making_df(setting)
-            for i in box:
-                if i > 0:
-                    self.visualization.plot_2D_gamma_for_average_state(setting, df, i)
-            plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
-            plt.ylim(-4, 4)
-            plt.xlabel(r'$\gamma$', fontsize=18, labelpad=4)
-            plt.ylabel('Average States', fontsize=18, labelpad=4)
-            plt.show()
-            plt.close()
-        elif self.result_gamma_locBox.currentText() == 'inner graph':
-            self.Result_gamma_layout.takeAt(0)
-            fig = plt.figure()
-            plt.style.use('seaborn-whitegrid')
-            ax = fig.add_subplot(111)
-            ax.tick_params(axis='both', labelsize=14)
-            df = self.making_df(setting)
-            for i in box:
-                if i > 0:
-                    self.visualization.plot_2D_gamma_for_average_state(setting, df, i)
-            plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
-            plt.ylim(-4, 4)
-            plt.xlabel(r'$\gamma$', fontsize=18, labelpad=4)
-            plt.ylabel('Average States', fontsize=18, labelpad=4)
-            canvas = FigureCanvas(fig)
-            layout = self.Result_gamma_layout
-            layout.addWidget(canvas)
-            canvas.draw()
-            canvas.show()
-            plt.close()
-
     def result_beta_graph(self, state, setting):
         print('drawing beta graph...')
-        box = [eval(self.gamma_spinBox1.text()), eval(self.gamma_spinBox2.text()),
-               eval(self.gamma_spinBox3.text()), eval(self.gamma_spinBox4.text()),
-               eval(self.gamma_spinBox5.text()), eval(self.gamma_spinBox6.text())]
         if self.result_beta_locBox.currentText() == 'outer graph':
             fig = plt.figure()
             plt.style.use('seaborn-whitegrid')
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
-            for i in box:
-                if i > 0:
-                    self.visualization.plot_2D_beta_for_average_state(setting, df, i)
-            plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
+            self.visualization.plot_2D_beta_for_average_state(setting, df)
             plt.ylim(-4, 4)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
             plt.ylabel('Average States', fontsize=18, labelpad=4)
@@ -274,9 +227,7 @@ class MyWindow(QMainWindow, WindowModel):
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
-            for i in box:
-                if i > 0:
-                    self.visualization.plot_2D_beta_for_average_state(setting, df, i)
+            self.visualization.plot_2D_beta_for_average_state(setting, df)
             plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
             plt.ylim(-4, 4)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
@@ -291,14 +242,13 @@ class MyWindow(QMainWindow, WindowModel):
     def prob_beta_graph(self, state, setting):
         print('drawing prob beta graph...')
         beta_value = [eval(self.beta_minBox.text()), eval(self.beta_maxBox.text())]
-        gamma_value = [eval(self.gamma_minBox.text()), eval(self.gamma_maxBox.text())]
         if self.prob_beta_locBox.currentText() == 'outer graph':
             fig = plt.figure()
             sns.set()
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
-            self.visualization.flow_prob_beta_chart(setting, df, beta_value, gamma_value)
+            self.visualization.flow_prob_beta_chart(setting, df, beta_value)
             plt.ylabel('probability for layer B', fontsize=18, labelpad=4)
             plt.xlabel('time(step)', fontsize=18, labelpad=4)
             plt.show()
@@ -310,7 +260,7 @@ class MyWindow(QMainWindow, WindowModel):
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
-            self.visualization.flow_prob_beta_chart(setting, df, beta_value, gamma_value)
+            self.visualization.flow_prob_beta_chart(setting, df, beta_value)
             plt.ylabel('probability for layer B', fontsize=18, labelpad=4)
             plt.xlabel('time(step)', fontsize=18, labelpad=4)
             canvas = FigureCanvas(fig)
@@ -323,7 +273,6 @@ class MyWindow(QMainWindow, WindowModel):
     def different_state_ratio_graph(self, state, setting):
         print('drawing different state ratio graph...')
         beta_value = [eval(self.beta_minBox_4.text()), eval(self.beta_maxBox_4.text())]
-        gamma_value = [eval(self.gamma_minBox_4.text()), eval(self.gamma_maxBox_4.text())]
         select_layer = str(self.select_layerBox.currentText())
         if select_layer != 'Total':
             if self.prob_beta_locBox.currentText() == 'outer graph':
@@ -332,7 +281,7 @@ class MyWindow(QMainWindow, WindowModel):
                 ax = fig.add_subplot(111)
                 ax.tick_params(axis='both', labelsize=14)
                 df = self.making_df(setting)
-                self.visualization.different_state_ratio_chart(setting, df, beta_value, gamma_value, select_layer)
+                self.visualization.different_state_ratio_chart(setting, df, beta_value, select_layer)
                 plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
                 plt.xlabel('time(step)', fontsize=18, labelpad=6)
                 plt.show()
@@ -344,7 +293,7 @@ class MyWindow(QMainWindow, WindowModel):
                 ax = fig.add_subplot(111)
                 ax.tick_params(axis='both', labelsize=14)
                 df = self.making_df(setting)
-                self.visualization.different_state_ratio_chart(setting, df, beta_value, gamma_value, select_layer)
+                self.visualization.different_state_ratio_chart(setting, df, beta_value, select_layer)
                 plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
                 plt.xlabel('time(step)', fontsize=18, labelpad=6)
                 canvas = FigureCanvas(fig)
@@ -360,7 +309,7 @@ class MyWindow(QMainWindow, WindowModel):
                 ax = fig.add_subplot(111)
                 ax.tick_params(axis='both', labelsize=14)
                 df = self.making_df(setting)
-                self.visualization.total_different_state_ratio_chart(setting, df, beta_value, gamma_value)
+                self.visualization.total_different_state_ratio_chart(setting, df, beta_value)
                 plt.ylabel('different state ratio', fontsize=18, labelpad=6)
                 plt.xlabel('time(step)', fontsize=18, labelpad=6)
                 plt.show()
@@ -372,7 +321,7 @@ class MyWindow(QMainWindow, WindowModel):
                 ax = fig.add_subplot(111)
                 ax.tick_params(axis='both', labelsize=14)
                 df = self.making_df(setting)
-                self.visualization.total_different_state_ratio_chart(setting, df, beta_value, gamma_value)
+                self.visualization.total_different_state_ratio_chart(setting, df, beta_value)
                 plt.ylabel('different state ratio', fontsize=18, labelpad=6)
                 plt.xlabel('time(step)', fontsize=18, labelpad=6)
                 canvas = FigureCanvas(fig)
@@ -381,9 +330,6 @@ class MyWindow(QMainWindow, WindowModel):
                 canvas.draw()
                 canvas.show()
                 plt.close()
-
-
-
 
     def db_drop_duplicate_row(self, state, setting):
         print('duplicate DB dropped...')
@@ -454,9 +400,9 @@ class MyWindow(QMainWindow, WindowModel):
 
 
 if __name__ == "__main__":
-    SS = Setting_Simulation_Value()
+    SS = Setting_Revised_Value()
     app = QApplication(sys.argv)
-    my_window = MyWindow(SS)
+    my_window = RevisedMyWindow(SS)
     my_window.show()
     app.exec_()
 

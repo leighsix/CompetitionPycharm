@@ -1,11 +1,11 @@
 import pandas as pd
 import numpy as np
-import Setting_Simulation_Value
+import Setting_Revised_Value
 import sqlalchemy
 import sqlite3
 
 
-class SelectDB:
+class RevisedSelectDB:
     def select_data_from_DB(self, setting):
         select_query = ('''
             SELECT * FROM %s 
@@ -25,7 +25,7 @@ class SelectDB:
             SELECT * FROM %s
             GROUP BY 
                 Structure, A_node_number, B_node_number, A_internal_edges, B_internal_edges,
-                A_external_edges, B_external_edges, beta, gamma, Steps 
+                A_external_edges, B_external_edges, beta, Steps 
             HAVING  COUNT(Structure) > 1 AND COUNT(A_node_number) > 1 AND COUNT(B_node_number) > 1
                 AND COUNT(A_internal_edges) >1 AND COUNT(A_external_edges) >1
                 AND COUNT(B_internal_edges) >1 AND COUNT(B_external_edges) >1
@@ -52,7 +52,7 @@ class SelectSQlite:
 
 if __name__ == "__main__":
     print("Select DB")
-    setting = Setting_Simulation_Value.Setting_Simulation_Value()
-    select = SelectSQlite()
-    db = select.select_data_from_sqlite(setting)
+    setting = Setting_Revised_Value.Setting_Revised_Value()
+    select = SelectDB()
+    db = select.select_data_from_DB(setting)
     print(db)
