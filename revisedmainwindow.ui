@@ -1,0 +1,1738 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1284</width>
+    <height>826</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>network.png</normaloff>network.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="Total">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>941</width>
+      <height>781</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Sitka Small</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::Rounded</enum>
+    </property>
+    <property name="currentIndex">
+     <number>4</number>
+    </property>
+    <widget class="QWidget" name="Initial_State">
+     <attribute name="title">
+      <string>Initial State</string>
+     </attribute>
+     <widget class="QPushButton" name="Initial_State_Button">
+      <property name="geometry">
+       <rect>
+        <x>810</x>
+        <y>690</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sitka Text</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Initial State</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>50</y>
+        <width>801</width>
+        <height>611</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="Initial_State_layout"/>
+     </widget>
+     <widget class="QComboBox" name="display_locBox_2">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>690</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>inner graph</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>outer graph</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Total_Result">
+     <attribute name="title">
+      <string>Total Result</string>
+     </attribute>
+     <widget class="QPushButton" name="Total_Result_Button">
+      <property name="geometry">
+       <rect>
+        <x>780</x>
+        <y>680</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sitka Text</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Total Result</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>891</width>
+        <height>661</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="Total_Result_layout"/>
+     </widget>
+     <widget class="QComboBox" name="display_typeBox">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>680</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>scatter</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>trisurf</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>contour2D</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>contour3D</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="display_locBox">
+      <property name="geometry">
+       <rect>
+        <x>610</x>
+        <y>680</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>inner graph</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>outer graph</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Result_gamma">
+     <attribute name="title">
+      <string>Result(gamma)</string>
+     </attribute>
+     <widget class="QPushButton" name="result_gamma_Button">
+      <property name="geometry">
+       <rect>
+        <x>810</x>
+        <y>700</y>
+        <width>121</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sitka Text</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Result(Gamma)</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>801</width>
+        <height>661</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="Result_gamma_layout"/>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>1000</x>
+        <y>30</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>1000</x>
+        <y>50</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="beta_value">
+      <property name="geometry">
+       <rect>
+        <x>830</x>
+        <y>470</y>
+        <width>101</width>
+        <height>221</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>beta value</string>
+      </property>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>67</width>
+         <height>182</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="1" column="0">
+         <widget class="QDoubleSpinBox" name="beta_spinBox2">
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="maximum">
+           <double>20.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.800000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QDoubleSpinBox" name="beta_spinBox6">
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="accelerated">
+           <bool>false</bool>
+          </property>
+          <property name="showGroupSeparator" stdset="0">
+           <bool>false</bool>
+          </property>
+          <property name="maximum">
+           <double>20.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>2.400000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QDoubleSpinBox" name="beta_spinBox4">
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="maximum">
+           <double>20.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>1.600000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QDoubleSpinBox" name="beta_spinBox1">
+          <property name="wrapping">
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="minimum">
+           <double>0.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>20.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.400000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QDoubleSpinBox" name="beta_spinBox5">
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="maximum">
+           <double>20.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>2.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QDoubleSpinBox" name="beta_spinBox3">
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="maximum">
+           <double>20.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>1.200000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QComboBox" name="result_gamma_locBox">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>700</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>inner graph</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>outer graph</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Result_beta">
+     <attribute name="title">
+      <string>Result(beta)</string>
+     </attribute>
+     <widget class="QWidget" name="horizontalLayoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>9</x>
+        <y>9</y>
+        <width>891</width>
+        <height>651</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="Result_beta_layout"/>
+     </widget>
+     <widget class="QPushButton" name="result_beta_Button">
+      <property name="geometry">
+       <rect>
+        <x>810</x>
+        <y>690</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sitka Text</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Result(Beta)</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="result_beta_locBox">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>690</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>inner graph</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>outer graph</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Prob_beta">
+     <attribute name="title">
+      <string>Probability(beta)</string>
+     </attribute>
+     <widget class="QWidget" name="horizontalLayoutWidget_11">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>20</y>
+        <width>871</width>
+        <height>621</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="prob_beta_layout"/>
+     </widget>
+     <widget class="QPushButton" name="prob_beta_Button">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>680</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sitka Text</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>probability(B)</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="beta">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>680</y>
+        <width>51</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>beta</string>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="beta_minBox">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>680</y>
+        <width>62</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <double>20.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="beta_maxBox">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>680</y>
+        <width>62</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <double>20.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+      <property name="value">
+       <double>3.000000000000000</double>
+      </property>
+     </widget>
+     <widget class="QLabel" name="min">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>656</y>
+        <width>51</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>MIN</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="max">
+      <property name="geometry">
+       <rect>
+        <x>670</x>
+        <y>656</y>
+        <width>51</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>MAX</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="prob_beta_locBox">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>680</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>inner graph</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>outer graph</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Different_State_Ratio">
+     <attribute name="title">
+      <string>Different State Ratio</string>
+     </attribute>
+     <widget class="QWidget" name="horizontalLayoutWidget_12">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>891</width>
+        <height>611</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="different_state_layout"/>
+     </widget>
+     <widget class="QPushButton" name="different_ratio_Button">
+      <property name="geometry">
+       <rect>
+        <x>750</x>
+        <y>690</y>
+        <width>161</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sitka Text</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Different State Ratio</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="min_4">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>660</y>
+        <width>51</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>MIN</string>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="beta_minBox_4">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>690</y>
+        <width>62</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <double>20.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="beta_maxBox_4">
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>690</y>
+        <width>62</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <double>20.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+      <property name="value">
+       <double>3.000000000000000</double>
+      </property>
+     </widget>
+     <widget class="QLabel" name="beta_4">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>690</y>
+        <width>51</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>beta</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="max_4">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>660</y>
+        <width>51</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>MAX</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="layer">
+      <property name="geometry">
+       <rect>
+        <x>580</x>
+        <y>680</y>
+        <width>51</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Layer</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="select_layerBox">
+      <property name="geometry">
+       <rect>
+        <x>630</x>
+        <y>680</y>
+        <width>101</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>A</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>B</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Total</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="state_ratio_locBox">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>680</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>inner graph</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>outer graph</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Movie">
+     <attribute name="title">
+      <string>Movie</string>
+     </attribute>
+     <widget class="QPushButton" name="play_movie_Button">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>650</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sitka Text</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Play Movie</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="movie_widget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>901</width>
+        <height>631</height>
+       </rect>
+      </property>
+      <widget class="QWidget" name="horizontalLayoutWidget_5">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>70</y>
+         <width>791</width>
+         <height>511</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="movieLayout"/>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="DB_manage">
+     <attribute name="title">
+      <string>DB Manager</string>
+     </attribute>
+     <widget class="QPushButton" name="drop_duplicate_Button">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>660</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sitka Text</family>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Drop duplicate row</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="select_db_Button">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>660</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sitka Text</family>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Select DB</string>
+      </property>
+      <property name="autoRepeatInterval">
+       <number>100</number>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="duplicate_Button">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>660</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sitka Text</family>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Duplicate DB</string>
+      </property>
+      <property name="autoRepeatInterval">
+       <number>100</number>
+      </property>
+     </widget>
+     <widget class="QWidget" name="table_widget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>911</width>
+        <height>631</height>
+       </rect>
+      </property>
+      <widget class="QWidget" name="horizontalLayoutWidget_6">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>891</width>
+         <height>611</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="DB_table_layout">
+        <item>
+         <widget class="QTableWidget" name="DB_table"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="Initial_Condition">
+    <property name="geometry">
+     <rect>
+      <x>950</x>
+      <y>10</y>
+      <width>261</width>
+      <height>791</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>633</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>Sitka Text</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 10pt &quot;Sitka Text&quot;;</string>
+    </property>
+    <property name="title">
+     <string>Initial Condition</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>29</y>
+       <width>251</width>
+       <height>704</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="Layer_A">
+        <property name="title">
+         <string>Layer A</string>
+        </property>
+        <layout class="QFormLayout" name="formLayout_2">
+         <item row="1" column="0">
+          <widget class="QLabel" name="A_node">
+           <property name="text">
+            <string>Node</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="A_NodeBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>2048</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>128</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="A_internaledge">
+           <property name="text">
+            <string>Internal Edge</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="A_InternalEdgeBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="maxVisibleItems">
+            <number>10</number>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>10</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="A_externaledge">
+           <property name="text">
+            <string>External Edge</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::AutoText</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="A_ExternalEdgeBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>16</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="A_state">
+           <property name="text">
+            <string>State</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QComboBox" name="A_StateBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>[1, 2]</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="A_max">
+           <property name="text">
+            <string>MAX</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QComboBox" name="A_MAXBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>+2</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="A_min">
+           <property name="text">
+            <string>MIN</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QComboBox" name="A_MINBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>-2</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="A_InitialStateBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>1.5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>-0.5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>-1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>-1.5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>-2</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="A_initial_state">
+           <property name="text">
+            <string>Initial State</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QGroupBox" name="Simulation_Condition">
+        <property name="title">
+         <string>Simulation Condition</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="7" column="0">
+          <widget class="QLabel" name="table">
+           <property name="text">
+            <string>Table</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="Database">
+           <property name="text">
+            <string>Database</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="drawing">
+           <property name="text">
+            <string>Drawing</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="DrawingBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>False</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>True</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="StepBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>100</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>30</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="11" column="1">
+          <widget class="QComboBox" name="StructuresBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>RR-RR</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>BA-BA</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>RR-BA</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>BA-RR</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QComboBox" name="DatabaseBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>renew_competition</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>revised_variable</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>competition</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QLabel" name="Structures">
+           <property name="text">
+            <string>Structures</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="step">
+           <property name="text">
+            <string>Step</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QComboBox" name="TableBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>average_layer_state</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>revised_layer_state</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>result_db</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="DBresource">
+           <property name="text">
+            <string>DB resource</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="DBBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>MySQL</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>SQlite</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="condition_settingButton">
+        <property name="text">
+         <string>Setting</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QGroupBox" name="Layer_B">
+        <property name="title">
+         <string>Layer B</string>
+        </property>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="1" column="0">
+          <widget class="QLabel" name="B_node">
+           <property name="text">
+            <string>Node</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="B_NodeBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="maxVisibleItems">
+            <number>10</number>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>2048</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>128</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Internal Edge</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="B_InternalEdgeBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>10</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>External Edge</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::AutoText</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="B_ExternalEdgeBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>16</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>State</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QComboBox" name="B_StateBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>[-1]</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="B_InitialStateBox">
+           <property name="font">
+            <font>
+             <family>Sitka Text</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="maxVisibleItems">
+            <number>10</number>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>-1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>0</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="B_initial_state">
+           <property name="text">
+            <string>Initial State</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="Simulation_Start">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>740</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Sitka Text</family>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Simulation Start</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

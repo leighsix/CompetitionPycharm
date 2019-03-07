@@ -7,10 +7,10 @@ from multiprocessing import Pool
 from numba import jit
 
 
-class Changing_Variable:
+class Revised_Variable:
     def __init__(self, setting):
         self.mp = MakingPandas.MakingPandas()
-        self.repeat_dynamics = RevisedRepeatDynamics.RepeatDynamics(setting)
+        self.repeat_dynamics = RevisedRepeatDynamics.RevisedRepeatDynamics(setting)
 
     def calculate_and_input_database(self, setting_variable_tuple):
         gamma = setting_variable_tuple[1][0]
@@ -39,7 +39,7 @@ class Changing_Variable:
 if __name__ == "__main__":
     print("Changing_Variable")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
-    changing_variable = Changing_Variable(setting)
+    changing_variable = Revised_Variable(setting)
     changing_variable.paralleled_work(setting)
     print("Operating end")
 

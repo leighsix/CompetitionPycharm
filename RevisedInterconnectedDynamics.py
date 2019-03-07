@@ -93,12 +93,11 @@ class RevisedInterconnectedDynamics:
         for i in sorted(layer_A.A_edges.nodes):
             opposite = []
             internal_edge_number = len(sorted(nx.all_neighbors(layer_A.A_edges, i)))
-            external_edge_number = 1
+            external_edge_number = setting.A_inter_edges
             for j in range(internal_edge_number):
                 if (layer_A.A[i]) * (layer_A.A[sorted(nx.all_neighbors(layer_A.A_edges, i))[j]]) < 0:
                     opposite.append(1)
-            for j in range(external_edge_number):
-                if (layer_B.B[i]) * (layer_A.A[layer_A.AB_neighbor[i][j]]) < 0:
+                if (layer_A.A[i]) * (layer_A.A[layer_A.AB_edges_reverse[i][1]]) < 0:
                     opposite.append(1)
             prob_q = (sum(opposite) / (external_edge_number+internal_edge_number))**beta
             prob_p = 1 - prob_q

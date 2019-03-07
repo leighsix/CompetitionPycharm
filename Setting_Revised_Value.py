@@ -5,7 +5,7 @@ import math
 class Setting_Revised_Value():
     def __init__(self):
         self.Structure = 'RR-RR'
-        self.A_state = [1, 2]
+        self.A_state = [1]
         self.A_node = 2048
         self.A_edge = 5
         self.MAX = 2
@@ -17,11 +17,12 @@ class Setting_Revised_Value():
         self.A_inter_edges = 1
         self.Limited_step = 100
         self.drawing_graph = False
-        self.database = 'revised_variable'  # 'competition  renew_competition'
-        self.table = 'revised_layer_state'
+        self.database = 'renew_competition'  # 'competition  renew_competition'
+        self.table = 'revised_initial_state'
         self.DB = 'MySQL'
-
-        self.gap = 40
+        self.A_initial_state = sum(self.A_state) / len(self.A_state)
+        self.B_initial_state = sum(self.B_state) / len(self.B_state)
+        self.gap = 30
         self.Repeating_number = 100
         self.D = self.simulation_condition(self.gap)
         self.NodeColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
@@ -47,4 +48,5 @@ if __name__ == "__main__":
     #print(len(layer_A1.A))
     #layer_A2 = Layer_A_Modeling.Layer_A_Modeling(SS)
     print(SS.A_node)
+    print(SS.D)
     #print(len(layer_A2.A))

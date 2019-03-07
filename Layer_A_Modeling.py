@@ -31,6 +31,13 @@ class Layer_A_Modeling():
             self.making_layer_A_barabasi_albert(setting)
         return self.A, self.A_edges
 
+    def making_layer_A_random_regular(self, setting):
+        # A_layer random_regular network
+        self.A = np.array(setting.A_state * int(setting.A_node / len(setting.A_state)), int)
+        random.shuffle(self.A)
+        self.A_edges = nx.random_regular_graph(setting.A_edge, setting.A_node, seed=None)
+        return self.A, self.A_edges
+
 
     def making_layer_A_random_regular(self, setting):
         # A_layer random_regular network
@@ -79,9 +86,9 @@ if __name__ == "__main__" :
     #print(Layer_A.A)
     #print('---------------------')
     print(Layer_A.AB_neighbor)
-    print(Layer_A.AB_edges)
+    #print(Layer_A.AB_edges)
+    #print(Layer_A.AB_edges_reverse)
     print(Layer_A.AB_edges_reverse)
-    print(Layer_A.AB_edges_reverse[3][1])
     #print('---------------------')
     #print(Layer_A.AB_edges)
     #print('---------------------A_edges')
