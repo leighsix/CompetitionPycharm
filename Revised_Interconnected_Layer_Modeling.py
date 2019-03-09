@@ -1,6 +1,6 @@
 from pymnet import *
 import matplotlib.pyplot as plt
-import Setting_Simulation_Value
+import Setting_Revised_Value
 import Layer_A_Modeling
 import Layer_B_Modeling
 from mpl_toolkits.mplot3d.axes3d import *

@@ -100,12 +100,18 @@ class RevisedMyWindow(QMainWindow, WindowModel):
 
     def total_result_graph(self, state, setting):
         print('drawing total result...')
+        A_initial_value = eval(self.A_InitialStateBox_3.currentText())
+        B_initial_value = eval(self.B_InitialStateBox_3.currentText())
         if self.display_typeBox.currentText() == 'scatter':
             print('scatter type...')
             if self.display_locBox.currentText() == 'outer graph':
                 plt.figure()
                 plt.style.use('seaborn-whitegrid')
                 df = self.making_df(setting)
+                if A_initial_value is not None:
+                    df = df[df.A_Initial_State == A_initial_value]
+                    if B_initial_value is not None:
+                        df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_scatter_for_average_state(setting, df)
                 plt.show()
                 plt.close()
@@ -114,6 +120,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 fig = plt.figure()
                 plt.style.use('seaborn-whitegrid')
                 df = self.making_df(setting)
+                if A_initial_value is not None:
+                    df = df[df.A_Initial_State == A_initial_value]
+                    if B_initial_value is not None:
+                        df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_scatter_for_average_state(setting, df)
                 canvas = FigureCanvas(fig)
                 layout = self.Total_Result_layout
@@ -128,6 +138,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 plt.figure()
                 plt.style.use('seaborn-whitegrid')
                 df = self.making_df(setting)
+                if A_initial_value is not None:
+                    df = df[df.A_Initial_State == A_initial_value]
+                    if B_initial_value is not None:
+                        df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_trisurf_for_average_state(setting, df)
                 plt.show()
                 plt.close()
@@ -136,6 +150,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 fig = plt.figure()
                 plt.style.use('seaborn-whitegrid')
                 df = self.making_df(setting)
+                if A_initial_value is not None:
+                    df = df[df.A_Initial_State == A_initial_value]
+                    if B_initial_value is not None:
+                        df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_trisurf_for_average_state(setting, df)
                 canvas = FigureCanvas(fig)
                 layout = self.Total_Result_layout
@@ -152,6 +170,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 ax = fig.add_subplot(111)
                 ax.tick_params(axis='both', labelsize=14)
                 df = self.making_df(setting)
+                if A_initial_value is not None:
+                    df = df[df.A_Initial_State == A_initial_value]
+                    if B_initial_value is not None:
+                        df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
                 cb = plt.colorbar()
                 cb.set_label(label='Average states', size=15, labelpad=10)
@@ -169,6 +191,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 ax = fig.add_subplot(111)
                 ax.tick_params(axis='both', labelsize=14)
                 df = self.making_df(setting)
+                if A_initial_value is not None:
+                    df = df[df.A_Initial_State == A_initial_value]
+                    if B_initial_value is not None:
+                        df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
                 cb = plt.colorbar()
                 cb.set_label(label='Average states', size=15, labelpad=10)
@@ -189,6 +215,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 plt.figure()
                 plt.style.use('seaborn-whitegrid')
                 df = self.making_df(setting)
+                if A_initial_value is not None:
+                    df = df[df.A_Initial_State == A_initial_value]
+                    if B_initial_value is not None:
+                        df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_contour_for_average_state(setting, df)
                 plt.show()
                 plt.close()
@@ -198,6 +228,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 fig = plt.figure()
                 plt.style.use('seaborn-whitegrid')
                 df = self.making_df(setting)
+                if A_initial_value is not None:
+                    df = df[df.A_Initial_State == A_initial_value]
+                    if B_initial_value is not None:
+                        df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_contour_for_average_state(setting, df)
                 canvas = FigureCanvas(fig)
                 layout = self.Total_Result_layout
@@ -208,12 +242,18 @@ class RevisedMyWindow(QMainWindow, WindowModel):
 
     def result_beta_graph(self, state, setting):
         print('drawing beta graph...')
+        A_initial_value = eval(self.A_InitialStateBox_2.currentText())
+        B_initial_value = eval(self.B_InitialStateBox_2.currentText())
         if self.result_beta_locBox.currentText() == 'outer graph':
             fig = plt.figure()
             plt.style.use('seaborn-whitegrid')
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
+            if A_initial_value is not None:
+                df = df[df.A_Initial_State == A_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
             self.visualization.plot_2D_beta_for_average_state(setting, df)
             plt.ylim(-4, 4)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
@@ -227,6 +267,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
+            if A_initial_value is not None:
+                df = df[df.A_Initial_State == A_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
             self.visualization.plot_2D_beta_for_average_state(setting, df)
             plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
             plt.ylim(-4, 4)
@@ -242,12 +286,18 @@ class RevisedMyWindow(QMainWindow, WindowModel):
     def prob_beta_graph(self, state, setting):
         print('drawing prob beta graph...')
         beta_value = [eval(self.beta_minBox.text()), eval(self.beta_maxBox.text())]
+        A_initial_value = eval(self.A_InitialStateBox.currentText())
+        B_initial_value = eval(self.B_InitialStateBox.currentText())
         if self.prob_beta_locBox.currentText() == 'outer graph':
             fig = plt.figure()
             sns.set()
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
+            if A_initial_value is not None:
+                df = df[df.A_Initial_State == A_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
             self.visualization.flow_prob_beta_chart(setting, df, beta_value)
             plt.ylabel('probability for layer B', fontsize=18, labelpad=4)
             plt.xlabel('time(step)', fontsize=18, labelpad=4)
@@ -260,6 +310,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
+            if A_initial_value is not None:
+                df = df[df.A_Initial_State == A_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
             self.visualization.flow_prob_beta_chart(setting, df, beta_value)
             plt.ylabel('probability for layer B', fontsize=18, labelpad=4)
             plt.xlabel('time(step)', fontsize=18, labelpad=4)
@@ -274,6 +328,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
         print('drawing different state ratio graph...')
         beta_value = [eval(self.beta_minBox_4.text()), eval(self.beta_maxBox_4.text())]
         select_layer = str(self.select_layerBox.currentText())
+        A_initial_value = eval(self.A_InitialStateBox_4.currentText())
+        B_initial_value = eval(self.B_InitialStateBox_4.currentText())
         if select_layer != 'Total':
             if self.prob_beta_locBox.currentText() == 'outer graph':
                 fig = plt.figure()
@@ -281,6 +337,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 ax = fig.add_subplot(111)
                 ax.tick_params(axis='both', labelsize=14)
                 df = self.making_df(setting)
+                if A_initial_value is not None:
+                    df = df[df.A_Initial_State == A_initial_value]
+                    if B_initial_value is not None:
+                        df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.different_state_ratio_chart(setting, df, beta_value, select_layer)
                 plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
                 plt.xlabel('time(step)', fontsize=18, labelpad=6)
@@ -293,6 +353,10 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 ax = fig.add_subplot(111)
                 ax.tick_params(axis='both', labelsize=14)
                 df = self.making_df(setting)
+                if A_initial_value is not None:
+                    df = df[df.A_Initial_State == A_initial_value]
+                    if B_initial_value is not None:
+                        df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.different_state_ratio_chart(setting, df, beta_value, select_layer)
                 plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
                 plt.xlabel('time(step)', fontsize=18, labelpad=6)
@@ -384,8 +448,6 @@ class RevisedMyWindow(QMainWindow, WindowModel):
         setting.A_state = eval(self.A_StateBox.currentText())
         setting.A_node = int(self.A_NodeBox.currentText())
         setting.A_edge = int(self.A_InternalEdgeBox.currentText())
-        setting.A_initial_state = float(self.A_InitialStateBox.currentText())
-        setting.B_initial_state = float(self.B_InitialStateBox.currentText())
         setting.MAX = int(self.A_MAXBox.currentText())
         setting.MIN = int(self.A_MINBox.currentText())
         setting.B_state = eval(self.B_StateBox.currentText())

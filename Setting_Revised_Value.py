@@ -5,7 +5,7 @@ import math
 class Setting_Revised_Value():
     def __init__(self):
         self.Structure = 'RR-RR'
-        self.A_state = [1]
+        self.A_state = [2]
         self.A_node = 2048
         self.A_edge = 5
         self.MAX = 2

@@ -11,8 +11,8 @@ class MakingPandas:
                    'POSITIVE_STATE_NUMBER', 'TIME_COUNT']
         df = pd.DataFrame(value_array, columns=columns)
         step = [i for i in range(0, setting.Limited_step+1)]
-        df['A_Inital_State'] = setting.A_initial_state
-        df['B_Inital_State'] = setting.B_initial_state
+        df['A_Initial_State'] = setting.A_initial_state
+        df['B_Initial_State'] = setting.B_initial_state
         df['Steps'] = step
         df['Structure'] = setting.Structure
         df['A_node_number'] = setting.A_node
