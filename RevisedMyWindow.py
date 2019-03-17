@@ -110,8 +110,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 if A_initial_value is not None:
                     df = df[df.A_Initial_State == A_initial_value]
-                    if B_initial_value is not None:
-                        df = df[df.B_Initial_State == B_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_scatter_for_average_state(setting, df)
                 plt.show()
                 plt.close()
@@ -122,8 +122,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 if A_initial_value is not None:
                     df = df[df.A_Initial_State == A_initial_value]
-                    if B_initial_value is not None:
-                        df = df[df.B_Initial_State == B_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_scatter_for_average_state(setting, df)
                 canvas = FigureCanvas(fig)
                 layout = self.Total_Result_layout
@@ -140,8 +140,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 if A_initial_value is not None:
                     df = df[df.A_Initial_State == A_initial_value]
-                    if B_initial_value is not None:
-                        df = df[df.B_Initial_State == B_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_trisurf_for_average_state(setting, df)
                 plt.show()
                 plt.close()
@@ -152,8 +152,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 if A_initial_value is not None:
                     df = df[df.A_Initial_State == A_initial_value]
-                    if B_initial_value is not None:
-                        df = df[df.B_Initial_State == B_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_trisurf_for_average_state(setting, df)
                 canvas = FigureCanvas(fig)
                 layout = self.Total_Result_layout
@@ -172,8 +172,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 if A_initial_value is not None:
                     df = df[df.A_Initial_State == A_initial_value]
-                    if B_initial_value is not None:
-                        df = df[df.B_Initial_State == B_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
                 cb = plt.colorbar()
                 cb.set_label(label='Average states', size=15, labelpad=10)
@@ -193,8 +193,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 if A_initial_value is not None:
                     df = df[df.A_Initial_State == A_initial_value]
-                    if B_initial_value is not None:
-                        df = df[df.B_Initial_State == B_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
                 cb = plt.colorbar()
                 cb.set_label(label='Average states', size=15, labelpad=10)
@@ -217,8 +217,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 if A_initial_value is not None:
                     df = df[df.A_Initial_State == A_initial_value]
-                    if B_initial_value is not None:
-                        df = df[df.B_Initial_State == B_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_contour_for_average_state(setting, df)
                 plt.show()
                 plt.close()
@@ -230,8 +230,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 if A_initial_value is not None:
                     df = df[df.A_Initial_State == A_initial_value]
-                    if B_initial_value is not None:
-                        df = df[df.B_Initial_State == B_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.plot_3D_contour_for_average_state(setting, df)
                 canvas = FigureCanvas(fig)
                 layout = self.Total_Result_layout
@@ -252,8 +252,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
             df = self.making_df(setting)
             if A_initial_value is not None:
                 df = df[df.A_Initial_State == A_initial_value]
-                if B_initial_value is not None:
-                    df = df[df.B_Initial_State == B_initial_value]
+            if B_initial_value is not None:
+                df = df[df.B_Initial_State == B_initial_value]
             self.visualization.plot_2D_beta_for_average_state(setting, df)
             plt.ylim(-4, 4)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
@@ -269,8 +269,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
             df = self.making_df(setting)
             if A_initial_value is not None:
                 df = df[df.A_Initial_State == A_initial_value]
-                if B_initial_value is not None:
-                    df = df[df.B_Initial_State == B_initial_value]
+            if B_initial_value is not None:
+                df = df[df.B_Initial_State == B_initial_value]
             self.visualization.plot_2D_beta_for_average_state(setting, df)
             plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
             plt.ylim(-4, 4)
@@ -296,8 +296,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
             df = self.making_df(setting)
             if A_initial_value is not None:
                 df = df[df.A_Initial_State == A_initial_value]
-                if B_initial_value is not None:
-                    df = df[df.B_Initial_State == B_initial_value]
+            if B_initial_value is not None:
+                df = df[df.B_Initial_State == B_initial_value]
             self.visualization.flow_prob_beta_chart(setting, df, beta_value)
             plt.ylabel('probability for layer B', fontsize=18, labelpad=4)
             plt.xlabel('time(step)', fontsize=18, labelpad=4)
@@ -312,8 +312,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
             df = self.making_df(setting)
             if A_initial_value is not None:
                 df = df[df.A_Initial_State == A_initial_value]
-                if B_initial_value is not None:
-                    df = df[df.B_Initial_State == B_initial_value]
+            if B_initial_value is not None:
+                df = df[df.B_Initial_State == B_initial_value]
             self.visualization.flow_prob_beta_chart(setting, df, beta_value)
             plt.ylabel('probability for layer B', fontsize=18, labelpad=4)
             plt.xlabel('time(step)', fontsize=18, labelpad=4)
@@ -339,8 +339,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 if A_initial_value is not None:
                     df = df[df.A_Initial_State == A_initial_value]
-                    if B_initial_value is not None:
-                        df = df[df.B_Initial_State == B_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.different_state_ratio_chart(setting, df, beta_value, select_layer)
                 plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
                 plt.xlabel('time(step)', fontsize=18, labelpad=6)
@@ -355,8 +355,8 @@ class RevisedMyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 if A_initial_value is not None:
                     df = df[df.A_Initial_State == A_initial_value]
-                    if B_initial_value is not None:
-                        df = df[df.B_Initial_State == B_initial_value]
+                if B_initial_value is not None:
+                    df = df[df.B_Initial_State == B_initial_value]
                 self.visualization.different_state_ratio_chart(setting, df, beta_value, select_layer)
                 plt.ylabel('different state ratio for layer %s' % select_layer, fontsize=18, labelpad=6)
                 plt.xlabel('time(step)', fontsize=18, labelpad=6)

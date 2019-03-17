@@ -2206,8 +2206,8 @@
     <widget class="QPushButton" name="Simulation_Start">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>740</y>
+       <x>70</x>
+       <y>710</y>
        <width>131</width>
        <height>41</height>
       </rect>

@@ -22,12 +22,12 @@ class RevisedVisualization:
     def plot_3D_scatter_for_average_state(self, setting, df):
         df = df[df.Steps == setting.Limited_step]
         ax = plt.axes(projection='3d')
-        ax.scatter(df['beta'], df['PROB_P'], (df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']),
+        ax.scatter(df['beta'], df['A_Initial_State'], (df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']),
                    c=(df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']), cmap='RdBu', linewidth=0.2)
         ax.set_xlabel(r'$\beta$', fontsize=18, labelpad=8)
-        ax.set_ylabel('PROB_P', fontsize=18, labelpad=8)
+        ax.set_ylabel('Initial State', fontsize=18, labelpad=8)
         ax.set_zlabel('Average States', fontsize=18, labelpad=8)
-        ax.set_title(r'$\beta$-PROB_P-States', fontsize=18)
+        ax.set_title(r'$\beta$-Initial_State-States', fontsize=18)
         ax.tick_params(axis='both', labelsize=14)
         ax.view_init(45, 45)
 
@@ -35,35 +35,35 @@ class RevisedVisualization:
     def plot_3D_trisurf_for_average_state(self, setting, df):
         df = df[df.Steps == setting.Limited_step]
         ax = plt.axes(projection='3d')
-        ax.plot_trisurf(df['beta'], df['PROB_P'], (df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']),
+        ax.plot_trisurf(df['beta'], df['A_Initial_State'] + df['B_Initial_State'], (df['LAYER_A_MEAN'] + df['LAYER_B_MEAN']),
                         cmap='RdBu', edgecolor='none')
         ax.set_xlabel(r'$\beta$', fontsize=18, labelpad=8)
-        ax.set_ylabel('PROB_P', fontsize=18, labelpad=8)
+        ax.set_ylabel('Initial State', fontsize=18, labelpad=8)
         ax.set_zlabel('Average States', fontsize=18, labelpad=8)
-        ax.set_title(r'$\beta$-PROB_P-States', fontsize=18)
+        ax.set_title(r'$\beta$-Initial_State-States', fontsize=18)
         ax.tick_params(axis='both', labelsize=14)
         ax.view_init(45, 45)
 
     def plot_3D_contour_for_average_state(self, setting, df):
         df = df[df.Steps == setting.Limited_step]
         beta_list = RevisedVisualization.making_select_list(df, 'beta')  # list이지만 실제로는 array
-        prob_p_list = RevisedVisualization.making_select_list(df, 'PROB_P')
-        X, Y = np.meshgrid(beta_list, prob_p_list)
-        Z = RevisedVisualization.state_list_function(df, prob_p_list, beta_list)
+        Initial_State_list = RevisedVisualization.making_initial_state_list(df, 'A_Initial_State', 'B_Initial_State')
+        X, Y = np.meshgrid(beta_list, Initial_State_list)
+        Z = RevisedVisualization.state_list_function(df, Initial_State_list, beta_list)
         ax = plt.axes(projection='3d')
         ax.contour3D(X, Y, Z, 50, cmap='RdBu')
         ax.set_xlabel(r'$\beta$', fontsize=18, labelpad=6)
-        ax.set_ylabel('PROB_P', fontsize=18, labelpad=6)
+        ax.set_ylabel('Initial State', fontsize=18, labelpad=6)
         ax.set_zlabel('Average States', fontsize=18, labelpad=6)
-        ax.set_title(r'$\beta$-PROB_P-States', fontsize=18)
+        ax.set_title(r'$\beta$-Initial_State-States', fontsize=18)
         ax.view_init(45, 45)
 
     def plot_3D_to_2D_contour_for_average_state(self, setting, df):
         df = df[df.Steps == setting.Limited_step]
         beta_list = RevisedVisualization.making_select_list(df, 'beta')  # list이지만 실제로는 array
-        prob_p_list = RevisedVisualization.making_select_list(df, 'PROB_P')
-        X, Y = np.meshgrid(beta_list, prob_p_list)
-        Z = RevisedVisualization.state_list_function(df, prob_p_list, beta_list)
+        Initial_State_list = RevisedVisualization.making_initial_state_list(df, 'A_Initial_State', 'B_Initial_State')
+        X, Y = np.meshgrid(beta_list, Initial_State_list)
+        Z = RevisedVisualization.state_list_function(df, Initial_State_list, beta_list)
         plt.contourf(X, Y, Z, 50, cmap='RdBu')
         #plt.clabel(contours, inline=True, fontsize=8)
 
@@ -138,9 +138,18 @@ class RevisedVisualization:
             list.append(select_list[i][0])
         return np.array(sorted(list))
 
+    @staticmethod
+    def making_initial_state_list(df, A_Initial_State, B_Initial_State):
+        list = []
+        df = pd.DataFrame(df[A_Initial_State]+df[B_Initial_State])
+        select_list = np.array(df.drop_duplicates())
+        for i in range(len(select_list)):
+            list.append(select_list[i][0])
+        return np.array(sorted(list))
+
 if __name__ == "__main__":
     print("Visualization")
-    setting = Setting_Simulation_Value.Setting_Simulation_Value()
+    setting = Setting_Revised_Value.Setting_Revised_Value()
     setting.database = 'competition'
     setting.table = 'result_db'
     visualization = RevisedVisualization()
