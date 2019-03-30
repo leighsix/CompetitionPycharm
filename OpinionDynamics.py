@@ -1,26 +1,28 @@
 import random
-# import Layer_A_Modeling
-# import Layer_B_Modeling
+import Setting_Simulation_Value
+import Layer_A_Modeling
+import Layer_B_Modeling
 
 
 class OpinionDynamics:
     def __init__(self):
         self.A_COUNT = 0
 
-    def A_layer_dynamics(self, setting, layer_A, layer_B, prob_p):  # A_layer 다이내믹스, 감마 적용 및 설득/타협 알고리즘 적용
+    def A_layer_dynamics(self, setting, layer_A, prob_p):  # A_layer 다이내믹스, 감마 적용 및 설득/타협 알고리즘 적용
         for i, j in sorted(layer_A.A_edges.edges()):
-            if layer_A.A[i] * layer_A.A[j] > 0:
-                layer_A.A[i] = self.A_layer_persuasion_function(setting, layer_A.A[i], layer_A.A[j], prob_p)[0]
-                layer_A.A[j] = self.A_layer_persuasion_function(setting, layer_A.A[i], layer_A.A[j], prob_p)[1]
-            elif layer_A.A[i] * layer_A.A[j] < 0:
-                layer_A.A[i] = self.A_layer_compromise_function(setting, layer_A.A[i], layer_A.A[j], prob_p)[0]
-                layer_A.A[j] = self.A_layer_compromise_function(setting, layer_A.A[i], layer_A.A[j], prob_p)[1]
+            if setting.A[i] * setting.A[j] > 0:
+                setting.A[i] = self.A_layer_persuasion_function(setting, setting.A[i], setting.A[j], prob_p)[0]
+                setting.A[j] = self.A_layer_persuasion_function(setting, setting.A[i], setting.A[j], prob_p)[1]
+            elif setting.A[i] * setting.A[j] < 0:
+                setting.A[i] = self.A_layer_compromise_function(setting, setting.A[i], setting.A[j], prob_p)[0]
+                setting.A[j] = self.A_layer_compromise_function(setting, setting.A[i], setting.A[j], prob_p)[1]
         for i, j in sorted(layer_A.AB_edges):
-            if layer_A.A[j] * layer_B.B[i] > 0:
-                layer_A.A[j] = self.AB_layer_persuasion_function(setting, layer_A.A[j], prob_p)
-            elif layer_A.A[j] * layer_B.B[i] < 0:
-                layer_A.A[j] = self.AB_layer_compromise_function(setting, layer_A.A[j], layer_B.B[i], prob_p)
-        return layer_A, layer_B
+            if setting.A[j] * setting.B[i] > 0:
+                setting.A[j] = self.AB_layer_persuasion_function(setting, setting.A[j], prob_p)
+            elif setting.A[j] * setting.B[i] < 0:
+                setting.A[j] = self.AB_layer_compromise_function(setting, setting.A[j], setting.B[i], prob_p)
+        return setting
+
 
     def A_layer_persuasion_function(self, setting, a, b, prob_p):  # A layer 중에서 same orientation 에서 일어나는  변동 현상
         z = random.random()
@@ -103,8 +105,9 @@ class OpinionDynamics:
 
 if __name__ == "__main__":
     print("OpinionDynamics")
-    # Layer_A = Layer_A_Modeling.Layer_A_Modeling()
-    # Layer_B = Layer_B_Modeling.Layer_B_Modeling()
-    # opinion = OpinionDynamics()
-    # opinion.A_layer_dynamics(Layer_A, Layer_B, 1)
-    # print(Layer_A.A, Layer_B.B)
+    setting = Setting_Simulation_Value.Setting_Simulation_Value()
+    Layer_A = Layer_A_Modeling.Layer_A_Modeling(setting)
+    Layer_B = Layer_B_Modeling.Layer_B_Modeling(setting)
+    opinion = OpinionDynamics()
+    opinion.A_layer_dynamics(setting, Layer_A, 1)
+    print(setting.A, setting.B)

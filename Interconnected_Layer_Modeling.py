@@ -79,7 +79,7 @@ class Interconnected_Layer_Modeling:
         im = plt.imread(save_file_name)
         return np.array(im), fig
 
-    def making_movie_for_dynamics(self, ims, gamma, beta):
+    def making_movie_for_dynamics(self, ims):
         dpi = 72
         x_pixels, y_pixels = ims[0].shape[0], ims[0].shape[1]
         fig = plt.figure(figsize=(y_pixels / dpi, x_pixels / dpi), dpi=dpi)
@@ -89,7 +89,7 @@ class Interconnected_Layer_Modeling:
             im.set_array(ims[i])
             return (im,)
         ani = animation.FuncAnimation(fig, animate, frames=len(ims), repeat=False, interval=1000)
-        ani.save('dynamics_%s_%s.mp4' % gamma % beta)
+        ani.save('dynamics2.mp4')
 
 
 if __name__ == "__main__":

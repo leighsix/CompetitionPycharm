@@ -1,44 +1,53 @@
 import numpy as np
 import math
+import random
 
 
 class Setting_Simulation_Value():
     def __init__(self):
-        self.Structure = 'RR-RR'
         self.A_state = [1, 2]
         self.A_node = 2048
-        self.A_edge = 5
+        self.A_edge = 2
+        self.A_inter_edges = 1
+        self.A_array_choice = 1
         self.MAX = 2
         self.MIN = -2
+        A_array = self.making_A_array_choice(self.A_array_choice)
+        self.A = A_array[0]
+        self.average_initial_A = A_array[1]
+        self.dev_A = A_array[2]
+        self.positive_ratio_A = A_array[3]
+
         self.B_state = [-1]
-        self.B_node = 2048
-        self.B_edge = 5
-        self.B_inter_edges = 1
-        self.A_inter_edges = 1
+        self.B_node = 256
+        self.B_edge = 2
+        self.B_inter_edges = 8
+        self.B_array_choice = 1
+        B_array = self.making_B_array_choice(self.B_array_choice)
+        self.B = B_array[0]
+        self.average_initial_B = B_array[1]
+        self.dev_B = B_array[2]
+        self.positive_ratio_B = B_array[3]
+
+        self.Structure = 'BA-BA'
+
         self.Limited_step = 100
         self.drawing_graph = False
         self.database = 'renew_competition'  # 'competition  renew_competition'
-        self.table = 'average_layer_state'
+        self.table = 'average_layer_state2'
         self.DB = 'MySQL'
-
-        self.gap = 20
+        self.gap = 40
         self.Repeating_number = 100
-        self.R = self.simulation_condition(self.gap)[0]
-        self.D = self.simulation_condition(self.gap)[1]
+        simulation_condition = self.simulation_condition(self.gap)
+        self.R = simulation_condition[0]
+        self.D = simulation_condition[1]
         self.variable_list = self.gamma_and_beta_list(self.R, self.D)
         self.NodeColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
-<<<<<<< HEAD
-        self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'deepblue'}
-        self.database = 'competition'   #'renew_competition
-
-=======
-        self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red', -1: 'skyblue', -2: 'blue', -4: 'darkblue'}
+        self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'darkblue'}
         self.workers = 4
->>>>>>> making_gui
-
 
     def simulation_condition(self, gap):
-        self.R = np.linspace(0.5, 1.5, gap)
+        self.R = np.linspace(0, 2, gap)
         self.D = np.linspace(self.making_beta_scale(gap)[0], self.making_beta_scale(gap)[1], gap)
         return self.R, self.D
 
@@ -54,6 +63,73 @@ class Setting_Simulation_Value():
                 / math.log(self.B_inter_edges / (self.B_edge + self.B_inter_edges))
         return 0, scale, a
 
+    def making_A_array_choice(self, a):
+        if a == 1:
+            self.static_making_A_array()
+        elif a == 2:
+            self.random_making_A_array()
+        return self.A, self.average_initial_A, self.dev_A, self.positive_ratio_A
+
+    def static_making_A_array(self):
+        values = self.A_state
+        nodes = int(self.A_node / len(values))
+        self.A = np.array(values * nodes)
+        random.shuffle(self.A)
+        self.average_initial_A = sum(self.A) / self.A_node
+        self.dev_A = math.sqrt(Setting_Simulation_Value.cal_variance(self.A, self.average_initial_A))
+        self.positive_ratio_A = sum(self.A > 0) / self.A_node
+        return self.A, self.average_initial_A, self.dev_A, self.positive_ratio_A
+
+    def random_making_A_array(self):
+        values = self.A_state
+        layer_A = []
+        for i in range(self.A_node):
+            v = random.choice(values)
+            layer_A.append(v)
+        self.A = np.array(layer_A, int)
+        random.shuffle(self.A)
+        self.average_initial_A = sum(self.A) / self.A_node
+        self.dev_A = math.sqrt(Setting_Simulation_Value.cal_variance(self.A, self.average_initial_A))
+        self.positive_ratio_A = sum(self.A > 0) / self.A_node
+        return self.A, self.average_initial_A, self.dev_A, self.positive_ratio_A
+
+    def making_B_array_choice(self, b):
+        if b == 1:
+            self.static_making_B_array()
+        elif b == 2:
+            self.random_making_B_array()
+        return self.B, self.average_initial_B, self.dev_B, self.positive_ratio_B
+
+    def static_making_B_array(self):
+        values = self.B_state
+        nodes = int(self.B_node / len(values))
+        self.B = np.array(values * nodes)
+        random.shuffle(self.B)
+        self.average_initial_B = sum(self.B) / self.B_node
+        self.dev_B = math.sqrt(Setting_Simulation_Value.cal_variance(self.B, self.average_initial_B))
+        self.positive_ratio_B = sum(self.B > 0) / self.B_node
+        return self.B, self.average_initial_B, self.dev_B, self.positive_ratio_B
+
+    def random_making_B_array(self):
+        values = self.B_state
+        layer_B = []
+        for i in range(self.B_node):
+            v = random.choice(values)
+            layer_B.append(v)
+        self.B = np.array(layer_B, int)
+        random.shuffle(self.B)
+        self.average_initial_B = sum(self.B) / self.B_node
+        self.dev_B = math.sqrt(Setting_Simulation_Value.cal_variance(self.B, self.average_initial_B))
+        self.positive_ratio_B = sum(self.B > 0) / self.B_node
+        return self.B, self.average_initial_B, self.dev_B, self.positive_ratio_B
+
+    @staticmethod
+    def cal_variance(layer, mean):
+        vsum = 0
+        for x in layer:
+            vsum = vsum + (x - mean) ** 2
+        var = vsum / len(layer)
+        return var
 
 if __name__ == "__main__":
     SS = Setting_Simulation_Value()
@@ -61,5 +137,7 @@ if __name__ == "__main__":
     print(SS.A_node)
     #print(len(layer_A1.A))
     #layer_A2 = Layer_A_Modeling.Layer_A_Modeling(SS)
-    print(SS.A_node)
+    print(SS.B_node)
+    print(SS.A)
+    print(SS.B)
     #print(len(layer_A2.A))
