@@ -11,7 +11,15 @@ class Layer_B_Modeling:
     def __init__(self, setting):
         self.B_edges = self.B_layer_config(setting)
         self.B_node_info = self.making_node_info()
+        self.G_B = self.making_layer_B_graph(setting)
 
+    def making_layer_B_graph(self, setting):
+        self.G_B = nx.Graph()
+        for i in range(setting.B_node):
+            self.G_B.add_node(i, name='B_%s' % i, state=setting.B[i])
+        B_edges_list = sorted(self.B_edges.edges)
+        self.G_B.add_edges_from(B_edges_list)
+        return self.G_B
 
     def B_layer_config(self, setting):  # B_layer 구성요소 B_layer_config(state = [-1], node = 2048, edge = 5, inter_edge= 1)
         self.select_layer_B_model(setting)
@@ -45,5 +53,8 @@ if __name__ == "__main__":
     Layer_B = Layer_B_Modeling(setting)
     #B = Layer_B.B
     #B_edges = Layer_B.B_edges
-    print(setting.B)
-    print(setting.average_initial_B)
+    print(Layer_B.G_B.nodes)
+    state = 0
+    for i in range(len(Layer_B.G_B.nodes)) :
+        state += Layer_B.G_B.nodes[i]['state']
+    print(state)

@@ -15,6 +15,15 @@ class Layer_A_Modeling():
         self.AB_edges = A_edges_array[1]
         self.AB_neighbor = A_edges_array[2]
         self.A_node_info = self.making_node_info()
+        self.G_A = self.making_layer_A_graph(setting)
+
+    def making_layer_A_graph(self, setting):
+        self.G_A = nx.Graph()
+        for i in range(setting.A_node):
+            self.G_A.add_node(i, name='A_%s' % i, state=setting.A[i])
+        A_edges_list = sorted(self.A_edges.edges)
+        self.G_A.add_edges_from(A_edges_list)
+        return self.G_A
 
     def A_layer_config(self, setting):
         # A_layer 구성요소 A_layer_config(state = [1,2], node = 2048, edge = 5, Max = 2, Min = -2)
@@ -67,8 +76,11 @@ if __name__ == "__main__" :
     print("layer_A")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     Layer_A = Layer_A_Modeling(setting)
-    print(setting.A)
-    print(len(Layer_A.A_edges.edges))
+    print(Layer_A.G_A.nodes)
+    state = 0
+    for i in range(len(Layer_A.G_A.nodes)) :
+        state += Layer_A.G_A.nodes[i]['state']
+    print(state)
     #print(Layer_A.AB_edges)
     #print(Layer_A.AB_neighbor)
     #print(Layer_A.SS.A_node)

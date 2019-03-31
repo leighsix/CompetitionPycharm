@@ -28,40 +28,77 @@ class MakingPandas:
         df['B_external_edges'] = setting.B_inter_edges
         return df
 
-    def layer_state_mean(self, setting):
-        layer_A_mean = sum(setting.A) / setting.A_node
-        layer_B_mean = sum(setting.B) / setting.B_node
+    def layer_state_mean(self, layer_A, layer_B):
+        judge_A = []
+        judge_B = []
+        for i in range(len(layer_A.G_A.nodes)):
+            judge_A.append(layer_A.G_A.nodes[i]['state'])
+        for i in range(len(layer_B.G_B.nodes)):
+            judge_B.append(layer_B.G_B.nodes[i]['state'])
+        layer_A_mean = sum(judge_A) / len(layer_A.G_A.nodes)
+        layer_B_mean = sum(judge_B) / len(layer_B.G_B.nodes)
         return layer_A_mean, layer_B_mean
 
-    def counting_positive_node(self, setting):
-        return sum(setting.A > 0) + sum(setting.B > 0)
+    def counting_positive_node(self, layer_A, layer_B):
+        judge_A = []
+        judge_B = []
+        for i in range(len(layer_A.G_A.nodes)):
+            judge_A.append(layer_A.G_A.nodes[i]['state'])
+        for i in range(len(layer_B.G_B.nodes)):
+            judge_B.append(layer_B.G_B.nodes[i]['state'])
+        judge_A = np.array(judge_A)
+        judge_B = np.array(judge_B)
+        return sum(judge_A > 0) + sum(judge_B > 0)
 
-    def counting_negative_node(self, setting):
-        return sum(setting.A < 0) + sum(setting.B < 0)
+    def counting_negative_node(self, layer_A, layer_B):
+        judge_A = []
+        judge_B = []
+        for i in range(len(layer_A.G_A.nodes)):
+            judge_A.append(layer_A.G_A.nodes[i]['state'])
+        for i in range(len(layer_B.G_B.nodes)):
+            judge_B.append(layer_B.G_B.nodes[i]['state'])
+        judge_A = np.array(judge_A)
+        judge_B = np.array(judge_B)
+        return sum(judge_A < 0) + sum(judge_B < 0)
 
-    def different_state_ratio(self, setting):
+    def different_state_ratio(self, layer_A, layer_B):
         global A_ratio, B_ratio
-        A_plus = sum(setting.A > 0)
-        A_minus = sum(setting.A < 0)
+        judge_A = []
+        judge_B = []
+        for i in range(len(layer_A.G_A.nodes)):
+            judge_A.append(layer_A.G_A.nodes[i]['state'])
+        for i in range(len(layer_B.G_B.nodes)):
+            judge_B.append(layer_B.G_B.nodes[i]['state'])
+        judge_A = np.array(judge_A)
+        judge_B = np.array(judge_B)
+        A_plus = sum(judge_A > 0)
+        A_minus = sum(judge_A < 0)
         if A_plus >= A_minus:
-            A_ratio = min(A_plus, A_minus) / setting.A_node
+            A_ratio = min(A_plus, A_minus) / len(layer_A.G_A.nodes)
         elif A_plus < A_minus:
-            A_ratio = -(min(A_plus, A_minus)) / setting.A_node
-        B_plus = sum(setting.B > 0)
-        B_minus = sum(setting.B < 0)
+            A_ratio = -(min(A_plus, A_minus)) / len(layer_B.G_B.nodes)
+        B_plus = sum(judge_B > 0)
+        B_minus = sum(judge_B < 0)
         if B_plus >= B_minus:
-            B_ratio = min(B_plus, B_minus) / setting.B_node
+            B_ratio = min(B_plus, B_minus) / len(layer_B.G_B.nodes)
         elif B_plus < B_minus:
-            B_ratio = -(min(B_plus, B_minus)) / setting.B_node
+            B_ratio = -(min(B_plus, B_minus)) / len(layer_B.G_B.nodes)
         return A_ratio, B_ratio, A_ratio*B_ratio
 
-    def judging_consensus(self, setting):
-        if (((np.all(setting.A > 0) == 1) and (np.all(setting.B > 0) == 1)) or
-                ((np.all(setting.A < 0) == 1) and (np.all(setting.B < 0) == 1))):
-                return True
+    def judging_consensus(self, layer_A, layer_B):
+        judge_A = []
+        judge_B = []
+        for i in range(len(layer_A.G_A.nodes)):
+            judge_A.append(layer_A.G_A.nodes[i]['state'])
+        for i in range(len(layer_B.G_B.nodes)):
+            judge_B.append(layer_B.G_B.nodes[i]['state'])
+        judge_A = np.array(judge_A)
+        judge_B = np.array(judge_B)
+        if ((np.all(judge_A > 0) == 1) and (np.all(judge_B > 0) == 1)) or \
+                ((np.all(judge_A < 0) == 1) and (np.all(judge_B < 0) == 1)):
+            return True
         else:
             return False
-
 
 if __name__ == "__main__":
     print("MakingPandas")
@@ -69,5 +106,13 @@ if __name__ == "__main__":
     layer_A = Layer_A_Modeling.Layer_A_Modeling(setting)
     layer_B = Layer_B_Modeling.Layer_B_Modeling(setting)
     mp = MakingPandas()
-    result = mp.judging_consensus(setting)
-    print(result)
+    result1 = mp.judging_consensus(layer_A, layer_B)
+    result2 = mp.different_state_ratio(layer_A, layer_B)
+    result3 = mp.layer_state_mean(layer_A, layer_B)
+    result4 = mp.counting_positive_node(layer_A, layer_B)
+    result5 = mp.counting_negative_node(layer_A, layer_B)
+    print(result1)
+    print(result2)
+    print(result3)
+    print(result4)
+    print(result5)

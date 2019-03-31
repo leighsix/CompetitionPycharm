@@ -14,17 +14,17 @@ matplotlib.use("TkAgg")
 class Interconnected_Layer_Modeling:
     def making_layer_A_graph(self, layer_A, interconnected_network):
         interconnected_network.add_layer('layer_A')
-        for i in sorted(layer_A.A_edges.nodes):
+        for i in sorted(layer_A.G_A.nodes):
             interconnected_network.add_node(i)
-        for i, j in sorted(layer_A.A_edges.edges):
+        for i, j in sorted(layer_A.G_A.edges):
             interconnected_network[i, j, 'layer_A'] = 1
         return interconnected_network
 
     def making_layer_B_graph(self, layer_B, interconnected_network):
         interconnected_network.add_layer('layer_B')
-        for i in sorted(layer_B.B_edges.nodes):
+        for i in sorted(layer_B.G_B.nodes):
             interconnected_network.add_node(i)
-        for i, j in sorted(layer_B.B_edges.edges):
+        for i, j in sorted(layer_B.G_B.edges):
             interconnected_network[i, j, 'layer_B'] = 1
         return interconnected_network
 
@@ -38,27 +38,33 @@ class Interconnected_Layer_Modeling:
 
     def making_node_color(self, setting, layer_A, layer_B):
         node_color_dic = {}
-        for i in sorted(layer_A.A_edges.nodes):
-            node_color_dic[(i, 'layer_A')] = setting.NodeColorDict[layer_A.A[i]]
-        for i in sorted(layer_B.B_edges.nodes):
-            node_color_dic[(i, 'layer_B')] = setting.NodeColorDict[layer_B.B[i]]
+        for i in sorted(layer_A.G_A.nodes):
+            node_color_dic[(i, 'layer_A')] = setting.NodeColorDict[layer_A.G_A.nodes[i]['state']]
+        for i in sorted(layer_B.G_B.nodes):
+            node_color_dic[(i, 'layer_B')] = setting.NodeColorDict[layer_B.G_B.nodes[i]['state']]
         return node_color_dic
 
     def making_edge_color(self, setting, layer_A, layer_B):
         edge_color_dic = {}
-        for i, j in sorted(layer_A.A_edges.edges):
-            edge_color_dic[(i, 'layer_A'), (j, 'layer_A')] = setting.EdgeColorDict[layer_A.A[i]*layer_A.A[j]]
-        for i, j in sorted(layer_B.B_edges.edges):
-            edge_color_dic[(i, 'layer_B'), (j, 'layer_B')] = setting.EdgeColorDict[layer_B.B[i]*layer_B.B[j]]
+        for i, j in sorted(layer_A.G_A.edges):
+            a = layer_A.G_A.nodes[i]['state']
+            b = layer_A.G_A.nodes[j]['state']
+            edge_color_dic[(i, 'layer_A'), (j, 'layer_A')] = setting.EdgeColorDict[a * b]
+        for i, j in sorted(layer_B.G_B.edges):
+            a = layer_B.G_B.nodes[i]['state']
+            b = layer_B.G_B.nodes[j]['state']
+            edge_color_dic[(i, 'layer_B'), (j, 'layer_B')] = setting.EdgeColorDict[a * b]
         for i, j in sorted(layer_A.AB_edges):
-            edge_color_dic[(j, 'layer_A'), (i, 'layer_B')] = setting.EdgeColorDict[layer_A.A[j]*layer_B.B[i]]
+            a = layer_A.G_A.nodes[j]['state']
+            b = layer_B.G_B.nodes[i]['state']
+            edge_color_dic[(j, 'layer_A'), (i, 'layer_B')] = setting.EdgeColorDict[a * b]
         return edge_color_dic
 
     def making_node_coordinates(self, layer_A, layer_B):
         node_coordinates_dic = {}
-        for i in sorted(layer_A.A_edges.nodes):
+        for i in sorted(layer_A.G_A.nodes):
             node_coordinates_dic[i] = np.array(layer_A.A_node_info['location'][i])
-        for i in sorted(layer_B.B_edges.nodes):
+        for i in sorted(layer_B.G_B.nodes):
             node_coordinates_dic[i] = np.array(layer_B.B_node_info['location'][i])
         return node_coordinates_dic
 
@@ -96,7 +102,6 @@ if __name__ == "__main__":
     print("Interconnected Layer Modeling")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     layer_A = Layer_A_Modeling.Layer_A_Modeling(setting)
-    # print(layer_A.A)
     layer_B = Layer_B_Modeling.Layer_B_Modeling(setting)
     ILM = Interconnected_Layer_Modeling()
     fig = ILM.draw_interconnected_network(setting, layer_A, layer_B, 'result.png')[1]

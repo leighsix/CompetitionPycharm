@@ -8,99 +8,105 @@ class OpinionDynamics:
     def __init__(self):
         self.A_COUNT = 0
 
-    def A_layer_dynamics(self, setting, layer_A, prob_p):  # A_layer 다이내믹스, 감마 적용 및 설득/타협 알고리즘 적용
-        for i, j in sorted(layer_A.A_edges.edges()):
-            if setting.A[i] * setting.A[j] > 0:
-                setting.A[i] = self.A_layer_persuasion_function(setting, setting.A[i], setting.A[j], prob_p)[0]
-                setting.A[j] = self.A_layer_persuasion_function(setting, setting.A[i], setting.A[j], prob_p)[1]
-            elif setting.A[i] * setting.A[j] < 0:
-                setting.A[i] = self.A_layer_compromise_function(setting, setting.A[i], setting.A[j], prob_p)[0]
-                setting.A[j] = self.A_layer_compromise_function(setting, setting.A[i], setting.A[j], prob_p)[1]
+    def A_layer_dynamics(self, setting, layer_A, layer_B, prob_p):  # A_layer 다이내믹스, 감마 적용 및 설득/타협 알고리즘 적용
+        for i, j in sorted(layer_A.G_A.edges()):
+            a = layer_A.G_A.nodes[i]['state']
+            b = layer_A.G_A.nodes[j]['state']
+            if a * b > 0:
+                persuasion = self.A_layer_persuasion_function(setting, layer_A.G_A.nodes[i], layer_A.G_A.nodes[j], prob_p)
+                layer_A.G_A.nodes[i]['state'] = persuasion[0]
+                layer_A.G_A.nodes[j]['state'] = persuasion[1]
+            elif a * b < 0:
+                compromise = self.A_layer_compromise_function(setting, layer_A.G_A.nodes[i], layer_A.G_A.nodes[j], prob_p)
+                layer_A.G_A.nodes[i]['state'] = compromise[0]
+                layer_A.G_A.nodes[j]['state'] = compromise[1]
         for i, j in sorted(layer_A.AB_edges):
-            if setting.A[j] * setting.B[i] > 0:
-                setting.A[j] = self.AB_layer_persuasion_function(setting, setting.A[j], prob_p)
-            elif setting.A[j] * setting.B[i] < 0:
-                setting.A[j] = self.AB_layer_compromise_function(setting, setting.A[j], setting.B[i], prob_p)
-        return setting
+            a = layer_A.G_A.nodes[j]['state']
+            b = layer_B.G_B.nodes[i]['state']
+            if a * b > 0:
+                layer_A.G_A.nodes[j]['state'] = self.AB_layer_persuasion_function(setting, layer_A.G_A.nodes[j], prob_p)
+            elif a * b < 0:
+                layer_A.G_A.nodes[j]['state'] = self.AB_layer_compromise_function(setting, layer_A.G_A.nodes[j], layer_B.G_B.nodes[i], prob_p)
+        return layer_A
 
 
     def A_layer_persuasion_function(self, setting, a, b, prob_p):  # A layer 중에서 same orientation 에서 일어나는  변동 현상
         z = random.random()
         if z < prob_p:
-            if a > 0 and b > 0:
-                a = self.A_layer_node_right(a, setting.MAX)
-                b = self.A_layer_node_right(b, setting.MAX)
-            elif a < 0 and b < 0:
-                a = self.A_layer_node_left(a, setting.MIN)
-                b = self.A_layer_node_left(b, setting.MIN)
-        return a, b
+            if (a['state']) > 0 and (b['state']) > 0:
+                a['state'] = self.A_layer_node_right(a, setting.MAX)
+                b['state'] = self.A_layer_node_right(b, setting.MAX)
+            elif (a['state']) < 0 and (b['state']) < 0:
+                a['state'] = self.A_layer_node_left(a, setting.MIN)
+                b['state'] = self.A_layer_node_left(b, setting.MIN)
+        return a['state'], b['state']
 
     def A_layer_compromise_function(self, setting, a, b, prob_p):  # A layer  중에서 opposite orientation 에서 일어나는 변동 현상
         z = random.random()
         if z < (1 - prob_p):
-            if a * b == -1:
+            if (a['state']) * (b['state']) == -1:
                 if z < ((1 - prob_p) / 2):
-                    a = 1
-                    b = 1
+                    (a['state']) = 1
+                    (b['state']) = 1
                 elif z > ((1 - prob_p) / 2):
-                    a = -1
-                    b = -1
-            elif a > 0:
-                a = self.A_layer_node_left(a, setting.MIN)
-                b = self.A_layer_node_right(b, setting.MAX)
-            elif a < 0:
-                a = self.A_layer_node_right(a, setting.MAX)
-                b = self.A_layer_node_left(b, setting.MIN)
-        return a, b
+                    a['state'] = -1
+                    b['state'] = -1
+            elif (a['state']) > 0:
+                a['state'] = self.A_layer_node_left(a, setting.MIN)
+                b['state'] = self.A_layer_node_right(b, setting.MAX)
+            elif (a['state']) < 0:
+                a['state'] = self.A_layer_node_right(a, setting.MAX)
+                b['state'] = self.A_layer_node_left(b, setting.MIN)
+        return a['state'], b['state']
 
     def AB_layer_persuasion_function(self, setting, a, prob_p):  # A-B layer 중에서 same orientation 에서 일어나는  변동 현상
         z = random.random()
         if z < prob_p:
-            if a > 0:
-                a = self.A_layer_node_right(a, setting.MAX)
-            elif a < 0:
-                a = self.A_layer_node_left(a, setting.MIN)
-        return a
+            if (a['state']) > 0:
+                a['state'] = self.A_layer_node_right(a, setting.MAX)
+            elif (a['state']) < 0:
+                a['state'] = self.A_layer_node_left(a, setting.MIN)
+        return a['state']
 
     def AB_layer_compromise_function(self, setting, a, b, prob_p):  # A-B layer  중에서 opposite orientation 에서 일어나는 변동 현상
         z = random.random()
         if z < (1 - prob_p):
-            if a * b == -1:
+            if (a['state']) * (b['state']) == -1:
                 if z < ((1 - prob_p) / 2):
-                    a = 1
+                    a['state'] = 1
                 elif z > ((1 - prob_p) / 2):
-                    a = -1
-            elif a > 0:
-                a = self.A_layer_node_left(a, setting.MIN)
-            elif a < 0:
-                a = self.A_layer_node_right(a, setting.MAX)
+                    a['state'] = -1
+            elif (a['state']) > 0:
+                a['state'] = self.A_layer_node_left(a, setting.MIN)
+            elif (a['state']) < 0:
+                a['state'] = self.A_layer_node_right(a, setting.MAX)
         elif z > (1 - prob_p):
-            a = a
-        return a
+            a['state'] = a['state']
+        return a['state']
 
     def A_layer_node_left(self, a, Min):
-        if a > Min:
-            if a < 0 or a > 1:
-                a = a - 1
+        if (a['state']) > Min:
+            if (a['state']) < 0 or (a['state']) > 1:
+                (a['state']) = (a['state']) - 1
                 self.A_COUNT += 1
-            elif a == 1:
-                a = -1
+            elif (a['state']) == 1:
+                a['state'] = -1
                 self.A_COUNT += 1
-        elif a <= Min:
-            a = Min
-        return a
+        elif (a['state']) <= Min:
+            (a['state']) = Min
+        return a['state']
 
     def A_layer_node_right(self, a, Max):
-        if a < Max:
-            if a > 0 or a < -1:
-                a = a + 1
+        if (a['state']) < Max:
+            if (a['state']) > 0 or (a['state']) < -1:
+                a['state'] = (a['state']) + 1
                 self.A_COUNT += 1
-            elif a == -1:
-                a = 1
+            elif (a['state']) == -1:
+                a['state'] = 1
                 self.A_COUNT += 1
-        elif a >= Max:
-            a = Max
-        return a
+        elif (a['state']) >= Max:
+            a['state'] = Max
+        return a['state']
 
 
 if __name__ == "__main__":
@@ -109,5 +115,10 @@ if __name__ == "__main__":
     Layer_A = Layer_A_Modeling.Layer_A_Modeling(setting)
     Layer_B = Layer_B_Modeling.Layer_B_Modeling(setting)
     opinion = OpinionDynamics()
-    opinion.A_layer_dynamics(setting, Layer_A, 1)
-    print(setting.A, setting.B)
+    opinion.A_layer_dynamics(setting, Layer_A, Layer_B, 1)
+    print(Layer_A.G_A, Layer_B.G_B)
+    state = 0
+    for i in range(len(Layer_A.G_A.nodes)) :
+        state += Layer_A.G_A.nodes[i]['state']
+    print(state)
+
