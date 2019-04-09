@@ -1164,7 +1164,7 @@
       <rect>
        <x>10</x>
        <y>29</y>
-       <width>247</width>
+       <width>251</width>
        <height>642</height>
       </rect>
      </property>
@@ -1533,6 +1533,11 @@
            </property>
            <item>
             <property name="text">
+             <string>paper_revised_data</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>renew_competition</string>
             </property>
            </item>
@@ -1574,6 +1579,11 @@
              <height>12</height>
             </size>
            </property>
+           <item>
+            <property name="text">
+             <string>simulation_table</string>
+            </property>
+           </item>
            <item>
             <property name="text">
              <string>average_layer_state</string>
@@ -1672,6 +1682,11 @@
            </item>
            <item>
             <property name="text">
+             <string>512</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>128</string>
             </property>
            </item>
@@ -1748,6 +1763,11 @@
            <item>
             <property name="text">
              <string>1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>4</string>
             </property>
            </item>
            <item>

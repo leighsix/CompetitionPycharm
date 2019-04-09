@@ -6,7 +6,7 @@ import sqlalchemy
 from multiprocessing import Pool
 
 
-class Changing_Variable:
+class KFChanging_Variable:
     def __init__(self, setting):
         self.mp = MakingPandas.MakingPandas()
         self.repeat_dynamics = RepeatDynamics.RepeatDynamics(setting)
@@ -38,7 +38,7 @@ class Changing_Variable:
 if __name__ == "__main__":
     print("Changing_Variable")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
-    changing_variable = Changing_Variable(setting)
+    changing_variable = KFChanging_Variable(setting)
     changing_variable.paralleled_work(setting)
     print("Operating end")
 

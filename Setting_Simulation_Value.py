@@ -5,45 +5,50 @@ import random
 
 class Setting_Simulation_Value():
     def __init__(self):
+        self.database = 'paper_revised_data'  # 'competition  renew_competition'
+        self.table = 'simulation_table'
+        self.MODEL = 'LM(64)'
+        self.Structure = 'RR-RR'
+
+        self.Limited_step = 100
+        self.Repeating_number = 10
+
         self.A_state = [1, 2]
         self.A_node = 2048
-        self.A_edge = 2
+        self.A_edge = 5
         self.A_inter_edges = 1
         self.A_array_choice = 1
         self.MAX = 2
         self.MIN = -2
+
+        self.B_state = [-1]
+        self.B_node = 32
+        self.B_edge = 5
+        self.B_inter_edges = int(self.A_node / self.B_node)
+        self.B_array_choice = 1
+
         A_array = self.making_A_array_choice(self.A_array_choice)
         self.A = A_array[0]
         self.average_initial_A = A_array[1]
         self.dev_A = A_array[2]
         self.positive_ratio_A = A_array[3]
 
-        self.B_state = [-1]
-        self.B_node = 256
-        self.B_edge = 2
-        self.B_inter_edges = 8
-        self.B_array_choice = 1
         B_array = self.making_B_array_choice(self.B_array_choice)
         self.B = B_array[0]
         self.average_initial_B = B_array[1]
         self.dev_B = B_array[2]
         self.positive_ratio_B = B_array[3]
 
-        self.Structure = 'BA-BA'
 
-        self.Limited_step = 100
         self.drawing_graph = False
-        self.database = 'renew_competition'  # 'competition  renew_competition'
-        self.table = 'average_layer_state2'
         self.DB = 'MySQL'
         self.gap = 40
-        self.Repeating_number = 100
         simulation_condition = self.simulation_condition(self.gap)
         self.R = simulation_condition[0]
         self.D = simulation_condition[1]
         self.variable_list = self.gamma_and_beta_list(self.R, self.D)
         self.NodeColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
-        self.EdgeColorDict = {1: 'yellow', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'darkblue'}
+        self.EdgeColorDict = {1: 'green', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'darkblue'}
         self.workers = 4
 
     def simulation_condition(self, gap):

@@ -4,11 +4,11 @@ import InterconnectedLayerModeling
 import networkx as nx
 
 
-class DecisionDynamics:
+class KFDecisionDynamics:
     def __init__(self):
         self.B_COUNT = 0
 
-    def B_layer_dynamics(self, setting, inter_layer, beta):  # B_layer 다이내믹스, 베타 적용 및 언어데스 알고리즘 적용
+    def B_layer_dynamics(self, setting, inter_layer, beta, node_i_name):  # B_layer 다이내믹스, 베타 적용 및 언어데스 알고리즘 적용
         prob_beta_list = []
         for i in range(setting.B_node):
             opposite = []
@@ -29,7 +29,9 @@ class DecisionDynamics:
             prob_beta_list.append(prob_beta)
             z = random.random()
             if z < prob_beta:
-                inter_layer.two_layer_graph.nodes[i + setting.A_node]['state'] = -(inter_layer.two_layer_graph.nodes[i + setting.A_node]['state'])
+                if inter_layer.two_layer_graph.nodes[i + setting.A_node]['name'] != node_i_name:
+                    inter_layer.two_layer_graph.nodes[i + setting.A_node]['state'] = \
+                        -(inter_layer.two_layer_graph.nodes[i + setting.A_node]['state'])
                 self.B_COUNT += 1
         prob_beta_mean = sum(prob_beta_list) / len(prob_beta_list)
         return inter_layer, prob_beta_mean
@@ -44,8 +46,10 @@ if __name__ == "__main__" :
     for i in range(setting.A_node, setting.A_node+setting.B_node):
         state += inter_layer.two_layer_graph.nodes[i]['state']
     print(state)
-    decision = DecisionDynamics()
-    value = decision.B_layer_dynamics(setting, inter_layer, 1.5)
+    decision = KFDecisionDynamics()
+    for i in range(100):
+        inter_layer = decision.B_layer_dynamics(setting, inter_layer, 1.5, 'B_0')[0]
+        print(inter_layer.two_layer_graph.node[2049]['state'])
     state = 0
     for i in range(setting.A_node, setting.A_node+setting.B_node):
         state += inter_layer.two_layer_graph.nodes[i]['state']

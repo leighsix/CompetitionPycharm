@@ -1,13 +1,12 @@
 import sys
 from pymnet import *
-import Layer_A_Modeling
-import Layer_B_Modeling
+import InterconnectedLayerModeling
 from Setting_Simulation_Value import *
 import Layer_A_Modeling
 import Layer_B_Modeling
 import Changing_Variable
 import Visualization
-import Interconnected_Layer_Modeling
+import Interconnected_Network_Visualization
 import DB_Management
 import SelectDB
 import seaborn as sns
@@ -45,7 +44,7 @@ class MyWindow(QMainWindow, WindowModel):
         self.setupUi(self)
         self.changing_variable = Changing_Variable.Changing_Variable(setting)
         self.visualization = Visualization.Visualization()
-        self.network = Interconnected_Layer_Modeling.Interconnected_Layer_Modeling()
+        self.network = Interconnected_Network_Visualization.Interconnected_Network_Visualization()
         self.db_manager = DB_Management.DB_Management()
         self.select_db = SelectDB.SelectDB()
         self.select_sql = SelectDB.SelectSQlite()
@@ -75,9 +74,8 @@ class MyWindow(QMainWindow, WindowModel):
     def initial_state_graph(self, state, setting):
         print('drawing initial state...')
         self.Initial_State_layout.takeAt(0)
-        layer_A = Layer_A_Modeling.Layer_A_Modeling(setting)
-        layer_B = Layer_B_Modeling.Layer_B_Modeling(setting)
-        fig = self.network.draw_interconnected_network(setting, layer_A, layer_B, 'result.png')[1]
+        inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
+        fig = self.network.draw_interconnected_network(setting, inter_layer, 'result.png')[1]
         if self.display_locBox_2.currentText() == 'outer graph':
             plt.show()
         elif self.display_locBox_2.currentText() == 'inner graph':
@@ -143,7 +141,7 @@ class MyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 self.visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
                 cb = plt.colorbar()
-                cb.set_label(label='Average states', size=15, labelpad=10)
+                cb.set_label(label='state', size=15, labelpad=10)
                 cb.ax.tick_params(labelsize=12)
                 plt.clim(-3, 3)
                 plt.xlabel(r'$\beta$', fontsize=18, labelpad=6)
@@ -160,7 +158,7 @@ class MyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 self.visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
                 cb = plt.colorbar()
-                cb.set_label(label='Average states', size=15, labelpad=10)
+                cb.set_label(label='state', size=15, labelpad=10)
                 cb.ax.tick_params(labelsize=12)
                 plt.clim(-3, 3)
                 plt.xlabel(r'$\beta$', fontsize=18, labelpad=6)
@@ -200,19 +198,20 @@ class MyWindow(QMainWindow, WindowModel):
         box = [eval(self.beta_spinBox1.text()), eval(self.beta_spinBox2.text()),
                eval(self.beta_spinBox3.text()), eval(self.beta_spinBox4.text()),
                eval(self.beta_spinBox5.text()), eval(self.beta_spinBox6.text())]
+        marker = ['-o', '-x', '-v', '-^', '-s', '-d']
         if self.result_gamma_locBox.currentText() == 'outer graph':
             fig = plt.figure()
             plt.style.use('seaborn-whitegrid')
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
-            for i in box:
-                if i > 0:
-                    self.visualization.plot_2D_gamma_for_average_state(setting, df, i)
-            plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
-            plt.ylim(-4, 4)
+            for i, j in enumerate(box):
+                if j > 0:
+                    self.visualization.plot_2D_gamma_for_average_state(setting, df, j, marker[i])
+            plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
+            plt.ylim(-3.5, 3.5)
             plt.xlabel(r'$\gamma$', fontsize=18, labelpad=4)
-            plt.ylabel('Average States', fontsize=18, labelpad=4)
+            plt.ylabel('state', fontsize=18, labelpad=4)
             plt.show()
             plt.close()
         elif self.result_gamma_locBox.currentText() == 'inner graph':
@@ -222,13 +221,13 @@ class MyWindow(QMainWindow, WindowModel):
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
-            for i in box:
-                if i > 0:
-                    self.visualization.plot_2D_gamma_for_average_state(setting, df, i)
-            plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
-            plt.ylim(-4, 4)
+            for i, j in enumerate(box):
+                if j > 0:
+                    self.visualization.plot_2D_gamma_for_average_state(setting, df, j, marker[i])
+            plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
+            plt.ylim(-3.5, 3.5)
             plt.xlabel(r'$\gamma$', fontsize=18, labelpad=4)
-            plt.ylabel('Average States', fontsize=18, labelpad=4)
+            plt.ylabel('state', fontsize=18, labelpad=4)
             canvas = FigureCanvas(fig)
             layout = self.Result_gamma_layout
             layout.addWidget(canvas)
@@ -241,19 +240,20 @@ class MyWindow(QMainWindow, WindowModel):
         box = [eval(self.gamma_spinBox1.text()), eval(self.gamma_spinBox2.text()),
                eval(self.gamma_spinBox3.text()), eval(self.gamma_spinBox4.text()),
                eval(self.gamma_spinBox5.text()), eval(self.gamma_spinBox6.text())]
+        marker = ['-o', '-x', '-v', '-^', '-s', '-d']
         if self.result_beta_locBox.currentText() == 'outer graph':
             fig = plt.figure()
             plt.style.use('seaborn-whitegrid')
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
-            for i in box:
-                if i > 0:
-                    self.visualization.plot_2D_beta_for_average_state(setting, df, i)
-            plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
-            plt.ylim(-4, 4)
+            for i, j in enumerate(box):
+                if j > 0:
+                    self.visualization.plot_2D_beta_for_average_state(setting, df, j, marker[i])
+            plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
+            plt.ylim(-3.5, 3.5)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
-            plt.ylabel('Average States', fontsize=18, labelpad=4)
+            plt.ylabel('state', fontsize=18, labelpad=4)
             plt.show()
             plt.close()
         elif self.result_beta_locBox.currentText() == 'inner graph':
@@ -263,13 +263,13 @@ class MyWindow(QMainWindow, WindowModel):
             ax = fig.add_subplot(111)
             ax.tick_params(axis='both', labelsize=14)
             df = self.making_df(setting)
-            for i in box:
-                if i > 0:
-                    self.visualization.plot_2D_beta_for_average_state(setting, df, i)
-            plt.legend(framealpha=1, frameon=True,  prop={'size': 14})
-            plt.ylim(-4, 4)
+            for i, j in enumerate(box):
+                if j > 0:
+                    self.visualization.plot_2D_beta_for_average_state(setting, df, j, marker[i])
+            plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
+            plt.ylim(-3.5, 3.5)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
-            plt.ylabel('Average States', fontsize=18, labelpad=4)
+            plt.ylabel('state', fontsize=18, labelpad=4)
             canvas = FigureCanvas(fig)
             layout = self.Result_beta_layout
             layout.addWidget(canvas)

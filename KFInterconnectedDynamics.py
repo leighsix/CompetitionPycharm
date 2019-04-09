@@ -1,8 +1,8 @@
 import numpy as np
 import networkx as nx
 import Setting_Simulation_Value
-import OpinionDynamics
-import DecisionDynamics
+import KFOpinionDynamics
+import KFDecisionDynamics
 import MakingPandas
 import InterconnectedLayerModeling
 import matplotlib
@@ -10,19 +10,19 @@ import Interconnected_Network_Visualization
 matplotlib.use("Agg")
 
 
-class InterconnectedDynamics:
+class KFInterconnectedDynamics:
     def __init__(self):
-        self.opinion = OpinionDynamics.OpinionDynamics()
-        self.decision = DecisionDynamics.DecisionDynamics()
+        self.kfopinion = KFOpinionDynamics.KFOpinionDynamics()
+        self.kfdecision = KFDecisionDynamics.KFDecisionDynamics()
         self.mp = MakingPandas.MakingPandas()
         self.network = Interconnected_Network_Visualization.Interconnected_Network_Visualization()
         self.total_value = np.zeros(15)
 
-    def interconnected_dynamics(self, setting, inter_layer, prob_p, beta):
+    def interconnected_dynamics(self, setting, inter_layer, prob_p, beta, node_i_name):
         ims = []
         step_number = 0
         while True:
-            time_count = self.opinion.A_COUNT + self.decision.B_COUNT
+            time_count = self.kfopinion.A_COUNT + self.kfdecision.B_COUNT
             if step_number == 0:
                 if setting.drawing_graph == 1:
                     im = self.network.draw_interconnected_network(setting, inter_layer, 'result.png')[0]
@@ -40,8 +40,8 @@ class InterconnectedDynamics:
                                           self.mp.counting_negative_node(setting, inter_layer),
                                           self.mp.counting_positive_node(setting, inter_layer), time_count])
                 self.total_value = initial_value
-            inter_layer = self.opinion.A_layer_dynamics(setting, inter_layer, prob_p)
-            decision = self.decision.B_layer_dynamics(setting, inter_layer, beta)
+            inter_layer = self.kfopinion.A_layer_dynamics(setting, inter_layer, prob_p, node_i_name)
+            decision = self.kfdecision.B_layer_dynamics(setting, inter_layer, beta, node_i_name)
             inter_layer = decision[0]
             prob_beta_mean = decision[1]
             if setting.drawing_graph == 1:
@@ -73,8 +73,8 @@ class InterconnectedDynamics:
                                     self.mp.counting_positive_node(setting, inter_layer), time_count])
             if step_number >= 1:
                 self.total_value = np.vstack([self.total_value, array_value])
-            self.opinion.A_COUNT = 0
-            self.decision.B_COUNT = 0
+            self.kfopinion.A_COUNT = 0
+            self.kfdecision.B_COUNT = 0
             if step_number >= setting.Limited_step:
                 break
         ims = np.array(ims)
@@ -118,10 +118,12 @@ if __name__ == "__main__":
     for i in range(setting.A_node, setting.A_node + setting.B_node):
         state += inter_layer.two_layer_graph.nodes[i]['state']
     print(state)
-    inter_dynamics = InterconnectedDynamics()
+    inter_dynamics = KFInterconnectedDynamics()
     prob_beta_mean = inter_dynamics.calculate_initial_prob_beta_mean(setting, inter_layer, beta)
     print(prob_beta_mean)
-    inter_dynamics.interconnected_dynamics(setting, inter_layer, prob_p, beta)
+    for i in range(10):
+        inter_layer = inter_dynamics.interconnected_dynamics(setting, inter_layer, prob_p, beta, 'A_0')[0]
+        print(inter_layer.two_layer_graph.node[0]['state'])
     state = 0
     for i in range(setting.A_node):
         state += inter_layer.two_layer_graph.nodes[i]['state']

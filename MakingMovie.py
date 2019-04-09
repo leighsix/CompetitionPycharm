@@ -1,5 +1,5 @@
 import Setting_Simulation_Value
-import Interconnected_Layer_Modeling
+import Interconnected_Network_Visualization
 import numpy as np
 from IPython.display import display, HTML
 import matplotlib.pyplot as plt
@@ -13,7 +13,7 @@ import Layer_B_Modeling
 class MakingMovie:
     def __init__(self):
         self.SS = Setting_Simulation_Value.Setting_Simulation_Value()
-        self.InterNetwork = Interconnected_Layer_Modeling.Interconnected_Layer_Modeling()
+        self.InterNetwork = Interconnected_Network_Visualization.Interconnected_Network_Visualization()
 
     def making_movie_for_interconneted_dynamics(self, layer_A, layer_B, img_file_name, save_file_name):
         ims = [np.array(self.InterNetwork.draw_interconnected_network(layer_A, layer_B, img_file_name))]
