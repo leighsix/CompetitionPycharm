@@ -17,7 +17,6 @@ class KFRepeatDynamics:
     def repeat_dynamics(self, setting, prob_p, beta, node_i_name):
         time = 0
         inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
-
         for i in range(setting.Repeating_number):
             time += 1
             print(time)
@@ -30,8 +29,7 @@ class KFRepeatDynamics:
         panda_db = self.kfmp.making_dataframe_per_step(setting, Num_Data, node_i_name)
         self.num_data = np.zeros([setting.Limited_step + 1, 15])
         self.Num_Data = np.zeros([setting.Limited_step + 1, 15])
-        number = node_i_name.split('_')[1]
-        panda_db = self.cal_property.making_df_for_property(panda_db, inter_layer, number)
+        panda_db = self.cal_property.making_df_for_property(panda_db, inter_layer, node_i_name)
         return panda_db
 
 

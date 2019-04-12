@@ -19,7 +19,6 @@ class KFChanging_Variable:
             panda_db = self.kfrepeat_dynamics.repeat_dynamics(setting_variable_tuple[0], prob_p, beta, i)
             panda_db['gamma'] = gamma
             panda_db['beta'] = beta
-            print(panda_db.loc[0])
             engine = sqlalchemy.create_engine('mysql+pymysql://root:2853@localhost:3306/%s' % setting_variable_tuple[0].database)
             panda_db.to_sql(name='%s' % setting_variable_tuple[0].table, con=engine, index=False, if_exists='append')
             print(panda_db.loc[0])  # 프로그램 잘 실행되고 있는지 확인을 위해서 프린트 실시
@@ -46,10 +45,6 @@ class KFChanging_Variable:
             node_i_name = 'B_%s' %i
             node_list.append(node_i_name)
         return node_list
-
-
-
-
 
 
 if __name__ == "__main__":

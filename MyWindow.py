@@ -143,7 +143,7 @@ class MyWindow(QMainWindow, WindowModel):
                 cb = plt.colorbar()
                 cb.set_label(label='AS', size=15, labelpad=10)
                 cb.ax.tick_params(labelsize=12)
-                plt.clim(-3, 3)
+                plt.clim(-1, 1)
                 plt.xlabel(r'$\beta$', fontsize=18, labelpad=6)
                 plt.ylabel(r'$\gamma$', fontsize=18, labelpad=6)
                 plt.show()
@@ -160,7 +160,7 @@ class MyWindow(QMainWindow, WindowModel):
                 cb = plt.colorbar()
                 cb.set_label(label='AS', size=15, labelpad=10)
                 cb.ax.tick_params(labelsize=12)
-                plt.clim(-3, 3)
+                plt.clim(-1, 1)
                 plt.xlabel(r'$\beta$', fontsize=18, labelpad=6)
                 plt.ylabel(r'$\gamma$', fontsize=18, labelpad=6)
                 canvas = FigureCanvas(fig)
@@ -209,7 +209,7 @@ class MyWindow(QMainWindow, WindowModel):
                 if j > 0:
                     self.visualization.plot_2D_gamma_for_average_state(setting, df, j, marker[i])
             plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
-            plt.ylim(-3.5, 3.5)
+            plt.ylim(-1.7, 1.7)
             plt.xlabel(r'$\gamma$', fontsize=18, labelpad=4)
             plt.ylabel('AS', fontsize=18, labelpad=4)
             plt.show()
@@ -225,7 +225,7 @@ class MyWindow(QMainWindow, WindowModel):
                 if j > 0:
                     self.visualization.plot_2D_gamma_for_average_state(setting, df, j, marker[i])
             plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
-            plt.ylim(-3.5, 3.5)
+            plt.ylim(-1.7, 1.7)
             plt.xlabel(r'$\gamma$', fontsize=18, labelpad=4)
             plt.ylabel('AS', fontsize=18, labelpad=4)
             canvas = FigureCanvas(fig)
@@ -251,7 +251,7 @@ class MyWindow(QMainWindow, WindowModel):
                 if j > 0:
                     self.visualization.plot_2D_beta_for_average_state(setting, df, j, marker[i])
             plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
-            plt.ylim(-3.5, 3.5)
+            plt.ylim(-1.7, 1.7)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
             plt.ylabel('AS', fontsize=18, labelpad=4)
             plt.show()
@@ -267,7 +267,7 @@ class MyWindow(QMainWindow, WindowModel):
                 if j > 0:
                     self.visualization.plot_2D_beta_for_average_state(setting, df, j, marker[i])
             plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
-            plt.ylim(-3.5, 3.5)
+            plt.ylim(-1.7, 1.7)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
             plt.ylabel('AS', fontsize=18, labelpad=4)
             canvas = FigureCanvas(fig)

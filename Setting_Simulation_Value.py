@@ -5,8 +5,8 @@ import random
 
 class Setting_Simulation_Value():
     def __init__(self):
-        self.database = 'finding_key_node'  # 'competition  renew_competition'
-        self.table = 'key_node_table'
+        self.database = 'finding_keynode'  # 'competition  renew_competition'
+        self.table = 'keynode_table'
         self.MODEL = 'LM(8)'
         self.Structure = 'BA-BA'
 

@@ -56,7 +56,7 @@ class AnalysisDB:
         return df
 
     def calculate_total_AS(self, setting, df):
-        AS = df['LAYER_A_MEAN'] / setting.MAX + df['LAYER_B_MEAN']
+        AS = (df['LAYER_A_MEAN'] / setting.MAX + df['LAYER_B_MEAN']) / 2
         total_AS = sum(AS) / len(AS)
         return total_AS
 
@@ -163,12 +163,12 @@ class AnalysisDB:
         width = 0.2  # 너비
         p1 = ax.bar(ind-(width/2), PCRs, width, color='SkyBlue')  # subplot에 bar chart 생성(남학생)
         p2 = ax.bar(ind-(width/2), NCRs, width, color='IndianRed', bottom=PCRs)  # subplot에 bar chart 생성(여학생), bottom 옵션에 남학생 위에다 그리기
-        p3 = ax.bar(ind+(width/2), CIs, width, color='green', label='AS')
+        p3 = ax.bar(ind+(width/2), CIs, width, color='palegreen', label='AS')
 
-        ax.set_ylabel('ratio of state', fontsize=16)  # y축 라벨
+        ax.set_ylabel('property', fontsize=16)  # y축 라벨
         ax.set_xlabel('model', fontsize=16)  # x축 라벨
-        ax.set_title('consensus ratio of models', fontsize=18)  # subplot의 제목
-        ax.set_yticks(np.arange(0, 2, 0.2))  # 0 ~ 81까지 10간격식으로 y축 틱설정
+        ax.set_title('consensus estimation of models', fontsize=18)  # subplot의 제목
+        ax.set_yticks(np.arange(0, 1.2, 0.2))  # 0 ~ 81까지 10간격식으로 y축 틱설정
         ax.set_xticks(ind)  # x축 틱설정
         ax.set_xticklabels(tuples[0])  # x축 틱 라벨설정
         ax.tick_params(labelsize=11)
@@ -223,20 +223,24 @@ if __name__ == "__main__":
     print(df2)
     setting.database = 'paper_revised_data'
     setting.table = 'simulation_table'
-
     df3 = analysis_db.making_property_array(setting, 30)
     print(df3)
     df = pd.concat([df1, df2, df3], ignore_index=True)
-    df = df.loc[[7, 11, 13, 15, 10, 12, 14], :]
-    df.iloc[0, 0] = 'RR(5)-RR(5)'
+    # df = df.loc[[7, 11, 13, 15, 10, 12, 14], :]
+    # df.iloc[0, 0] = 'LM(1)'
+
+
     df = df.iloc[:, [0, 6, 8, 9, 10]]
-    # for i in range(len(df)):
-    #      print(df.iloc[i, :])
+    for i in range(len(df)):
+         print(df.iloc[i, :])
 
     #analysis_db.making_hist_for_pcr(df)
-    analysis_db.making_mixed_hist(df)
+    # analysis_db.making_mixed_hist(df)
 
     # df = df.loc[[7, 9, 8, 1, 0, 3, 4, 5, 6, 11, 13, 15, 10, 12, 14], :]
+    # df = df.loc[[4, 5, 6, 7], :]
+    # df = df.loc[[7, 8, 1, 0, 3], :]
+
     # df.iloc[0, 0] = 'BM(30)'
     # df.iloc[1, 0] = 'BM(100)'
     # analysis_db.making_mixed_hist(df)
