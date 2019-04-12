@@ -5,25 +5,25 @@ import random
 
 class Setting_Simulation_Value():
     def __init__(self):
-        self.database = 'paper_revised_data'  # 'competition  renew_competition'
-        self.table = 'simulation_table'
-        self.MODEL = 'LM(64)'
-        self.Structure = 'RR-RR'
+        self.database = 'finding_key_node'  # 'competition  renew_competition'
+        self.table = 'key_node_table'
+        self.MODEL = 'LM(8)'
+        self.Structure = 'BA-BA'
 
         self.Limited_step = 100
         self.Repeating_number = 10
 
         self.A_state = [1, 2]
-        self.A_node = 2048
-        self.A_edge = 5
+        self.A_node = 512
+        self.A_edge = 3
         self.A_inter_edges = 1
         self.A_array_choice = 1
         self.MAX = 2
         self.MIN = -2
 
         self.B_state = [-1]
-        self.B_node = 32
-        self.B_edge = 5
+        self.B_node = 64
+        self.B_edge = 3
         self.B_inter_edges = int(self.A_node / self.B_node)
         self.B_array_choice = 1
 

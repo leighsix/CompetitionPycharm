@@ -91,9 +91,9 @@ class AnalysisDB:
         neg_con = 0
         signed_CI = (df['LAYER_A_MEAN'] / setting.MAX) + df['LAYER_B_MEAN']
         for i in range(len(df)):
-            if signed_CI.iloc[i] > 1.9:
+            if signed_CI.iloc[i] > 1.95:      # 원래 1.9
                 pos_con += 1
-            elif signed_CI.iloc[i] < -1.9:
+            elif signed_CI.iloc[i] < -1.95:   # 원래 -1.9
                 neg_con += 1
         pos_con = pos_con / len(df)
         neg_con = neg_con / len(df)
@@ -121,7 +121,7 @@ class AnalysisDB:
         ax.set_yticks(np.arange(0, 1.2, 0.2))  # 0 ~ 81까지 10간격식으로 y축 틱설정
         ax.set_xticks(ind)  # x축 틱설정
         ax.set_xticklabels(tuples[0])  # x축 틱 라벨설정
-        ax.tick_params(labelsize=9)
+        ax.tick_params(labelsize=11)
         plt.legend((p1[0], p2[0]), ("PCR", "NCR"), loc=0, fontsize=14)
         plt.show()
         plt.close()
@@ -150,6 +150,31 @@ class AnalysisDB:
         plt.show()
         plt.close()
 
+
+    def making_mixed_hist(self, df):
+        fig = plt.figure()  # 그래프 창생성
+        ax = fig.add_subplot(111)
+        N = len(df)
+        tuples = self.making_tuple_data(df)
+        PCRs = tuples[1]  # 남학생 수
+        NCRs = tuples[2]  # 여학생 수
+        CIs = tuples[4]
+        ind = np.arange(N)  # x축
+        width = 0.2  # 너비
+        p1 = ax.bar(ind-(width/2), PCRs, width, color='SkyBlue')  # subplot에 bar chart 생성(남학생)
+        p2 = ax.bar(ind-(width/2), NCRs, width, color='IndianRed', bottom=PCRs)  # subplot에 bar chart 생성(여학생), bottom 옵션에 남학생 위에다 그리기
+        p3 = ax.bar(ind+(width/2), CIs, width, color='green', label='AS')
+
+        ax.set_ylabel('ratio of state', fontsize=16)  # y축 라벨
+        ax.set_xlabel('model', fontsize=16)  # x축 라벨
+        ax.set_title('consensus ratio of models', fontsize=18)  # subplot의 제목
+        ax.set_yticks(np.arange(0, 2, 0.2))  # 0 ~ 81까지 10간격식으로 y축 틱설정
+        ax.set_xticks(ind)  # x축 틱설정
+        ax.set_xticklabels(tuples[0])  # x축 틱 라벨설정
+        ax.tick_params(labelsize=11)
+        plt.legend((p1[0], p2[0], p3[0]), ("PCR", "NCR", "AS total"), loc=0, fontsize=14)
+        plt.show()
+        plt.close()
 
     def making_tuple_data(self, df):
         model = []
@@ -202,16 +227,19 @@ if __name__ == "__main__":
     df3 = analysis_db.making_property_array(setting, 30)
     print(df3)
     df = pd.concat([df1, df2, df3], ignore_index=True)
-    print(df)
     df = df.loc[[7, 11, 13, 15, 10, 12, 14], :]
-    df.iloc[0, 0] = 'BM'
-    analysis_db.making_hist_for_pcr(df)
+    df.iloc[0, 0] = 'RR(5)-RR(5)'
+    df = df.iloc[:, [0, 6, 8, 9, 10]]
+    # for i in range(len(df)):
+    #      print(df.iloc[i, :])
 
+    #analysis_db.making_hist_for_pcr(df)
+    analysis_db.making_mixed_hist(df)
 
     # df = df.loc[[7, 9, 8, 1, 0, 3, 4, 5, 6, 11, 13, 15, 10, 12, 14], :]
     # df.iloc[0, 0] = 'BM(30)'
     # df.iloc[1, 0] = 'BM(100)'
-    # analysis_db.making_hist_for_pcr(df)
+    # analysis_db.making_mixed_hist(df)
 
 
     # df = df.iloc[:, [0, 6, 8, 9, 10]]

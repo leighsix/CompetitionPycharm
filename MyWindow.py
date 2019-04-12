@@ -141,7 +141,7 @@ class MyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 self.visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
                 cb = plt.colorbar()
-                cb.set_label(label='state', size=15, labelpad=10)
+                cb.set_label(label='AS', size=15, labelpad=10)
                 cb.ax.tick_params(labelsize=12)
                 plt.clim(-3, 3)
                 plt.xlabel(r'$\beta$', fontsize=18, labelpad=6)
@@ -158,7 +158,7 @@ class MyWindow(QMainWindow, WindowModel):
                 df = self.making_df(setting)
                 self.visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
                 cb = plt.colorbar()
-                cb.set_label(label='state', size=15, labelpad=10)
+                cb.set_label(label='AS', size=15, labelpad=10)
                 cb.ax.tick_params(labelsize=12)
                 plt.clim(-3, 3)
                 plt.xlabel(r'$\beta$', fontsize=18, labelpad=6)
@@ -211,7 +211,7 @@ class MyWindow(QMainWindow, WindowModel):
             plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
             plt.ylim(-3.5, 3.5)
             plt.xlabel(r'$\gamma$', fontsize=18, labelpad=4)
-            plt.ylabel('state', fontsize=18, labelpad=4)
+            plt.ylabel('AS', fontsize=18, labelpad=4)
             plt.show()
             plt.close()
         elif self.result_gamma_locBox.currentText() == 'inner graph':
@@ -227,7 +227,7 @@ class MyWindow(QMainWindow, WindowModel):
             plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
             plt.ylim(-3.5, 3.5)
             plt.xlabel(r'$\gamma$', fontsize=18, labelpad=4)
-            plt.ylabel('state', fontsize=18, labelpad=4)
+            plt.ylabel('AS', fontsize=18, labelpad=4)
             canvas = FigureCanvas(fig)
             layout = self.Result_gamma_layout
             layout.addWidget(canvas)
@@ -253,7 +253,7 @@ class MyWindow(QMainWindow, WindowModel):
             plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
             plt.ylim(-3.5, 3.5)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
-            plt.ylabel('state', fontsize=18, labelpad=4)
+            plt.ylabel('AS', fontsize=18, labelpad=4)
             plt.show()
             plt.close()
         elif self.result_beta_locBox.currentText() == 'inner graph':
@@ -269,7 +269,7 @@ class MyWindow(QMainWindow, WindowModel):
             plt.legend(framealpha=1, frameon=True,  prop={'size': 12})
             plt.ylim(-3.5, 3.5)
             plt.xlabel(r'$\beta$', fontsize=18, labelpad=4)
-            plt.ylabel('state', fontsize=18, labelpad=4)
+            plt.ylabel('AS', fontsize=18, labelpad=4)
             canvas = FigureCanvas(fig)
             layout = self.Result_beta_layout
             layout.addWidget(canvas)

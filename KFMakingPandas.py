@@ -4,14 +4,15 @@ import InterconnectedLayerModeling
 import Setting_Simulation_Value
 
 
-class MakingPandas:
-    def making_dataframe_per_step(self, setting, value_array):
+class KFMakingPandas:
+    def making_dataframe_per_step(self, setting, value_array, node_i_name):
         columns = ['LAYER_A_MEAN', 'LAYER_B_MEAN', 'FRACTION_A', 'FRACTION_B', 'PROB_P', 'PROB_BETA',
                    'A_DIFFERENT_STATE_RATIO', 'B_DIFFERENT_STATE_RATIO', 'AB_RATIO',
                    'A_total_edges', 'B_total_edges', 'CONSENSUS',
                    'NEGATIVE_STATE_NUMBER', 'POSITIVE_STATE_NUMBER', 'TIME_COUNT']
         df = pd.DataFrame(value_array, columns=columns)
         step = [i for i in range(0, setting.Limited_step+1)]
+        df['Unchanged_A_Node'] = node_i_name
         df['MODEL'] = setting.MODEL
         df['A_Initial_State'] = setting.average_initial_A
         df['B_Initial_State'] = setting.average_initial_B
@@ -118,12 +119,12 @@ if __name__ == "__main__":
     print("MakingPandas")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
-    mp = MakingPandas()
-    result1 = mp.judging_consensus(setting, inter_layer)
-    result2 = mp.different_state_ratio(setting, inter_layer)
-    result3 = mp.layer_state_mean(setting, inter_layer)
-    result4 = mp.counting_positive_node(setting, inter_layer)
-    result5 = mp.counting_negative_node(setting, inter_layer)
+    kfmp = KFMakingPandas()
+    result1 = kfmp.judging_consensus(setting, inter_layer)
+    result2 = kfmp.different_state_ratio(setting, inter_layer)
+    result3 = kfmp.layer_state_mean(setting, inter_layer)
+    result4 = kfmp.counting_positive_node(setting, inter_layer)
+    result5 = kfmp.counting_negative_node(setting, inter_layer)
     print(result1)
     print(result2)
     print(result3)

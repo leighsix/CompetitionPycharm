@@ -89,14 +89,7 @@ class KFOpinionDynamics:
     def AB_layer_compromise_function(self, setting, a, b, prob_p, node_i_name):  # A-B layer  중에서 opposite orientation 에서 일어나는 변동 현상
         z = random.random()
         if z < (1 - prob_p):
-            if (a['state']) * (b['state']) == -1:
-                if z < ((1 - prob_p) / 2):
-                    if a['name'] != node_i_name:
-                        a['state'] = 1
-                elif z > ((1 - prob_p) / 2):
-                    if a['name'] != node_i_name:
-                        a['state'] = -1
-            elif (a['state']) > 0:
+            if (a['state']) > 0:
                 if a['name'] != node_i_name:
                     a['state'] = self.A_layer_node_left(a, setting.MIN)
             elif (a['state']) < 0:

@@ -108,8 +108,8 @@ if __name__ == "__main__":
     print("InterconnectedDynamics")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
-    prob_p = 0.3
-    beta = 10
+    prob_p = 0.1
+    beta = 20
     state = 0
     for i in range(setting.A_node):
         state += inter_layer.two_layer_graph.nodes[i]['state']
@@ -121,6 +121,7 @@ if __name__ == "__main__":
     inter_dynamics = KFInterconnectedDynamics()
     prob_beta_mean = inter_dynamics.calculate_initial_prob_beta_mean(setting, inter_layer, beta)
     print(prob_beta_mean)
+    print(inter_layer.two_layer_graph.node[0]['state'])
     for i in range(10):
         inter_layer = inter_dynamics.interconnected_dynamics(setting, inter_layer, prob_p, beta, 'A_0')[0]
         print(inter_layer.two_layer_graph.node[0]['state'])

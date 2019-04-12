@@ -39,8 +39,8 @@ class Visualization:
                    c=((df['LAYER_A_MEAN']/setting.MAX) + df['LAYER_B_MEAN']), cmap='RdBu', linewidth=0.2)
         ax.set_xlabel(r'$\beta$', fontsize=18, labelpad=8)
         ax.set_ylabel(r'$\gamma$', fontsize=18, labelpad=8)
-        ax.set_zlabel('state', fontsize=18, labelpad=8)
-        ax.set_title(r'$\beta$-$\gamma$-state', fontsize=18)
+        ax.set_zlabel('AS', fontsize=18, labelpad=8)
+        ax.set_title(r'$\beta$-$\gamma$-AS', fontsize=18)
         ax.tick_params(axis='both', labelsize=14)
         ax.view_init(45, 45)
 
@@ -52,8 +52,8 @@ class Visualization:
                         cmap='RdBu', edgecolor='none')
         ax.set_xlabel(r'$\beta$', fontsize=18, labelpad=8)
         ax.set_ylabel(r'$\gamma$', fontsize=18, labelpad=8)
-        ax.set_zlabel('state', fontsize=18, labelpad=8)
-        ax.set_title(r'$\beta$-$\gamma$-state', fontsize=18)
+        ax.set_zlabel('AS', fontsize=18, labelpad=8)
+        ax.set_title(r'$\beta$-$\gamma$-AS', fontsize=18)
         ax.tick_params(axis='both', labelsize=14)
         ax.view_init(45, 45)
 
@@ -67,8 +67,8 @@ class Visualization:
         ax.contour3D(X, Y, Z, 50, cmap='RdBu')
         ax.set_xlabel(r'$\beta$', fontsize=18, labelpad=6)
         ax.set_ylabel(r'$\gamma$', fontsize=18, labelpad=6)
-        ax.set_zlabel('state', fontsize=18, labelpad=6)
-        ax.set_title(r'$\beta$-$\gamma$-state', fontsize=18)
+        ax.set_zlabel('AS', fontsize=18, labelpad=6)
+        ax.set_title(r'$\beta$-$\gamma$-AS', fontsize=18)
         ax.view_init(45, 45)
 
     def plot_3D_to_2D_contour_for_average_state(self, setting, df):
