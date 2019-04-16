@@ -16,17 +16,43 @@ class KFInterconnectedDynamics:
         self.kfdecision = KFDecisionDynamics.KFDecisionDynamics()
         self.mp = MakingPandas.MakingPandas()
         self.network = Interconnected_Network_Visualization.Interconnected_Network_Visualization()
-        self.total_value = np.zeros(15)
+
+    def interconnected_dynamics_100steps_result_only(self, setting, inter_layer, prob_p, beta, node_i_name):
+        step_number = 0
+        while True:
+            inter_layer = self.kfopinion.A_layer_dynamics(setting, inter_layer, prob_p, node_i_name)
+            decision = self.kfdecision.B_layer_dynamics(setting, inter_layer, beta, node_i_name)
+            inter_layer = decision[0]
+            prob_beta_mean = decision[1]
+            step_number += 1
+            if step_number >= setting.Limited_step:
+                layer_state_mean = self.mp.layer_state_mean(setting, inter_layer)
+                different_state_ratio = self.mp.different_state_ratio(setting, inter_layer)
+                fraction_plus = self.mp.calculate_fraction_plus(setting, inter_layer)
+                time_count = self.kfopinion.A_COUNT + self.kfdecision.B_COUNT
+                array_value = np.array([layer_state_mean[0], layer_state_mean[1],
+                                        fraction_plus[0], fraction_plus[1],
+                                        prob_p, prob_beta_mean, different_state_ratio[0],
+                                        different_state_ratio[1], different_state_ratio[2],
+                                        len(sorted(inter_layer.A_edges.edges)), len(inter_layer.B_edges),
+                                        self.mp.judging_consensus(setting, inter_layer),
+                                        self.mp.counting_negative_node(setting, inter_layer),
+                                        self.mp.counting_positive_node(setting, inter_layer), time_count])
+                break
+        self.kfopinion.A_COUNT = 0
+        self.kfdecision.B_COUNT = 0
+        return inter_layer, array_value
 
     def interconnected_dynamics(self, setting, inter_layer, prob_p, beta, node_i_name):
+        total_value = np.zeros(15)
         ims = []
         step_number = 0
         while True:
-            time_count = self.kfopinion.A_COUNT + self.kfdecision.B_COUNT
             if step_number == 0:
                 if setting.drawing_graph == 1:
                     im = self.network.draw_interconnected_network(setting, inter_layer, 'result.png')[0]
                     ims.append(im)
+                time_count = self.kfopinion.A_COUNT + self.kfdecision.B_COUNT
                 prob_beta_mean = self.calculate_initial_prob_beta_mean(setting, inter_layer, beta)
                 layer_state_mean = self.mp.layer_state_mean(setting, inter_layer)
                 different_state_ratio = self.mp.different_state_ratio(setting, inter_layer)
@@ -39,7 +65,7 @@ class KFInterconnectedDynamics:
                                           self.mp.judging_consensus(setting, inter_layer),
                                           self.mp.counting_negative_node(setting, inter_layer),
                                           self.mp.counting_positive_node(setting, inter_layer), time_count])
-                self.total_value = initial_value
+                total_value = total_value + initial_value
             inter_layer = self.kfopinion.A_layer_dynamics(setting, inter_layer, prob_p, node_i_name)
             decision = self.kfdecision.B_layer_dynamics(setting, inter_layer, beta, node_i_name)
             inter_layer = decision[0]
@@ -63,6 +89,7 @@ class KFInterconnectedDynamics:
             layer_state_mean = self.mp.layer_state_mean(setting, inter_layer)
             different_state_ratio = self.mp.different_state_ratio(setting, inter_layer)
             fraction_plus = self.mp.calculate_fraction_plus(setting, inter_layer)
+            time_count = self.kfopinion.A_COUNT + self.kfdecision.B_COUNT
             array_value = np.array([layer_state_mean[0], layer_state_mean[1],
                                     fraction_plus[0], fraction_plus[1],
                                     prob_p, prob_beta_mean, different_state_ratio[0],
@@ -72,15 +99,15 @@ class KFInterconnectedDynamics:
                                     self.mp.counting_negative_node(setting, inter_layer),
                                     self.mp.counting_positive_node(setting, inter_layer), time_count])
             if step_number >= 1:
-                self.total_value = np.vstack([self.total_value, array_value])
-            self.kfopinion.A_COUNT = 0
-            self.kfdecision.B_COUNT = 0
+                total_value = np.vstack([total_value, array_value])
             if step_number >= setting.Limited_step:
                 break
+        self.kfopinion.A_COUNT = 0
+        self.kfdecision.B_COUNT = 0
         ims = np.array(ims)
         if setting.drawing_graph == 1:
             self.network.making_movie_for_dynamics(ims)
-        return inter_layer, self.total_value
+        return inter_layer, total_value
 
     def calculate_initial_prob_beta_mean(self, setting, inter_layer, beta):
         prob_beta_list = []
@@ -119,12 +146,8 @@ if __name__ == "__main__":
         state += inter_layer.two_layer_graph.nodes[i]['state']
     print(state)
     inter_dynamics = KFInterconnectedDynamics()
-    prob_beta_mean = inter_dynamics.calculate_initial_prob_beta_mean(setting, inter_layer, beta)
-    print(prob_beta_mean)
-    print(inter_layer.two_layer_graph.node[0]['state'])
-    for i in range(10):
-        inter_layer = inter_dynamics.interconnected_dynamics(setting, inter_layer, prob_p, beta, 'A_0')[0]
-        print(inter_layer.two_layer_graph.node[0]['state'])
+    array = inter_dynamics.interconnected_dynamics(setting, inter_layer, prob_p, beta, 'A_0')[1]
+    print(array)
     state = 0
     for i in range(setting.A_node):
         state += inter_layer.two_layer_graph.nodes[i]['state']

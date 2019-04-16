@@ -7,6 +7,13 @@ import sqlite3
 
 class SelectDB:
     def select_data_from_DB(self, setting):
+        select_query = ('''SELECT * FROM %s;''' % str(setting.table))
+        engine = sqlalchemy.create_engine('mysql+pymysql://root:2853@localhost:3306/%s' % setting.database)
+        query = select_query
+        df = pd.read_sql_query(query, engine)
+        return df
+
+    def select_data_from_setting(self, setting):
         select_query = ('''
             SELECT * FROM %s 
             WHERE Structure = '%s' AND A_internal_edges = %s AND B_internal_edges = %s 

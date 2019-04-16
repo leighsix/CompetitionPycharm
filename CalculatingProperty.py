@@ -11,33 +11,105 @@ import operator
 
 class CalculatingProperty:
 
+    def making_df_property_for_100steps(self, df, inter_layer, node_i_name):
+        df['Unchanged_A_Node'] = node_i_name
+        node_i = node_i_name.split('_')[1]
+        if node_i == 'N':
+            df['Connected_B_node'] = 0
+        else:
+            node_i = int(node_i)
+            connected_B_node = self.finding_B_node(inter_layer, node_i)
+            df['Connected_B_node'] = 'B_%s' % (connected_B_node - len(sorted(inter_layer.A_edges)))
+
     def making_df_for_property(self, panda_df, inter_layer, node_i_name):
-        i = int(node_i_name.split('_')[1])
-        panda_df['A_Clustering'] = self.cal_clustering(inter_layer)[i]
-        panda_df['A_Hub'] = self.cal_hub_and_authority(inter_layer)[0][i]
-        panda_df['A_Authority'] = self.cal_hub_and_authority(inter_layer)[1][i]
-        panda_df['A_Pagerank'] = self.cal_pagerank(inter_layer)[i]
-        panda_df['A_Eigenvector'] = self.cal_eigenvector_centrality(inter_layer)[i]
-        panda_df['A_Degree'] = self.cal_degree_centrality(inter_layer)[i]
-        panda_df['A_Betweenness'] = self.cal_betweenness_centrality(inter_layer)[i]
-        panda_df['A_Closeness'] = self.cal_closeness_centrality(inter_layer)[i]
-        panda_df['A_Load'] = self.cal_load_centrality(inter_layer)[i]
-        connected_B_node = self.finding_B_node(inter_layer, i)
-        panda_df['Connected_B_node'] = connected_B_node
-        panda_df['B_Clustering'] = self.cal_clustering(inter_layer)[connected_B_node]
-        panda_df['B_Hub'] = self.cal_hub_and_authority(inter_layer)[0][connected_B_node]
-        panda_df['B_Authority'] = self.cal_hub_and_authority(inter_layer)[1][connected_B_node]
-        panda_df['B_Pagerank'] = self.cal_pagerank(inter_layer)[connected_B_node]
-        panda_df['B_Eigenvector'] = self.cal_eigenvector_centrality(inter_layer)[connected_B_node]
-        panda_df['B_Degree'] = self.cal_degree_centrality(inter_layer)[connected_B_node]
-        panda_df['B_Betweenness'] = self.cal_betweenness_centrality(inter_layer)[connected_B_node]
-        panda_df['B_Closeness'] = self.cal_closeness_centrality(inter_layer)[connected_B_node]
-        panda_df['B_Load'] = self.cal_load_centrality(inter_layer)[connected_B_node]
+        node_i = node_i_name.split('_')[1]
+        if node_i == 'N':
+            panda_df['Unchanged_A_Node'] = node_i_name
+            panda_df['Un_A_node_state'] = 0
+            panda_df['A_Clustering'] = 0
+            panda_df['A_Hub'] = 0
+            panda_df['A_Authority'] = 0
+            panda_df['A_Pagerank'] = 0
+            panda_df['A_Eigenvector'] = 0
+            panda_df['A_Degree'] = 0
+            panda_df['A_Betweenness'] = 0
+            panda_df['A_Closeness'] = 0
+            panda_df['A_Load'] = 0
+            panda_df['A_NumberofDegree'] = 0
+            panda_df['Connected_B_node'] = 0
+            panda_df['B_Clustering'] = 0
+            panda_df['B_Hub'] = 0
+            panda_df['B_Authority'] = 0
+            panda_df['B_Pagerank'] = 0
+            panda_df['B_Eigenvector'] = 0
+            panda_df['B_Degree'] = 0
+            panda_df['B_Betweenness'] = 0
+            panda_df['B_Closeness'] = 0
+            panda_df['B_Load'] = 0
+
+        else:
+            node_i = int(node_i)
+            panda_df['Unchanged_A_Node'] = node_i_name
+            panda_df['Un_A_node_state'] = inter_layer.two_layer_graph.node[node_i]['state']
+            panda_df['A_Clustering'] = self.cal_clustering(inter_layer)[node_i]
+            panda_df['A_Hub'] = self.cal_hub_and_authority(inter_layer)[0][node_i]
+            panda_df['A_Authority'] = self.cal_hub_and_authority(inter_layer)[1][node_i]
+            panda_df['A_Pagerank'] = self.cal_pagerank(inter_layer)[node_i]
+            panda_df['A_Eigenvector'] = self.cal_eigenvector_centrality(inter_layer)[node_i]
+            panda_df['A_Degree'] = self.cal_degree_centrality(inter_layer)[node_i]
+            panda_df['A_Betweenness'] = self.cal_betweenness_centrality(inter_layer)[node_i]
+            panda_df['A_Closeness'] = self.cal_closeness_centrality(inter_layer)[node_i]
+            panda_df['A_Load'] = self.cal_load_centrality(inter_layer)[node_i]
+            panda_df['A_NumberofDegree'] = self.cal_number_of_degree(inter_layer, node_i)
+            connected_B_node = self.finding_B_node(inter_layer, node_i)
+            panda_df['Connected_B_node'] = 'B_%s' % (connected_B_node-len(sorted(inter_layer.A_edges)))
+            panda_df['B_Clustering'] = self.cal_clustering(inter_layer)[connected_B_node]
+            panda_df['B_Hub'] = self.cal_hub_and_authority(inter_layer)[0][connected_B_node]
+            panda_df['B_Authority'] = self.cal_hub_and_authority(inter_layer)[1][connected_B_node]
+            panda_df['B_Pagerank'] = self.cal_pagerank(inter_layer)[connected_B_node]
+            panda_df['B_Eigenvector'] = self.cal_eigenvector_centrality(inter_layer)[connected_B_node]
+            panda_df['B_Degree'] = self.cal_degree_centrality(inter_layer)[connected_B_node]
+            panda_df['B_Betweenness'] = self.cal_betweenness_centrality(inter_layer)[connected_B_node]
+            panda_df['B_Closeness'] = self.cal_closeness_centrality(inter_layer)[connected_B_node]
+            panda_df['B_Load'] = self.cal_load_centrality(inter_layer)[connected_B_node]
+            panda_df['B_NumberofDegree'] = self.cal_number_of_degree(inter_layer, connected_B_node)
         return panda_df
 
-    def finding_B_node(self, inter_layer, i):
+    def making_array_for_property(self, additional_array, inter_layer, node_i_name):
+        node_i = node_i_name.split('_')[1]
+        if node_i == 'N':
+            additional_array2 = np.zeros(21)
+            new_array = np.concatenate([additional_array, additional_array2])
+        else:
+            node_i = int(node_i)
+            connected_B_node = self.finding_B_node(inter_layer, node_i)
+            additional_array2 = np.array([inter_layer.two_layer_graph.node[node_i]['state'],
+                                          self.cal_clustering(inter_layer)[node_i],
+                                          self.cal_hub_and_authority(inter_layer)[0][node_i],
+                                          self.cal_hub_and_authority(inter_layer)[1][node_i],
+                                          self.cal_pagerank(inter_layer)[node_i],
+                                          self.cal_eigenvector_centrality(inter_layer)[node_i],
+                                          self.cal_degree_centrality(inter_layer)[node_i],
+                                          self.cal_betweenness_centrality(inter_layer)[node_i],
+                                          self.cal_closeness_centrality(inter_layer)[node_i],
+                                          self.cal_load_centrality(inter_layer)[node_i],
+                                          self.cal_number_of_degree(inter_layer, node_i),
+                                          self.cal_clustering(inter_layer)[connected_B_node],
+                                          self.cal_hub_and_authority(inter_layer)[0][connected_B_node],
+                                          self.cal_hub_and_authority(inter_layer)[1][connected_B_node],
+                                          self.cal_pagerank(inter_layer)[connected_B_node],
+                                          self.cal_eigenvector_centrality(inter_layer)[connected_B_node],
+                                          self.cal_degree_centrality(inter_layer)[connected_B_node],
+                                          self.cal_betweenness_centrality(inter_layer)[connected_B_node],
+                                          self.cal_closeness_centrality(inter_layer)[connected_B_node],
+                                          self.cal_load_centrality(inter_layer)[connected_B_node],
+                                          self.cal_number_of_degree(inter_layer, connected_B_node)])
+            new_array = np.concatenate([additional_array, additional_array2])
+        return new_array
+
+    def finding_B_node(self, inter_layer, node_i):
         connected_B_node = 0
-        neighbors = sorted(nx.neighbors(inter_layer.two_layer_graph, i))
+        neighbors = sorted(nx.neighbors(inter_layer.two_layer_graph, node_i))
         for neighbor in neighbors:
             if neighbor > (len(sorted(inter_layer.A_edges))-1):
                 connected_B_node = neighbor
@@ -76,6 +148,10 @@ class CalculatingProperty:
     def cal_load_centrality(self, inter_layer):
         load_centrality = nx.load_centrality(inter_layer.two_layer_graph)
         return load_centrality
+
+    def cal_number_of_degree(self, inter_layer, node_i):
+        degree = len(sorted(nx.neighbors(inter_layer.two_layer_graph, node_i)))
+        return degree
 
 if __name__ == "__main__":
     print("CalculatingProperty")

@@ -33,10 +33,10 @@ class Visualization:
                  markersize=6, linewidth=1.5, markeredgewidth=1)
 
     def plot_3D_scatter_for_average_state(self, setting, df):
-        df = df[df.Steps == setting.Limited_step]
+        # df = df[df.Steps == setting.Limited_step]
         ax = plt.axes(projection='3d')
         ax.scatter(df['beta'], df['gamma'], ((df['LAYER_A_MEAN']/setting.MAX) + df['LAYER_B_MEAN']) / 2,
-                   c=((df['LAYER_A_MEAN']/setting.MAX) + df['LAYER_B_MEAN']), cmap='RdBu', linewidth=0.2)
+                   c=((df['LAYER_A_MEAN']/setting.MAX) + df['LAYER_B_MEAN']) / 2, cmap='RdBu', linewidth=0.2)
         ax.set_xlabel(r'$\beta$', fontsize=18, labelpad=8)
         ax.set_ylabel(r'$\gamma$', fontsize=18, labelpad=8)
         ax.set_zlabel('AS', fontsize=18, labelpad=8)
@@ -46,7 +46,7 @@ class Visualization:
 
 
     def plot_3D_trisurf_for_average_state(self, setting, df):
-        df = df[df.Steps == setting.Limited_step]
+        # df = df[df.Steps == setting.Limited_step]
         ax = plt.axes(projection='3d')
         ax.plot_trisurf(df['beta'], df['gamma'], ((df['LAYER_A_MEAN']/setting.MAX) + df['LAYER_B_MEAN']) / 2,
                         cmap='RdBu', edgecolor='none')
@@ -58,7 +58,7 @@ class Visualization:
         ax.view_init(45, 45)
 
     def plot_3D_contour_for_average_state(self, setting, df):
-        df = df[df.Steps == setting.Limited_step]
+        # df = df[df.Steps == setting.Limited_step]
         beta_list = Visualization.making_select_list(df, 'beta')  # list이지만 실제로는 array
         gamma_list = Visualization.making_select_list(df, 'gamma')
         X, Y = np.meshgrid(beta_list, gamma_list)
@@ -72,7 +72,7 @@ class Visualization:
         ax.view_init(45, 45)
 
     def plot_3D_to_2D_contour_for_average_state(self, setting, df):
-        df = df[df.Steps == setting.Limited_step]
+        # df = df[df.Steps == setting.Limited_step]
         beta_list = Visualization.making_select_list(df, 'beta')  # list이지만 실제로는 array
         gamma_list = Visualization.making_select_list(df, 'gamma')
         X, Y = np.meshgrid(beta_list, gamma_list)
@@ -81,8 +81,8 @@ class Visualization:
         #plt.clabel(contours, inline=True, fontsize=8)
 
     def flow_prob_beta_chart(self, setting, df, beta_value, gamma_value):
-        #beta_value = [min, max], #gamma_value =[min, max]
-        df = df[df.Steps <= setting.Limited_step]
+        # beta_value = [min, max], #gamma_value =[min, max]
+        # df = df[df.Steps <= setting.Limited_step]
         beta_list = Visualization.making_select_list(df, 'beta')  # 이름은 list이지만 실제로는 array
         gamma_list = Visualization.making_select_list(df, 'gamma') # 이름은 list이지만 실제로는 array
         beta_min = Visualization.covert_to_select_list_value(beta_list, beta_value[0])
@@ -105,7 +105,7 @@ class Visualization:
                     plt.plot(df2['Steps'], df2['PROB_BETA'], linewidth=0.3)
 
     def different_state_ratio_chart(self, setting, df, beta_value, gamma_value, select_layer):
-        df = df[df.Steps <= setting.Limited_step]
+        # df = df[df.Steps <= setting.Limited_step]
         beta_list = Visualization.making_select_list(df, 'beta')    # 이름은 list이지만 실제로는 array
         gamma_list = Visualization.making_select_list(df, 'gamma')  # 이름은 list이지만 실제로는 array
         beta_min = Visualization.covert_to_select_list_value(beta_list, beta_value[0])
@@ -158,15 +158,21 @@ class Visualization:
 if __name__ == "__main__":
     print("Visualization")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
-    setting.database = 'competition'
-    setting.table = 'result_db'
-    setting.Limited_step = 100
+    setting.database = 'finding_keynode'
+    setting.table = 'keynode_table_for_temporary'
     select_db = SelectDB.SelectDB()
     df = select_db.select_data_from_DB(setting)
+    print(len(df))
+    df = df[df.Steps == 100]
+    print(len(df))
+    # df = df[df.Unchanged_A_Node == 'A_N']
+    print(len(df))
     visualization = Visualization()
     fig = plt.figure()
-    visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
-    #visualization.plot_3D_trisurf_for_average_state(setting, df)
+    visualization.plot_3D_trisurf_for_average_state(setting, df)
+    plt.show()
+    plt.close()
+    #visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
     #visualization.plot_3D_to_2D_contour_for_average_state()
     #visualization.plot_3D_contour_for_average_state('previous_research')
     #visualization.plot_3D_scatter_for_average_state('average_layer_state')    #previous_research
@@ -174,8 +180,7 @@ if __name__ == "__main__":
     # fig = visualization.different_state_ratio_chart([0, 3], [0, 2], 'B')
     # visualization.plot_2D_beta_for_average_state(0.2)
     # visualization.plot_2D_beta_for_average_state(0.4)
-    plt.show()
-    plt.close()
+
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.4)
     #visualization.plot_2D_beta_for_average_state('previous_research', 0.6)
     print("paint finished")

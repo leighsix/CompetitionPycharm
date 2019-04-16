@@ -29,8 +29,7 @@ class KFOpinionDynamics:
                     = self.AB_layer_persuasion_function(setting, inter_layer.two_layer_graph.nodes[j], prob_p, node_i_name)
             elif a * b < 0:
                 inter_layer.two_layer_graph.nodes[j]['state'] \
-                    = self.AB_layer_compromise_function(setting, inter_layer.two_layer_graph.nodes[j],
-                                                        inter_layer.two_layer_graph.nodes[i], prob_p, node_i_name)
+                    = self.AB_layer_compromise_function(setting, inter_layer.two_layer_graph.nodes[j], prob_p, node_i_name)
         return inter_layer
 
 
@@ -86,7 +85,7 @@ class KFOpinionDynamics:
                     a['state'] = self.A_layer_node_left(a, setting.MIN)
         return a['state']
 
-    def AB_layer_compromise_function(self, setting, a, b, prob_p, node_i_name):  # A-B layer  중에서 opposite orientation 에서 일어나는 변동 현상
+    def AB_layer_compromise_function(self, setting, a, prob_p, node_i_name):  # A-B layer  중에서 opposite orientation 에서 일어나는 변동 현상
         z = random.random()
         if z < (1 - prob_p):
             if (a['state']) > 0:

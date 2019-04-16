@@ -6,7 +6,7 @@ import random
 class Setting_Simulation_Value():
     def __init__(self):
         self.database = 'finding_keynode'  # 'competition  renew_competition'
-        self.table = 'keynode_table'
+        self.table = 'keynode_table_for_100steps'
         self.MODEL = 'LM(8)'
         self.Structure = 'BA-BA'
 
@@ -15,7 +15,7 @@ class Setting_Simulation_Value():
 
         self.A_state = [1, 2]
         self.A_node = 512
-        self.A_edge = 3
+        self.A_edge = 5
         self.A_inter_edges = 1
         self.A_array_choice = 1
         self.MAX = 2
@@ -23,7 +23,7 @@ class Setting_Simulation_Value():
 
         self.B_state = [-1]
         self.B_node = 64
-        self.B_edge = 3
+        self.B_edge = 5
         self.B_inter_edges = int(self.A_node / self.B_node)
         self.B_array_choice = 1
 
@@ -42,7 +42,7 @@ class Setting_Simulation_Value():
 
         self.drawing_graph = False
         self.DB = 'MySQL'
-        self.gap = 40
+        self.gap = 30
         simulation_condition = self.simulation_condition(self.gap)
         self.R = simulation_condition[0]
         self.D = simulation_condition[1]
@@ -57,11 +57,11 @@ class Setting_Simulation_Value():
         return self.R, self.D
 
     def gamma_and_beta_list(self, gamma_list, beta_list):
-        variable_list = []
+        self.variable_list = []
         for gamma in gamma_list:
             for beta in beta_list:
-                variable_list.append((gamma, beta))
-        return variable_list
+                self.variable_list.append((gamma, beta))
+        return self.variable_list
 
     def making_beta_scale(self, a):
         scale = math.log((1 / (self.B_edge + 1)) ** 3)\
@@ -127,6 +127,7 @@ class Setting_Simulation_Value():
         self.dev_B = math.sqrt(Setting_Simulation_Value.cal_variance(self.B, self.average_initial_B))
         self.positive_ratio_B = sum(self.B > 0) / self.B_node
         return self.B, self.average_initial_B, self.dev_B, self.positive_ratio_B
+
 
     @staticmethod
     def cal_variance(layer, mean):

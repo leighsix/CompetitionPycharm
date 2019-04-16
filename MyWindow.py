@@ -42,7 +42,7 @@ class MyWindow(QMainWindow, WindowModel):
         QMainWindow.__init__(self, None)
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.setupUi(self)
-        self.changing_variable = Changing_Variable.Changing_Variable(setting)
+        self.changing_variable = Changing_Variable.Changing_Variable()
         self.visualization = Visualization.Visualization()
         self.network = Interconnected_Network_Visualization.Interconnected_Network_Visualization()
         self.db_manager = DB_Management.DB_Management()
@@ -66,7 +66,7 @@ class MyWindow(QMainWindow, WindowModel):
     def making_df(self, setting):
         df = pd.DataFrame()
         if setting.DB == 'MySQL':
-            df = self.select_db.select_data_from_DB(setting)
+            df = self.select_db.select_data_from_setting(setting)
         elif setting.DB == 'SQLITE':
             df = self.select_sql.select_data_from_sqlite(setting)
         return df

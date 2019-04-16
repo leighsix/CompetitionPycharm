@@ -3,7 +3,11 @@ import numpy as np
 import pandas as pd
 import random
 import math
+import matplotlib.pyplot as plt
+import matplotlib
 import Setting_Simulation_Value
+matplotlib.use("TkAgg")
+
 ## A layer Modeling : A, A_edges, AB_edges, AB_neighbor
 
 
@@ -117,8 +121,10 @@ if __name__ == "__main__" :
     print("interconnectedlayer")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     inter_layer = InterconnectedLayerModeling(setting)
+    nx.draw(inter_layer.two_layer_graph)
+    plt.show()
     #print(graph.two_layer_graph.edges)
-    print(len(inter_layer.B_edges))
+    #print(len(inter_layer.B_edges))
     # for i in range(len(inter_layer.two_layer_graph.nodes)):
     #     state += inter_layer.two_layer_graph.nodes[i]['state']
     # print(state)

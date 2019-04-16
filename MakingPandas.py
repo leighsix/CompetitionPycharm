@@ -29,6 +29,37 @@ class MakingPandas:
         df['B_external_edges'] = setting.B_inter_edges
         return df
 
+    def making_df_for_100steps(self, setting, total_data):
+        columns = ['LAYER_A_MEAN', 'LAYER_B_MEAN', 'FRACTION_A', 'FRACTION_B', 'PROB_P', 'PROB_BETA',
+                   'A_DIFFERENT_STATE_RATIO', 'B_DIFFERENT_STATE_RATIO', 'AB_RATIO',
+                   'A_total_edges', 'B_total_edges', 'CONSENSUS',
+                   'NEGATIVE_STATE_NUMBER', 'POSITIVE_STATE_NUMBER', 'TIME_COUNT',
+                   'A_Initial_State', 'B_Initial_State', 'A_Initial_Dev', 'B_Initial_Dev',
+                   'A_Initial_Positive_Ratio', 'B_Initial_Positive_Ratio', 'Steps', 'A_node_number',
+                   'B_node_number', 'A_internal_edges', 'B_internal_edges', 'A_external_edges',
+                   'B_external_edges', 'gamma', 'beta', 'Un_A_node_state', 'A_Clustering', 'A_Hub',
+                   'A_Authority', 'A_Pagerank', 'A_Eigenvector', 'A_Degree', 'A_Betweenness',
+                   'A_Closeness', 'A_Load', 'A_NumberofDegree',
+                   'B_Clustering''B_Hub', 'B_Authority', 'B_Pagerank', 'B_Eigenvector', 'B_Degree',
+                   'B_Betweenness', 'B_Closeness', 'B_Load']
+        df = pd.DataFrame(total_data, columns=columns)
+        df['MODEL'] = setting.MODEL
+        df['Structure'] = setting.Structure
+        return df
+
+
+
+    def making_array_for_100steps(self, setting, value_array, gamma, beta):
+        additional_array = np.array([setting.average_initial_A, setting.average_initial_B,
+                                     setting.dev_A, setting.dev_B, setting.positive_ratio_A,
+                                     setting.positive_ratio_B, 100, setting.A_node, setting.B_node,
+                                     setting.A_edge, setting.B_edge, setting.A_inter_edges, setting.B_inter_edges,
+                                     gamma, beta])
+        new_array = np.concatenate([value_array, additional_array])
+        return new_array
+
+
+
     def layer_state_mean(self, setting, inter_layer):
         judge_A = []
         judge_B = []
