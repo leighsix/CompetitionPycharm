@@ -7,6 +7,7 @@ import MakingPandas
 import InterconnectedLayerModeling
 import matplotlib
 import Interconnected_Network_Visualization
+from tqdm import tqdm
 matplotlib.use("Agg")
 
 
@@ -17,8 +18,28 @@ class KFInterconnectedDynamics:
         self.mp = MakingPandas.MakingPandas()
         self.network = Interconnected_Network_Visualization.Interconnected_Network_Visualization()
 
-    def interconnected_dynamics_100steps_result_only(self, setting, inter_layer, prob_p, beta, node_i_name):
+
+    def average_interconnected_dynamics(self, setting, inter_layer, gamma, beta, node_i_name):
+        num_data = np.zeros([setting.Limited_step + 1, 15])
+        for i in range(setting.Repeating_number):
+            dynamics_result = self.interconnected_dynamics_100steps_result_only(setting, inter_layer, gamma, beta, node_i_name)
+            result_array = dynamics_result[1]
+            num_data = num_data + result_array
+        Num_Data = num_data / setting.Repeating_number
+        return Num_Data
+
+    def average_interconnected_dynamics_for_100steps(self, setting, inter_layer, gamma, beta, node_i_name):
+        num_data = np.zeros(15)
+        for i in range(setting.Repeating_number):
+            dynamics_result = self.interconnected_dynamics_100steps_result_only(setting, inter_layer, gamma, beta, node_i_name)
+            result_array = dynamics_result[1]
+            num_data = num_data + result_array
+        Num_Data = num_data / setting.Repeating_number
+        return Num_Data
+
+    def interconnected_dynamics_100steps_result_only(self, setting, inter_layer, gamma, beta, node_i_name):
         step_number = 0
+        prob_p = gamma / (gamma + 1)
         while True:
             inter_layer = self.kfopinion.A_layer_dynamics(setting, inter_layer, prob_p, node_i_name)
             decision = self.kfdecision.B_layer_dynamics(setting, inter_layer, beta, node_i_name)
@@ -37,16 +58,18 @@ class KFInterconnectedDynamics:
                                         len(sorted(inter_layer.A_edges.edges)), len(inter_layer.B_edges),
                                         self.mp.judging_consensus(setting, inter_layer),
                                         self.mp.counting_negative_node(setting, inter_layer),
-                                        self.mp.counting_positive_node(setting, inter_layer), time_count])
+                                        self.mp.counting_positive_node(setting, inter_layer), time_count,
+                                        gamma, beta])
                 break
         self.kfopinion.A_COUNT = 0
         self.kfdecision.B_COUNT = 0
         return inter_layer, array_value
 
-    def interconnected_dynamics(self, setting, inter_layer, prob_p, beta, node_i_name):
+    def interconnected_dynamics(self, setting, inter_layer, gamma, beta, node_i_name):
         total_value = np.zeros(15)
         ims = []
         step_number = 0
+        prob_p = gamma / (gamma + 1)
         while True:
             if step_number == 0:
                 if setting.drawing_graph == 1:
@@ -64,7 +87,8 @@ class KFInterconnectedDynamics:
                                           len(sorted(inter_layer.A_edges.edges)), len(inter_layer.B_edges),
                                           self.mp.judging_consensus(setting, inter_layer),
                                           self.mp.counting_negative_node(setting, inter_layer),
-                                          self.mp.counting_positive_node(setting, inter_layer), time_count])
+                                          self.mp.counting_positive_node(setting, inter_layer), time_count,
+                                          gamma, beta])
                 total_value = total_value + initial_value
             inter_layer = self.kfopinion.A_layer_dynamics(setting, inter_layer, prob_p, node_i_name)
             decision = self.kfdecision.B_layer_dynamics(setting, inter_layer, beta, node_i_name)
@@ -97,7 +121,8 @@ class KFInterconnectedDynamics:
                                     len(sorted(inter_layer.A_edges.edges)), len(inter_layer.B_edges),
                                     self.mp.judging_consensus(setting, inter_layer),
                                     self.mp.counting_negative_node(setting, inter_layer),
-                                    self.mp.counting_positive_node(setting, inter_layer), time_count])
+                                    self.mp.counting_positive_node(setting, inter_layer), time_count,
+                                    gamma, beta])
             if step_number >= 1:
                 total_value = np.vstack([total_value, array_value])
             if step_number >= setting.Limited_step:

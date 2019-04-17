@@ -5,6 +5,8 @@ import sqlalchemy
 import MakingPandas
 import CalculatingProperty
 from multiprocessing import Pool
+from tqdm import tqdm
+
 
 
 class KFChanging_Variable:

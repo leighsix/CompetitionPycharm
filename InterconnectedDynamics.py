@@ -17,10 +17,11 @@ class InterconnectedDynamics:
         self.mp = MakingPandas.MakingPandas()
         self.network = Interconnected_Network_Visualization.Interconnected_Network_Visualization()
 
-    def interconnected_dynamics(self, setting, inter_layer, prob_p, beta):
-        total_value = np.zeros(15)
+    def interconnected_dynamics(self, setting, inter_layer, gamma, beta):
+        total_value = np.zeros(17)
         ims = []
         step_number = 0
+        prob_p = gamma / (gamma + 1)
         while True:
             if step_number == 0:
                 if setting.drawing_graph == 1:
@@ -38,7 +39,8 @@ class InterconnectedDynamics:
                                           len(sorted(inter_layer.A_edges.edges)), len(inter_layer.B_edges),
                                           self.mp.judging_consensus(setting, inter_layer),
                                           self.mp.counting_negative_node(setting, inter_layer),
-                                          self.mp.counting_positive_node(setting, inter_layer), time_count])
+                                          self.mp.counting_positive_node(setting, inter_layer), time_count,
+                                          gamma, beta])
                 total_value = total_value + initial_value
             inter_layer = self.opinion.A_layer_dynamics(setting, inter_layer, prob_p)
             decision = self.decision.B_layer_dynamics(setting, inter_layer, beta)
@@ -71,7 +73,8 @@ class InterconnectedDynamics:
                                     len(sorted(inter_layer.A_edges.edges)), len(inter_layer.B_edges),
                                     self.mp.judging_consensus(setting, inter_layer),
                                     self.mp.counting_negative_node(setting, inter_layer),
-                                    self.mp.counting_positive_node(setting, inter_layer), time_count])
+                                    self.mp.counting_positive_node(setting, inter_layer), time_count,
+                                    gamma, beta])
             if step_number >= 1:
                 total_value = np.vstack([total_value, array_value])
             if step_number >= setting.Limited_step:

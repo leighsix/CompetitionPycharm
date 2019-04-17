@@ -9,7 +9,7 @@ class MakingPandas:
         columns = ['LAYER_A_MEAN', 'LAYER_B_MEAN', 'FRACTION_A', 'FRACTION_B', 'PROB_P', 'PROB_BETA',
                    'A_DIFFERENT_STATE_RATIO', 'B_DIFFERENT_STATE_RATIO', 'AB_RATIO',
                    'A_total_edges', 'B_total_edges', 'CONSENSUS',
-                   'NEGATIVE_STATE_NUMBER', 'POSITIVE_STATE_NUMBER', 'TIME_COUNT']
+                   'NEGATIVE_STATE_NUMBER', 'POSITIVE_STATE_NUMBER', 'TIME_COUNT', 'gamma', 'beta']
         df = pd.DataFrame(value_array, columns=columns)
         step = [i for i in range(0, setting.Limited_step+1)]
         df['MODEL'] = setting.MODEL
@@ -33,7 +33,7 @@ class MakingPandas:
         columns = ['LAYER_A_MEAN', 'LAYER_B_MEAN', 'FRACTION_A', 'FRACTION_B', 'PROB_P', 'PROB_BETA',
                    'A_DIFFERENT_STATE_RATIO', 'B_DIFFERENT_STATE_RATIO', 'AB_RATIO',
                    'A_total_edges', 'B_total_edges', 'CONSENSUS',
-                   'NEGATIVE_STATE_NUMBER', 'POSITIVE_STATE_NUMBER', 'TIME_COUNT',
+                   'NEGATIVE_STATE_NUMBER', 'POSITIVE_STATE_NUMBER', 'TIME_COUNT', 'gamma', 'beta',
                    'A_Initial_State', 'B_Initial_State', 'A_Initial_Dev', 'B_Initial_Dev',
                    'A_Initial_Positive_Ratio', 'B_Initial_Positive_Ratio', 'Steps', 'A_node_number',
                    'B_node_number', 'A_internal_edges', 'B_internal_edges', 'A_external_edges',
@@ -49,12 +49,11 @@ class MakingPandas:
 
 
 
-    def making_array_for_100steps(self, setting, value_array, gamma, beta):
+    def making_array_for_100steps(self, setting, value_array):
         additional_array = np.array([setting.average_initial_A, setting.average_initial_B,
                                      setting.dev_A, setting.dev_B, setting.positive_ratio_A,
                                      setting.positive_ratio_B, 100, setting.A_node, setting.B_node,
-                                     setting.A_edge, setting.B_edge, setting.A_inter_edges, setting.B_inter_edges,
-                                     gamma, beta])
+                                     setting.A_edge, setting.B_edge, setting.A_inter_edges, setting.B_inter_edges])
         new_array = np.concatenate([value_array, additional_array])
         return new_array
 

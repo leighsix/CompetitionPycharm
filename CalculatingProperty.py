@@ -20,6 +20,7 @@ class CalculatingProperty:
             node_i = int(node_i)
             connected_B_node = self.finding_B_node(inter_layer, node_i)
             df['Connected_B_node'] = 'B_%s' % (connected_B_node - len(sorted(inter_layer.A_edges)))
+        return df
 
     def making_df_for_property(self, panda_df, inter_layer, node_i_name):
         node_i = node_i_name.split('_')[1]

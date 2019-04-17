@@ -49,7 +49,7 @@ class Setting_Simulation_Value():
         self.variable_list = self.gamma_and_beta_list(self.R, self.D)
         self.NodeColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
         self.EdgeColorDict = {1: 'green', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'darkblue'}
-        self.workers = 4
+        self.workers = 5
 
     def simulation_condition(self, gap):
         self.R = np.linspace(0, 2, gap)
