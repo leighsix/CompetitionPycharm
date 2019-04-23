@@ -2,7 +2,6 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import random
-import math
 import matplotlib.pyplot as plt
 import matplotlib
 import Setting_Simulation_Value
@@ -11,7 +10,7 @@ matplotlib.use("TkAgg")
 ## A layer Modeling : A, A_edges, AB_edges, AB_neighbor
 
 
-class InterconnectedLayerModeling():
+class InterconnectedLayerModeling:
     def __init__(self, setting):
         # network : 1 = random regular graph   2 = barabasi-albert graph
         A_edges_array = self.A_layer_config(setting)

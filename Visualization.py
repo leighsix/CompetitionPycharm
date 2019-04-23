@@ -80,11 +80,36 @@ class Visualization:
         plt.contourf(X, Y, Z, 50, cmap='RdBu')
         #plt.clabel(contours, inline=True, fontsize=8)
 
+
+    def average_state_for_steps(self, setting, df,  beta_value, gamma_value):
+        beta_list = Visualization.making_select_list(df, 'beta')    # 이름은 list이지만 실제로는 array
+        gamma_list = Visualization.making_select_list(df, 'gamma')  # 이름은 list이지만 실제로는 array
+        beta_min = Visualization.covert_to_select_list_value(beta_list, beta_value[0])
+        beta_max = Visualization.covert_to_select_list_value(beta_list, beta_value[1])
+        gamma_min = Visualization.covert_to_select_list_value(gamma_list, gamma_value[0])
+        gamma_max = Visualization.covert_to_select_list_value(gamma_list, gamma_value[1])
+        df = df[df.gamma >= gamma_min]
+        df = df[df.gamma <= gamma_max]
+        df = df[df.beta >= beta_min]
+        df = df[df.beta <= beta_max]
+        gamma_array = pd.DataFrame(df['gamma'])
+        gamma_array = np.array(gamma_array.drop_duplicates())
+        beta_array = pd.DataFrame(df['beta'])
+        beta_array = np.array(beta_array.drop_duplicates())
+        for i in sorted(gamma_array):
+            for j in beta_array:
+                df1 = df[df.gamma == i[0]]
+                df2 = df1[df1.beta == j[0]]
+                if len(df2) >= setting.Limited_step:
+                    plt.plot(df['Steps'], ((df['LAYER_A_MEAN']/setting.MAX) + df['LAYER_B_MEAN']) / 2, linewidth=0.3)
+
+
+
     def flow_prob_beta_chart(self, setting, df, beta_value, gamma_value):
         # beta_value = [min, max], #gamma_value =[min, max]
         # df = df[df.Steps <= setting.Limited_step]
         beta_list = Visualization.making_select_list(df, 'beta')  # 이름은 list이지만 실제로는 array
-        gamma_list = Visualization.making_select_list(df, 'gamma') # 이름은 list이지만 실제로는 array
+        gamma_list = Visualization.making_select_list(df, 'gamma')  # 이름은 list이지만 실제로는 array
         beta_min = Visualization.covert_to_select_list_value(beta_list, beta_value[0])
         beta_max = Visualization.covert_to_select_list_value(beta_list, beta_value[1])
         gamma_min = Visualization.covert_to_select_list_value(gamma_list, gamma_value[0])
@@ -158,18 +183,20 @@ class Visualization:
 if __name__ == "__main__":
     print("Visualization")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
-    setting.database = 'finding_keynode'
-    setting.table = 'keynode_table_for_temporary'
+    setting.database = 'paper_revised_data'
+    setting.table = 'simulation_table'
     select_db = SelectDB.SelectDB()
     df = select_db.select_data_from_DB(setting)
     print(len(df))
-    df = df[df.Steps == 100]
+    # df = df[df.Unchanged_A_Node == 'A_95']
+    # df = df[df.Steps == 100]
+    print(len(df))
+    df = df[df.Structure == 'BA-BA']
     print(len(df))
     # df = df[df.Unchanged_A_Node == 'A_N']
-    print(len(df))
     visualization = Visualization()
     fig = plt.figure()
-    visualization.plot_3D_trisurf_for_average_state(setting, df)
+    visualization.average_state_for_steps(setting, df, [0.2, 0.5], [0.5, 1.5])
     plt.show()
     plt.close()
     #visualization.plot_3D_to_2D_contour_for_average_state(setting, df)

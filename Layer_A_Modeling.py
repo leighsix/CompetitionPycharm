@@ -78,7 +78,7 @@ if __name__ == "__main__" :
     Layer_A = Layer_A_Modeling(setting)
     print(Layer_A.G_A.nodes)
     state = 0
-    for i in range(len(Layer_A.G_A.nodes)) :
+    for i in range(len(Layer_A.G_A.nodes)):
         state += Layer_A.G_A.nodes[i]['state']
     print(state)
     #print(Layer_A.AB_edges)
