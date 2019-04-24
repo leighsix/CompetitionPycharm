@@ -6,12 +6,12 @@ import random
 class Setting_Simulation_Value:
     def __init__(self):
         self.database = 'paper_revised_data'  # 'competition  renew_competition'
-        self.table = 'simulation_table'
-        self.MODEL = 'LM(8)'
-        self.Structure = 'BA-BA'
+        self.table = 'simulation_table2'
+        self.MODEL = 'RR(5)-RR(2)' #'RR(2)-RR(2)', 'RR(2)-RR(5), 'BA-BA', 'BA-RR(5)', 'RR(5)-BA', 'RR(10)-BA'
+        self.Structure = 'RR-RR'
 
         self.Limited_step = 100
-        self.Repeating_number = 10
+        self.Repeating_number = 5
 
         self.A_state = [1, 2]
         self.A_node = 2048
@@ -22,21 +22,18 @@ class Setting_Simulation_Value:
         self.MIN = -2
 
         self.B_state = [-1]
-        self.B_node = 256
-        self.B_edge = 5
+        self.B_node = 2048
+        self.B_edge = 2
         self.B_inter_edges = int(self.A_node / self.B_node)
         self.B = self.static_making_B_array()
 
-        self.drawing_graph = False
         self.DB = 'MySQL'
-        self.gap = 40
+        self.gap = 20
         simulation_condition = self.simulation_condition(self.gap)
         self.R = simulation_condition[0]
         self.D = simulation_condition[1]
         self.variable_list = self.gamma_and_beta_list(self.R, self.D)
-        self.NodeColorDict = {1: 'hotpink', 2: 'red', -1: 'skyblue', -2: 'blue'}
-        self.EdgeColorDict = {1: 'green', 2: 'hotpink', 4: 'red',  -1: 'skyblue', -2: 'blue', -4 : 'darkblue'}
-        self.workers = 5
+        self.workers = 1
 
     def simulation_condition(self, gap):
         self.R = np.linspace(0, 2, gap)

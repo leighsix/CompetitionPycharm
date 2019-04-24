@@ -2,21 +2,14 @@ import numpy as np
 import Setting_Simulation_Value
 import InterconnectedDynamics
 import InterconnectedLayerModeling
+import MakingPandas
 import time
 
 
 class RepeatDynamics:
     def __init__(self):
         self.inter_dynamics = InterconnectedDynamics.InterconnectedDynamics()
-
-    def repeat_simultaneous_dynamics(self, setting, gamma, beta):
-        num_data = np.zeros([setting.Limited_step + 1, 13])
-        for i in range(setting.Repeating_number):
-            inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
-            total_array = self.inter_dynamics.interconnected_simultaneous_dynamics(setting, inter_layer, gamma, beta)
-            num_data = num_data + total_array
-        Num_Data = num_data / setting.Repeating_number
-        return Num_Data
+        self.mp = MakingPandas.MakingPandas()
 
     def repeat_dynamics(self, setting, gamma, beta):
         num_data = np.zeros([setting.Limited_step + 1, 13])
@@ -25,8 +18,8 @@ class RepeatDynamics:
             total_array = self.inter_dynamics.interconnected_dynamics(setting, inter_layer, gamma, beta)
             num_data = num_data + total_array
         Num_Data = num_data / setting.Repeating_number
-        return Num_Data
-
+        panda_db = self.mp.making_dataframe_per_step(setting, Num_Data)
+        return panda_db
 
 if __name__ == "__main__":
     print("RepeatDynamics")

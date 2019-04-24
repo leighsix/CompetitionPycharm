@@ -8,34 +8,8 @@ class OpinionDynamics:
     def __init__(self):
         self.A_COUNT = 0
 
-    def A_layer_simultaneous_dynamics(self, setting, inter_layer, prob_p):
-        temp_inter_layer = inter_layer
-        for i, j in sorted(temp_inter_layer.A_edges.edges()):
-            a = temp_inter_layer.two_layer_graph.nodes[i]['state']
-            b = temp_inter_layer.two_layer_graph.nodes[j]['state']
-            if a * b > 0:
-                persuasion = self.A_layer_persuasion_function(setting, temp_inter_layer.two_layer_graph.nodes[i],
-                                                              temp_inter_layer.two_layer_graph.nodes[j], prob_p)
-                inter_layer.two_layer_graph.nodes[i]['state'] = persuasion[0]
-                inter_layer.two_layer_graph.nodes[j]['state'] = persuasion[1]
-            elif a * b < 0:
-                compromise = self.A_layer_compromise_function(setting, temp_inter_layer.two_layer_graph.nodes[i],
-                                                              temp_inter_layer.two_layer_graph.nodes[j], prob_p)
-                inter_layer.two_layer_graph.nodes[i]['state'] = compromise[0]
-                inter_layer.two_layer_graph.nodes[j]['state'] = compromise[1]
-        for i, j in sorted(temp_inter_layer.AB_edges):
-            a = temp_inter_layer.two_layer_graph.nodes[j]['state']
-            b = temp_inter_layer.two_layer_graph.nodes[i]['state']
-            if a * b > 0:
-                inter_layer.two_layer_graph.nodes[j]['state'] \
-                    = self.AB_layer_persuasion_function(setting, temp_inter_layer.two_layer_graph.nodes[j], prob_p)
-            elif a * b < 0:
-                inter_layer.two_layer_graph.nodes[j]['state'] \
-                    = self.AB_layer_compromise_function(setting, temp_inter_layer.two_layer_graph.nodes[j], prob_p)
-        return inter_layer
-
-
-    def A_layer_dynamics(self, setting, inter_layer, prob_p):  # A_layer 다이내믹스, 감마 적용 및 설득/타협 알고리즘 적용
+    def A_layer_dynamics(self, setting, inter_layer, gamma):  # A_layer 다이내믹스, 감마 적용 및 설득/타협 알고리즘 적용
+        prob_p = gamma / (1+gamma)
         for i, j in sorted(inter_layer.A_edges.edges()):
             a = inter_layer.two_layer_graph.nodes[i]['state']
             b = inter_layer.two_layer_graph.nodes[j]['state']
