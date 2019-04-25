@@ -7,7 +7,7 @@ class Setting_Simulation_Value:
     def __init__(self):
         self.database = 'paper_revised_data'  # 'competition  renew_competition'
         self.table = 'simulation_table2'
-        self.MODEL = 'RR(5)-RR(2)' #'RR(2)-RR(2)', 'RR(2)-RR(5), 'BA-BA', 'BA-RR(5)', 'RR(5)-BA', 'RR(10)-BA'
+        self.MODEL = 'RR(2)-RR(2)' #'RR(2)-RR(5), 'BA-BA', 'BA-RR(5)', 'RR(5)-BA', 'RR(10)-BA'
         self.Structure = 'RR-RR'
 
         self.Limited_step = 100
@@ -15,7 +15,7 @@ class Setting_Simulation_Value:
 
         self.A_state = [1, 2]
         self.A_node = 2048
-        self.A_edge = 5
+        self.A_edge = 2
         self.A_inter_edges = 1
         self.A = self.static_making_A_array()
         self.MAX = 2
@@ -33,7 +33,7 @@ class Setting_Simulation_Value:
         self.R = simulation_condition[0]
         self.D = simulation_condition[1]
         self.variable_list = self.gamma_and_beta_list(self.R, self.D)
-        self.workers = 1
+        self.workers = 5
 
     def simulation_condition(self, gap):
         self.R = np.linspace(0, 2, gap)

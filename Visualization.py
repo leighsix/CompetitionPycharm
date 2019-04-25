@@ -13,6 +13,7 @@ matplotlib.use("TkAgg")
 
 
 class Visualization:
+
     def plot_2D_gamma_for_average_state(self, setting, df, beta_value, marker):
         beta_list = Visualization.making_select_list(df, 'beta')
         temp_value = Visualization.covert_to_select_list_value(beta_list, beta_value)
@@ -32,8 +33,7 @@ class Visualization:
                  label=r'$\gamma$=%.2f' % temp_value,
                  markersize=6, linewidth=1.5, markeredgewidth=1)
 
-    def plot_3D_scatter_for_average_state(self, setting, df):
-        # df = df[df.Steps == setting.Limited_step]
+    def plot_3D_scatter_for_average_state(self, df):
         ax = plt.axes(projection='3d')
         ax.scatter(df['beta'], df['gamma'], ((df['LAYER_A_MEAN']/setting.MAX) + df['LAYER_B_MEAN']) / 2,
                    c=((df['LAYER_A_MEAN']/setting.MAX) + df['LAYER_B_MEAN']) / 2, cmap='RdBu', linewidth=0.2)
@@ -45,8 +45,7 @@ class Visualization:
         ax.view_init(45, 45)
 
 
-    def plot_3D_trisurf_for_average_state(self, setting, df):
-        # df = df[df.Steps == setting.Limited_step]
+    def plot_3D_trisurf_for_average_state(self, df):
         ax = plt.axes(projection='3d')
         ax.plot_trisurf(df['beta'], df['gamma'], ((df['LAYER_A_MEAN']/setting.MAX) + df['LAYER_B_MEAN']) / 2,
                         cmap='RdBu', edgecolor='none')
@@ -58,7 +57,6 @@ class Visualization:
         ax.view_init(45, 45)
 
     def plot_3D_contour_for_average_state(self, setting, df):
-        # df = df[df.Steps == setting.Limited_step]
         beta_list = Visualization.making_select_list(df, 'beta')  # list이지만 실제로는 array
         gamma_list = Visualization.making_select_list(df, 'gamma')
         X, Y = np.meshgrid(beta_list, gamma_list)
@@ -81,7 +79,7 @@ class Visualization:
         #plt.clabel(contours, inline=True, fontsize=8)
 
 
-    def average_state_for_steps(self, setting, df,  beta_value, gamma_value):
+    def average_state_for_steps(self, setting, df, beta_value, gamma_value):
         beta_list = Visualization.making_select_list(df, 'beta')    # 이름은 list이지만 실제로는 array
         gamma_list = Visualization.making_select_list(df, 'gamma')  # 이름은 list이지만 실제로는 array
         beta_min = Visualization.covert_to_select_list_value(beta_list, beta_value[0])
@@ -184,19 +182,19 @@ if __name__ == "__main__":
     print("Visualization")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     setting.database = 'paper_revised_data'
-    setting.table = 'simulation_table'
+    setting.table = 'simulation_table2'
     select_db = SelectDB.SelectDB()
     df = select_db.select_data_from_DB(setting)
     print(len(df))
     # df = df[df.Unchanged_A_Node == 'A_95']
-    # df = df[df.Steps == 100]
+    df = df[df.Steps == 100]
     print(len(df))
-    df = df[df.Structure == 'BA-BA']
+    df = df[df.MODEL == 'RR(5)-RR(2)']
     print(len(df))
     # df = df[df.Unchanged_A_Node == 'A_N']
     visualization = Visualization()
     fig = plt.figure()
-    visualization.average_state_for_steps(setting, df, [0.2, 0.5], [0.5, 1.5])
+    visualization.plot_3D_trisurf_for_average_state(df)
     plt.show()
     plt.close()
     #visualization.plot_3D_to_2D_contour_for_average_state(setting, df)
