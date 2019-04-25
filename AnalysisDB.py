@@ -284,15 +284,26 @@ if __name__ == "__main__":
     print("AnalysisDB")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     analysis_db = AnalysisDB()
+    setting.database = 'paper_revised_data'
+    setting.table = 'simulation_table2'
     df = analysis_db.making_property_array_for_new(setting, 100)
     analysis_db.making_mixed_hist_new(df)
+
+    
+
 
     # setting.database = 'competition'
     # setting.table = 'result_db'
     # df1 = analysis_db.making_property_array(setting, 30)
-    # df1[df1.Model == 'RR(5)-RR(5)']['Model'] = 'BM(30)'
-    # print(df1)
     # df2 = analysis_db.making_property_array(setting, 100)
+    # setting.database = 'paper_revised_data'
+    # setting.table = 'simulation_table'
+    # df3 = analysis_db.making_property_array(setting, 100)
+    # df = pd.concat([df1, df2, df3], ignore_index=True)
+    # df = df.iloc[:, [0, 6, 8, 9, 10]]
+    # print(df)
+    # pd.to_pickle(df, 'df1')
+
 
     # fig.6
     # df = pd.concat([df1, df2], ignore_index=True)
@@ -309,6 +320,10 @@ if __name__ == "__main__":
     # setting.database = 'paper_revised_data'
     # setting.table = 'simulation_table'
     # df3 = analysis_db.making_property_array(setting, 100)
+
+    # df = analysis_db.making_property_array_for_new(setting, 100)
+    # analysis_db.making_mixed_hist_new(df)
+
 
     # df = pd.concat([df2, df3], ignore_index=True)
     # df = df.loc[[0, 2, 4, 6, 1, 3, 5], :]
