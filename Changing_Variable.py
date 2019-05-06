@@ -2,11 +2,40 @@ import Setting_Simulation_Value
 import RepeatDynamics
 import sqlalchemy
 from multiprocessing import Pool
+from concurrent import futures
+from tqdm import tqdm
+
 
 
 class Changing_Variable:
     def __init__(self):
         self.repeat_dynamics = RepeatDynamics.RepeatDynamics()
+
+    def many_execute_for_simulation(self, setting):
+        setting_variable_list = self.making_variable_tuples_list(setting)
+        engine = sqlalchemy.create_engine('mysql+pymysql://root:2853@localhost:3306/%s' % setting.database)
+        with futures.ProcessPoolExecutor(max_workers=setting.workers) as executor:
+            to_do_map = {}
+            for setting_variable_tuple in setting_variable_list:
+                future = executor.submit(self.calculate_for_simulation, setting_variable_tuple)
+                to_do_map[future] = setting_variable_tuple
+            done_iter = futures.as_completed(to_do_map)
+            done_iter = tqdm(done_iter, total=len(setting_variable_list))
+            for future in done_iter:
+                res = future.result()
+                res.to_sql(name='%s' % setting.table, con=engine, index=False, if_exists='append')
+
+    def calculate_for_simulation(self, setting_variable_tuple):
+        gamma = setting_variable_tuple[1][0]
+        beta = setting_variable_tuple[1][1]
+        panda_db = self.repeat_dynamics.repeat_dynamics(setting_variable_tuple[0], gamma, beta)
+        return panda_db
+
+    def making_variable_tuples_list(self, setting):
+        setting_variable_list = []
+        for i in setting.variable_list:
+            setting_variable_list.append((setting, i))
+        return setting_variable_list
 
     def calculate_and_input_database(self, setting_variable_tuple):
         gamma = setting_variable_tuple[1][0]
