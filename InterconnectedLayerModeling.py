@@ -102,8 +102,7 @@ if __name__ == "__main__" :
     print("interconnectedlayer")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     inter_layer = InterconnectedLayerModeling(setting)
-    nx.draw(inter_layer.two_layer_graph)
-    plt.show()
+    print(len(sorted(inter_layer.A_edges.edges())))
     #print(graph.two_layer_graph.edges)
     #print(len(inter_layer.B_edges))
     # for i in range(len(inter_layer.two_layer_graph.nodes)):

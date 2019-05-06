@@ -167,8 +167,8 @@ class Visualization:
         Z = np.zeros([len(p_list), len(v_list)])
         for i, p in enumerate(p_list):
             for j, v in enumerate(v_list):
-                df1 = df[df.p == p]
-                df2 = df1[df1.v == v]
+                df1 = df[df.gamma == p]
+                df2 = df1[df1.beta == v]
                 if len(df2) == 0:
                     Z[i][j] = 0
                 else:
@@ -194,9 +194,10 @@ if __name__ == "__main__":
     print("Visualization")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     setting.database = 'paper_revised_data'
-    setting.table = 'simulation_table2'
+    setting.table = 'simulation_table3'
     select_db = SelectDB.SelectDB()
     df = select_db.select_data_from_DB(setting)
+    # df = df[df.MODEL == 'LM(16)']
     # df = df[df.Steps == 100]
     # array1 = Visualization.making_select_list(df, 'p')
     # array2 = Visualization.making_select_list(df, 'v')
@@ -208,7 +209,8 @@ if __name__ == "__main__":
     visualization = Visualization()
     fig = plt.figure()
     sns.set()
-    visualization.flow_prob_beta_chart(df, [0, 3], [0, 2])
+    # visualization.plot_3D_to_2D_contour_for_average_state(df)
+    visualization.average_state_for_steps_scale(df, [0, 3], [0, 2])
     plt.show()
     plt.close()
 

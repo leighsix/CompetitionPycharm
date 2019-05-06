@@ -6,16 +6,16 @@ import random
 class Setting_Simulation_Value:
     def __init__(self):
         self.database = 'paper_revised_data'  # 'competition  renew_competition'
-        self.table = 'simulation_table2'
-        self.MODEL = 'RR(2)-RR(2)' #'RR(2)-RR(5), 'BA-BA', 'BA-RR(5)', 'RR(5)-BA', 'RR(10)-BA'
-        self.Structure = 'RR-RR'
+        self.table = 'simulation_table4'
+        self.MODEL = 'BA-BA' #'RR(2)-RR(5), 'BA-BA', 'BA-RR(5)', 'RR(5)-BA', 'RR(10)-BA'
+        self.Structure = 'BA-BA'
 
         self.Limited_step = 100
-        self.Repeating_number = 5
+        self.Repeating_number = 20
 
         self.A_state = [1, 2]
         self.A_node = 2048
-        self.A_edge = 2
+        self.A_edge = 5
         self.A_inter_edges = 1
         self.A = self.static_making_A_array()
         self.MAX = 2
@@ -23,12 +23,12 @@ class Setting_Simulation_Value:
 
         self.B_state = [-1]
         self.B_node = 2048
-        self.B_edge = 2
+        self.B_edge = 5
         self.B_inter_edges = int(self.A_node / self.B_node)
         self.B = self.static_making_B_array()
 
         self.DB = 'MySQL'
-        self.gap = 20
+        self.gap = 40
         simulation_condition = self.simulation_condition(self.gap)
         self.R = simulation_condition[0]
         self.D = simulation_condition[1]

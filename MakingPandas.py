@@ -6,7 +6,7 @@ import Setting_Simulation_Value
 
 class MakingPandas:
     def making_dataframe_per_step(self, setting, value_array):
-        columns = ['gamma', 'beta', 'prob_beta',
+        columns = ['gamma', 'beta', 'prob_beta', 'persuasion', 'compromise',
                    'A_plus', 'A_minus', 'B_plus', 'B_minus',
                    'Layer_A_Mean', 'Layer_B_Mean', 'AS',
                    'A_total_edges', 'B_total_edges', 'change_count']

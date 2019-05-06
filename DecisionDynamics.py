@@ -26,7 +26,8 @@ class DecisionDynamics:
                     -(inter_layer.two_layer_graph.nodes[node_i]['state'])
                 self.B_COUNT += 1
             prob_beta_list.append(prob_beta)
-        prob_beta_mean = np.array(prob_beta_list)
+        prob_beta_array = np.array(prob_beta_list)
+        prob_beta_mean = np.sum(prob_beta_array) / len(prob_beta_array)
         return inter_layer, prob_beta_mean
 
     def B_state_change_probability_cal(self, setting, inter_layer, beta):
@@ -42,7 +43,8 @@ class DecisionDynamics:
             prob_beta = (opposite_orientation / len(neighbors)) ** beta
             prob_beta_list.append(prob_beta)
         prob_beta_array = np.array(prob_beta_list)
-        return prob_beta_array
+        prob_beta_mean = np.sum(prob_beta_array) / len(prob_beta_array)
+        return prob_beta_array, prob_beta_mean
 
 
 if __name__ == "__main__" :

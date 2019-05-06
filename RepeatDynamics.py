@@ -12,7 +12,7 @@ class RepeatDynamics:
         self.mp = MakingPandas.MakingPandas()
 
     def repeat_dynamics(self, setting, gamma, beta):
-        num_data = np.zeros([setting.Limited_step + 1, 13])
+        num_data = np.zeros([setting.Limited_step + 1, 15])
         for i in range(setting.Repeating_number):
             inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
             total_array = self.inter_dynamics.interconnected_dynamics(setting, inter_layer, gamma, beta)
