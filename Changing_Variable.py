@@ -57,7 +57,8 @@ if __name__ == "__main__":
     print("Changing_Variable")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     changing_variable = Changing_Variable()
-    changing_variable.paralleled_work(setting)
+    print(changing_variable.making_variable_tuples_list(setting))
+    # changing_variable.many_execute_for_simulation(setting)
     print("Operating end")
 
 

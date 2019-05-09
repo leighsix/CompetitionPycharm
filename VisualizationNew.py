@@ -194,11 +194,11 @@ if __name__ == "__main__":
     print("Visualization")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     setting.database = 'paper_revised_data'
-    setting.table = 'simulation_table3'
+    setting.table = 'simulation_table4'
     select_db = SelectDB.SelectDB()
     df = select_db.select_data_from_DB(setting)
     # df = df[df.MODEL == 'LM(16)']
-    # df = df[df.Steps == 100]
+    df = df[df.Steps == 100]
     # array1 = Visualization.making_select_list(df, 'p')
     # array2 = Visualization.making_select_list(df, 'v')
     # temp1 = Visualization.covert_to_select_list_value(array1, 0.1)
@@ -209,8 +209,8 @@ if __name__ == "__main__":
     visualization = Visualization()
     fig = plt.figure()
     sns.set()
-    # visualization.plot_3D_to_2D_contour_for_average_state(df)
-    visualization.average_state_for_steps_scale(df, [0, 3], [0, 2])
+    visualization.plot_3D_scatter_for_average_state(df)
+    # visualization.average_state_for_steps_scale(df, [0, 3], [0, 2])
     plt.show()
     plt.close()
 
